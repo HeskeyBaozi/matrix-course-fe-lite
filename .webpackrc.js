@@ -2,6 +2,9 @@ import path from 'path';
 
 export default {
   entry: './src/entry-client.tsx',
+  extraBabelPlugins: [
+    ['import', { 'libraryName': ['antd', 'ant-design-pro'], 'libraryDirectory': 'es', 'style': true }]
+  ],
   browserslist: [
     '> 1%',
     'last 2 versions',
