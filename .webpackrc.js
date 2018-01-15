@@ -24,7 +24,15 @@ export default {
         'process.env': { NODE_ENV: '"development"' }
       },
       devtool: 'eval-source-map',
-      extraBabelPlugins: ['dva-hmr']
+      proxy: {
+        "/api/*": {
+          "target": "http://test.vmatrix.org.cn",
+          "secure": false,
+          "changeOrigin": true,
+          "cookieDomainRewrite": "",
+          "ws": true
+        }
+      }
     },
     production: {
       publicPath: '/',
