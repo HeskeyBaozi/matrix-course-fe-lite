@@ -1,4 +1,4 @@
-import { action, observable } from 'mobx';
+import { observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
 import { fetchUserLoginState, LoginQueryResult } from '@/api/user';
 
@@ -11,13 +11,15 @@ export class LoginModel {
 
   @asyncAction
   * QueryLoginStatus() {
-    const response = yield fetchUserLoginState();
-    const { data } = response as { data: LoginQueryResult };
     yield new Promise(resolve => {
       setTimeout(() => {
         resolve();
-      }, 3000);
+      }, 1000);
     });
-    console.log(data);
+    const response = yield fetchUserLoginState();
+    const { data } = response as { data: LoginQueryResult };
+    if (data.status === 'OK') {
+      this.isLogin = true;
+    }
   }
 }

@@ -18,6 +18,7 @@ interface Secured {
 
 export interface AuthorizedRouteProps extends RouteProps {
   authority: authority;
+  redirectPath: string;
 }
 export class AuthorizedRoute extends React.Component<
   AuthorizedRouteProps,
