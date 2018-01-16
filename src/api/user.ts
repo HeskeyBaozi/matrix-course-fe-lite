@@ -1,9 +1,13 @@
 import axios from 'axios';
 import { stringify } from 'qs';
 
+export interface LoginQueryResult {
+  status: 'OK' | 'NOT_AUTHORIZED';
+}
+
 // https://api.vmatrix.org.cn/#/user/get_api_users_login
-export async function fetchUserLoginState() {
-  return axios.get('/api/users/login');
+export function fetchUserLoginState() {
+  return axios.get<LoginQueryResult>('/api/users/login');
 }
 
 export interface LoginBody {
@@ -13,16 +17,16 @@ export interface LoginBody {
 }
 
 // https://api.vmatrix.org.cn/#/user/post_api_users_login
-export async function login(body: LoginBody) {
+export function loginPost(body: LoginBody) {
   return axios.post('/api/users/login', body);
 }
 
 // https://api.vmatrix.org.cn/#/user/post_api_users_logout
-export async function logout() {
+export function logoutPost() {
   return axios.post('/api/users/logout');
 }
 
 // https://api.vmatrix.org.cn/#/user/get_api_users_profile_avatar
-export async function fetchAvatar(username: string) {
+export function fetchAvatar(username: string) {
   return axios.get(`/api/users/profile/avatar?${stringify({ username })}`);
 }

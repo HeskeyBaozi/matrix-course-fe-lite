@@ -3,8 +3,8 @@
 
 
 "@antv/data-set@^0.8.0":
-  version "0.8.3"
-  resolved "http://registry.npm.taobao.org/@antv/data-set/download/@antv/data-set-0.8.3.tgz#7f58207532a9de5d174b52676b876247b2acab02"
+  version "0.8.5"
+  resolved "http://registry.npm.taobao.org/@antv/data-set/download/@antv/data-set-0.8.5.tgz#9ab5f53b7ac078f52211db6cefd0c6a42822bd0e"
   dependencies:
     d3-array "~1.2.0"
     d3-composite-projections "~1.2.0"
@@ -885,7 +885,11 @@
   dependencies:
     axios "*"
 
-"@types/history@*", "@types/history@^4.6.2":
+"@types/classnames@^2.2.3":
+  version "2.2.3"
+  resolved "http://registry.npm.taobao.org/@types/classnames/download/@types/classnames-2.2.3.tgz#3f0ff6873da793870e20a260cada55982f38a9e5"
+
+"@types/history@*":
   version "4.6.2"
   resolved "http://registry.npm.taobao.org/@types/history/download/@types/history-4.6.2.tgz#12cfaba693ba20f114ed5765467ff25fdf67ddb0"
 
@@ -902,6 +906,12 @@
   resolved "http://registry.npm.taobao.org/@types/react-dom/download/@types/react-dom-16.0.3.tgz#8accad7eabdab4cca3e1a56f5ccb57de2da0ff64"
   dependencies:
     "@types/node" "*"
+    "@types/react" "*"
+
+"@types/react-loadable@^5.3.1":
+  version "5.3.1"
+  resolved "http://registry.npm.taobao.org/@types/react-loadable/download/@types/react-loadable-5.3.1.tgz#88b94edb8c418a0b3b85d1b66ebae8490b3bbc47"
+  dependencies:
     "@types/react" "*"
 
 "@types/react-router-dom@^4.2.3":
@@ -6168,6 +6178,24 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   dependencies:
     minimist "0.0.8"
 
+mobx-react-devtools@^4.2.15:
+  version "4.2.15"
+  resolved "http://registry.npm.taobao.org/mobx-react-devtools/download/mobx-react-devtools-4.2.15.tgz#881c038fb83db4dffd1e72bbaf5374d26b2fdebb"
+
+mobx-react@^4.3.5:
+  version "4.3.5"
+  resolved "http://registry.npm.taobao.org/mobx-react/download/mobx-react-4.3.5.tgz#76853f2f2ef4a6f960c374bcd9f01e875929c04c"
+  dependencies:
+    hoist-non-react-statics "^2.3.1"
+
+mobx-utils@^3.2.2:
+  version "3.2.2"
+  resolved "http://registry.npm.taobao.org/mobx-utils/download/mobx-utils-3.2.2.tgz#1979fe85a27df496d4f17af288813ac4fd356fd5"
+
+mobx@^3.4.1:
+  version "3.4.1"
+  resolved "http://registry.npm.taobao.org/mobx/download/mobx-3.4.1.tgz#37abe5ee882d401828d9f26c6c1a2f47614bbbef"
+
 moment@2.x, moment@^2.19.1, moment@^2.19.3:
   version "2.20.1"
   resolved "http://registry.npm.taobao.org/moment/download/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
@@ -7416,8 +7444,8 @@ rc-dialog@~7.1.0:
     rc-util "^4.1.0"
 
 rc-drawer-menu@^0.5.0:
-  version "0.5.3"
-  resolved "http://registry.npm.taobao.org/rc-drawer-menu/download/rc-drawer-menu-0.5.3.tgz#747e04e1821d6e3c09dd0b35d0b00f93736c4337"
+  version "0.5.4"
+  resolved "http://registry.npm.taobao.org/rc-drawer-menu/download/rc-drawer-menu-0.5.4.tgz#93f752c1430e493c4af0632980baad4e46ec88af"
   dependencies:
     babel-runtime "6.x"
     classnames "^2.2.5"
@@ -7746,6 +7774,12 @@ react-lazy-load@^3.0.12:
     lodash.debounce "^4.0.0"
     lodash.throttle "^4.0.0"
     prop-types "^15.5.8"
+
+react-loadable@^5.3.1:
+  version "5.3.1"
+  resolved "http://registry.npm.taobao.org/react-loadable/download/react-loadable-5.3.1.tgz#9699e9a08fed49bacd69caaa282034b62a76bcdd"
+  dependencies:
+    prop-types "^15.5.0"
 
 react-reconciler@^0.7.0:
   version "0.7.0"

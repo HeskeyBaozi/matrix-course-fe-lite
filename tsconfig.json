@@ -6,6 +6,7 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "strict": true,
+    "importHelpers": true,
     "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
