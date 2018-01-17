@@ -4,6 +4,7 @@
 }
 
 .avatarWrapper {
+  position: relative;
   width: 5rem;
   height: 5rem;
   margin: auto;
@@ -13,4 +14,31 @@
     border-radius: 50%;
     width: 100%;
   }
+}
+
+.captchaWrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.captchaImageWrapper {
+  position: relative;
+  &:last-child {
+    margin-left: 1rem;
+  }
+}
+
+.captcha {
+  cursor: pointer;
+  max-height: 40px;
+}
+
+.hidden {
+  display: none;
+}
+
+.submit {
+  border-radius: 10rem;
+  min-width: 6rem;
 }

@@ -5,17 +5,19 @@ import styles from './loading.component.less';
 
 
 interface LoadingProps {
+  showTips?: boolean;
   isLoading: boolean;
   isFullScreen: boolean;
 }
 
-export function Loading({ isLoading, isFullScreen }: LoadingProps) {
+export function Loading({ isLoading, isFullScreen, showTips = true }: LoadingProps) {
   return (
     <div className={ classNames(styles.loading, {
       [styles.hidden]: !isLoading,
       [styles.fullScreen]: isFullScreen
     }) }>
-      <Spin spinning={ isLoading } tip={ 'LOADING' } indicator={ <Icon type="loading" className={ styles.icon }/> }/>
+      <Spin spinning={ isLoading } tip={ showTips ? 'LOADING' : void 0 }
+            indicator={ <Icon type="loading" className={ styles.icon }/> }/>
     </div>
   );
 }
