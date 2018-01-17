@@ -23,7 +23,7 @@ class LoginComponent extends React.Component<LoginComponentProps> {
 
     const UserName = $('username', {
       rules: [{ required: true, message: '请输入用户名' }]
-    })(<Input placeholder={ '用户名' } prefix={ <Icon type={ 'user' }/> }/>);
+    })(<Input placeholder={ '账号' } prefix={ <Icon type={ 'user' }/> }/>);
     const Password = $('password', {
       rules: [{ required: true, message: '请输入密码' }]
     })(<Input type={ 'password' } placeholder={ '密码' } prefix={ <Icon type={ 'lock' }/> }/>);
