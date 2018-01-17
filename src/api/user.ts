@@ -28,5 +28,5 @@ export function logoutPost() {
 
 // https://api.vmatrix.org.cn/#/user/get_api_users_profile_avatar
 export function fetchAvatar(username: string) {
-  return axios.get(`/api/users/profile/avatar?${stringify({ username })}`);
+  return axios.get<Blob>(`/api/users/profile/avatar?${stringify({ username })}`, { responseType: 'blob' });
 }

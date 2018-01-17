@@ -17,3 +17,9 @@ declare module '*.json' {
 declare module 'dva/router' {
   export * from 'react-router-dom';
 }
+
+
+declare module '*.jpg' {
+  const content: string;
+  export default content;
+}

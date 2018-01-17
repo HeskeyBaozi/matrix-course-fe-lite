@@ -1,6 +1,6 @@
 import { observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
-import { fetchUserLoginState, LoginQueryResult } from '@/api/user';
+import { fetchAvatar, fetchUserLoginState, LoginQueryResult } from '@/api/user';
 
 'use strict';
 
@@ -8,6 +8,9 @@ import { fetchUserLoginState, LoginQueryResult } from '@/api/user';
 export class LoginModel {
   @observable
   isLogin = false;
+
+  @observable
+  avatar = '';
 
   @asyncAction
   * QueryLoginStatus() {
@@ -22,4 +25,13 @@ export class LoginModel {
       this.isLogin = true;
     }
   }
+
+  @asyncAction
+  * FetchUserAvatar({ username }: { username: string }) {
+    const response = yield fetchAvatar(username);
+    const { data } = response as { data: Blob };
+    this.avatar = URL.createObjectURL(data);
+  }
+
+
 }
