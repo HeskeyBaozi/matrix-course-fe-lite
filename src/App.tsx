@@ -7,6 +7,7 @@ import { asyncAction } from 'mobx-utils';
 import RenderAuthorizeRoute from '@/components/Authorized'
 import { HashRouter as Router, Switch } from 'react-router-dom';
 import { dynamic } from '@/utils/dynamic';
+import { Layout } from 'antd';
 
 const LoginLayout = dynamic(() => import('@/layouts/Login/login.layout'));
 const BasicLayout = dynamic(() => import('@/layouts/Basic/basic.layout'));

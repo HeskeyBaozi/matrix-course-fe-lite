@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import styles from './baisc.layout.less';
+import styles from './basic.layout.less';
 import { RouteComponentProps } from 'react-router';
 
 interface LoginLayoutProps extends RouteComponentProps<{}> {
