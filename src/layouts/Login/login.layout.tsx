@@ -5,9 +5,9 @@ import { Layout } from 'antd';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import { dynamic } from '@/utils/dynamic';
 import logoUrl from '@/assets/images/logo.svg';
-import { Particles } from '@/components/Particles/particles.component';
 
 const LoginComponent = dynamic(() => import('@/components/Login/login.component'));
+const ParticlesComponent = dynamic(() => import('@/components/Particles/particles.component'));
 
 interface LoginLayoutProps extends RouteComponentProps<{}> {
 }
@@ -20,7 +20,7 @@ export default class LoginLayout extends React.Component<LoginLayoutProps> {
     const { match } = this.props;
     return (
       <Layout className={ styles.container }>
-        <Particles/>
+        <ParticlesComponent/>
         <img className={ styles.logo } src={ logoUrl } alt={ 'logo' }/>
         <div className={ styles.inner }>
           <Switch>
