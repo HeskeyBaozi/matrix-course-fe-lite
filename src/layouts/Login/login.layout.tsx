@@ -54,7 +54,9 @@ export default class LoginLayout extends React.Component<LoginLayoutProps> {
             <Redirect to={ { key: 'login' } }/>
           </Switch>
         </div>
-        <GlobalFooter className={ styles.footer } links={ links } copyright={ copyright }/>
+        <div className={ styles.footer }>
+          <GlobalFooter links={ links } copyright={ copyright }/>
+        </div>
       </Layout>
     );
   }

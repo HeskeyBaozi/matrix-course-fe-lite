@@ -2,7 +2,7 @@ import React, { SyntheticEvent } from 'react';
 import { Tooltip, Form, Input, Icon, Button } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { Loading } from '@/components/Loading/loading.component';
-import { action, autorunAsync, observable, IReactionDisposer } from 'mobx';
+import { action, autorunAsync, observable, IReactionDisposer, computed } from 'mobx';
 import { RouteComponentProps } from 'react-router';
 import { FormComponentProps } from 'antd/lib/form';
 import styles from './login.component.less';
@@ -25,6 +25,11 @@ interface LoginComponentProps extends RouteComponentProps<{}>, FormComponentProp
 class LoginComponent extends React.Component<LoginComponentProps> {
   @observable
   username = '';
+
+  @computed
+  get shouldFetchAvatar() {
+    return this.username.length > 5
+  }
 
   @observable
   isCaptchaLoading = false;
@@ -65,7 +70,7 @@ class LoginComponent extends React.Component<LoginComponentProps> {
   componentDidMount() {
     const { $Login } = this.props;
     this.disposer = autorunAsync(() => {
-      if (this.username.length > 5) {
+      if (this.shouldFetchAvatar) {
         $Login!.FetchUserAvatar({ username: this.username });
       }
     }, 1500);
@@ -115,7 +120,7 @@ class LoginComponent extends React.Component<LoginComponentProps> {
         </Item>
 
         <div className={ styles.container }>
-          <Button className={ styles.submit } type={ 'primary' } htmlType={ 'submit' }>LOG IN</Button>
+          <Button className={ styles.submit } type={ 'primary' } htmlType={ 'submit' }>LOGIN</Button>
         </div>
       </Form>
     );
