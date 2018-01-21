@@ -2,11 +2,11 @@ import React, { SyntheticEvent } from 'react';
 import { Tooltip, Form, Input, Icon, Button } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { Loading } from '@/components/Loading/loading.component';
-import { action, autorunAsync, observable, IReactionDisposer, computed } from 'mobx';
+import { action, autorunAsync, observable, IReactionDisposer, computed, runInAction } from 'mobx';
 import { RouteComponentProps } from 'react-router';
 import { FormComponentProps } from 'antd/lib/form';
-import styles from './login.component.less';
-import avatarUrl from '@/assets/images/avatar.jpg';
+import styles from './login.route.less';
+import defaultAvatarUrl from '@/assets/images/avatar.jpg';
 import { LoginModel } from '@/models/login.model';
 import classNames from 'classnames';
 import { LoginBody } from '@/api/user';
@@ -26,29 +26,45 @@ class LoginComponent extends React.Component<LoginComponentProps> {
   @observable
   username = '';
 
-  @computed
-  get shouldFetchAvatar() {
-    return this.username.length > 5
-  }
-
   @observable
   isCaptchaLoading = false;
 
   @observable
   isAvatarLoading = false;
 
+  @observable
+  isEntering = false;
+
+  @computed
+  get shouldFetchAvatar() {
+    return this.username.length > 5
+  }
+
+  @computed
+  get avatarUrl() {
+    const { $Login } = this.props;
+    return $Login!.avatar ? $Login!.avatar : defaultAvatarUrl
+  }
+
+
   @action
   handleChange = (e: SyntheticEvent<HTMLInputElement>) => {
+    e.preventDefault();
     this.username = e.currentTarget.value
   };
 
-  submit = (e: SyntheticEvent<any>) => {
+  @action
+  submit = (e: SyntheticEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    this.isEntering = true;
     const { form: { validateFields }, $Login } = this.props;
-    validateFields({ force: true }, (error, { username, password, captcha }: LoginBody) => {
+    validateFields({ force: true }, async (error, { username, password, captcha }: LoginBody) => {
       if (!error) {
-        $Login!.login({ username, password, captcha });
+        await $Login!.login({ username, password, captcha });
       }
+      runInAction(() => {
+        this.isEntering = false;
+      });
     });
   };
 
@@ -85,11 +101,11 @@ class LoginComponent extends React.Component<LoginComponentProps> {
 
     const UserName = $('username', {
       rules: [{ required: true, message: '请输入用户名' }]
-    })(<Input onChange={ this.handleChange } placeholder={ '账号' } prefix={ <Icon type={ 'user' }/> }/>);
+    })(<Input onChange={ this.handleChange } placeholder={ 'Username' } prefix={ <Icon type={ 'user' }/> }/>);
 
     const Password = $('password', {
       rules: [{ required: true, message: '请输入密码' }]
-    })(<Input type={ 'password' } placeholder={ '密码' } prefix={ <Icon type={ 'lock' }/> }/>);
+    })(<Input type={ 'password' } placeholder={ 'Password' } prefix={ <Icon type={ 'lock' }/> }/>);
 
     const Captcha = $('captcha', {
       rules: [{ required: !!$Login!.captchaUrl, message: '请输入验证码' }]
@@ -100,7 +116,7 @@ class LoginComponent extends React.Component<LoginComponentProps> {
         <Item>
           <div className={ styles.avatarWrapper }>
             <Loading isLoading={ this.isAvatarLoading } isFullScreen={ false } showTips={ false }/>
-            <img src={ $Login!.avatar ? $Login!.avatar : avatarUrl } alt={ 'avatar' }/>
+            <img src={ this.avatarUrl } alt={ 'avatar' }/>
           </div>
         </Item>
         <Item>{ UserName }</Item>
@@ -120,7 +136,8 @@ class LoginComponent extends React.Component<LoginComponentProps> {
         </Item>
 
         <div className={ styles.container }>
-          <Button className={ styles.submit } type={ 'primary' } htmlType={ 'submit' }>LOGIN</Button>
+          <Button loading={ this.isEntering } className={ styles.submit } type={ 'primary' }
+                  htmlType={ 'submit' }>LOGIN</Button>
         </div>
       </Form>
     );

@@ -36,7 +36,6 @@
     "less": "^2.7.3",
     "mobx-react-devtools": "^4.2.15",
     "roadhog": "^2.1.0",
-    "tslib": "^1.8.1",
     "typescript": "^2.6.2"
   }
 }

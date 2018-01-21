@@ -14,12 +14,13 @@ export default class Particles extends React.PureComponent {
   }
 
   componentWillUnmount() {
+
     if (Array.isArray(pJSDom) && pJSDom.length) {
       pJSDom.forEach(pJS => {
-        pJS.fn.vendors.destroypJS();
+        pJS.pJS.fn.vendors.destroypJS();
       });
 
-      while (pJSDom.length) {
+      while (Array.isArray(pJSDom) && pJSDom.length) {
         pJSDom.pop();
       }
     }

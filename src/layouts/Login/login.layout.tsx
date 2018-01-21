@@ -7,7 +7,7 @@ import { dynamic } from '@/utils/dynamic';
 import logoUrl from '@/assets/images/logo.svg';
 import GlobalFooter from 'ant-design-pro/lib/GlobalFooter';
 
-const LoginComponent = dynamic(() => import('@/components/Login/login.component'));
+const LoginComponent = dynamic(() => import('@/routes/Login/login.route'));
 const ParticlesComponent = dynamic(() => import('@/components/Particles/particles.component'));
 
 interface ILink {
