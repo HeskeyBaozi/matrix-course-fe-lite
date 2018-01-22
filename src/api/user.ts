@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { xios } from '@/api/instance';
 import { stringify } from 'qs';
 
 
@@ -12,7 +12,7 @@ export interface LoginQueryResult {
 
 // https://api.vmatrix.org.cn/#/user/get_api_users_login
 export function fetchUserLoginState() {
-  return axios.get<LoginQueryResult>('/api/users/login');
+  return xios.get<LoginQueryResult>('/api/users/login');
 }
 
 export interface LoginBody {
@@ -21,26 +21,35 @@ export interface LoginBody {
   captcha?: string;
 }
 
-export interface LoginResult {
+export interface LoginErrorResult {
   data: {
     captcha?: boolean;
   };
   status: 'WRONG_PASSWORD' | 'WRONG_CAPTCHA';
+  msg: string;
+}
+
+export interface LoginSuccessResult {
+  data: {
+    realname: string;
+  };
+  status: 'OK';
+  msg: string;
 }
 
 // https://api.vmatrix.org.cn/#/user/post_api_users_login
 export function loginPost(body: LoginBody) {
-  return axios.post<LoginResult>('/api/users/login', body);
+  return xios.post<LoginErrorResult | LoginSuccessResult>('/api/users/login', body);
 }
 
 // https://api.vmatrix.org.cn/#/user/post_api_users_logout
 export function logoutPost() {
-  return axios.post('/api/users/logout');
+  return xios.post('/api/users/logout');
 }
 
 // https://api.vmatrix.org.cn/#/user/get_api_users_profile_avatar
 export function fetchAvatar(username: string) {
-  return axios.get<Blob>(`/api/users/profile/avatar?${stringify({ username })}`, { responseType: 'blob' });
+  return xios.get<Blob>(`/api/users/profile/avatar?${stringify({ username })}`, { responseType: 'blob' });
 }
 
 /******************************
@@ -55,5 +64,5 @@ export interface CaptchaResult {
 
 // https://api.vmatrix.org.cn/#/captcha/get_api_captcha
 export function fetchCaptcha() {
-  return axios.get<CaptchaResult>(`/api/captcha`);
+  return xios.get<CaptchaResult>(`/api/captcha`);
 }

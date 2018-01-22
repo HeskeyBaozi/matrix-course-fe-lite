@@ -1,56 +1,64 @@
 .sider {
-  height: 100vh;
-  position: fixed;
-  background-color: #232526;
-  background-image: linear-gradient(62deg, #414345 0%, #414345 100%);
-  box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
-  z-index: 2;
+    height: 100vh;
+    position: fixed;
+    background-color: #232526;
+    background-image: linear-gradient(62deg, #414345 0%, #414345 100%);
+    box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+    z-index: 2;
 }
 
 .menu {
-  :global(.ant-menu-item-selected) {
-    background-color: rgba(255, 255, 255, 0.2) !important;
-  }
+     :global(.ant-menu-item-selected) {
+        background-color: rgba(255, 255, 255, 0.2) !important;
+    }
 }
 
-.logo {
-  height: 64px;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  align-items: center;
+.logoWrapper {
+    height: 64px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    >img {
+        max-width: 2.5rem;
+        max-height: 2.5rem;
+    }
 }
 
 .contentLayout {
-  transition: all 200ms;
-  margin-left: 200px;
+    transition: all 200ms;
+    margin-left: 200px;
 }
 
 .contentLayoutCollapsed {
-  margin-left: 80px;
+    margin-left: 80px;
 }
 
 .contentHeader {
-  position: fixed;
-  padding: 0 1rem 0 0;
-  width: 100%;
-  background-color: white;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, .08)
+    position: fixed;
+    padding: 0 1rem 0 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 1px 4px rgba(0, 21, 41, .08)
 }
 
 .trigger {
-  font-size: 1.3rem;
-  line-height: 64px;
-  cursor: pointer;
-  transition: all 200ms;
-  padding: 0 2rem;
-
-  &:hover {
-    background-color: mix(white, black, 95%);
-  }
+    font-size: 1.3rem;
+    line-height: 64px;
+    cursor: pointer;
+    transition: all 200ms;
+    padding: 0 2rem;
+    &:hover {
+        background-color: mix(white, black, 95%);
+    }
 }
 
 .content {
-  margin: calc(~'64px + 2rem') 1rem 2rem 1rem;
-  padding: 1rem;
+    margin: calc(~'64px + 2rem') 1rem 2rem 1rem;
+    padding: 1rem;
+}
+
+.hidden {
+    display: none;
+    opacity: 0;
 }

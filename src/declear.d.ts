@@ -13,9 +13,14 @@ declare module '*.json' {
   export default content;
 }
 
+declare module '*.png' {
+  const content: string;
+  export default content;
+}
+
 
 declare module 'dva/router' {
-  export * from 'react-router-dom';
+  export * from 'react-router';
 }
 
 

@@ -1,9 +1,12 @@
 import { observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
+import { notification } from 'antd';
+import { history } from '@/utils/history';
 import {
   CaptchaResult,
   fetchAvatar, fetchCaptcha, fetchUserLoginState, LoginBody, loginPost, LoginQueryResult,
-  LoginResult
+  LoginErrorResult,
+  LoginSuccessResult
 } from '@/api/user';
 
 'use strict';
@@ -19,6 +22,9 @@ export class LoginModel {
   @observable
   captchaUrl = '';
 
+  @observable
+  notice = '';
+
   @asyncAction
   * QueryLoginStatus() {
     yield new Promise(resolve => {
@@ -30,6 +36,7 @@ export class LoginModel {
     if (data.status === 'OK') {
       this.isLogin = true;
     }
+    return data;
   }
 
   @asyncAction
@@ -40,18 +47,18 @@ export class LoginModel {
 
   @asyncAction
   * login(body: LoginBody) {
-    const { data }: { data: LoginResult } = yield loginPost(body);
-    if (data.data.captcha) {
-      yield this.captchaFlow();
+    const { data }: { data: LoginErrorResult | LoginSuccessResult } = yield loginPost(body);
+    if (data.status === 'OK') {
+      this.isLogin = true;
     }
+    return data;
   }
 
   @asyncAction
-  * captchaFlow() {
-    const { data }:{ data: CaptchaResult } = yield fetchCaptcha();
-    const svg = new Blob([data.data.captcha], { type: 'image/svg+xml' });
+  * captcha() {
+    const { data }: { data: CaptchaResult } = yield fetchCaptcha();
+    const svg = new Blob([ data.data.captcha ], { type: 'image/svg+xml' });
     this.captchaUrl = URL.createObjectURL(svg);
   }
-
 
 }

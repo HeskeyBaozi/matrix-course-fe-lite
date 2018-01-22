@@ -1,6 +1,5 @@
 import React from 'react';
 import particlesConfig from '@/assets/jsons/particlesjs-config.json';
-import 'particles.js'
 import styles from './particles.component.less';
 
 declare const particlesJS: (id: string, config: object) => void;
@@ -14,7 +13,7 @@ export default class Particles extends React.PureComponent {
   }
 
   componentWillUnmount() {
-
+    console.log('unmount particles');
     if (Array.isArray(pJSDom) && pJSDom.length) {
       pJSDom.forEach(pJS => {
         pJS.pJS.fn.vendors.destroypJS();

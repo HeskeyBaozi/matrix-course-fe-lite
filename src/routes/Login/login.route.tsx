@@ -1,5 +1,5 @@
 import React, { SyntheticEvent } from 'react';
-import { Tooltip, Form, Input, Icon, Button } from 'antd';
+import { Tooltip, Form, Input, Icon, Button, notification } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { Loading } from '@/components/Loading/loading.component';
 import { action, autorunAsync, observable, IReactionDisposer, computed, runInAction } from 'mobx';
@@ -9,9 +9,8 @@ import styles from './login.route.less';
 import defaultAvatarUrl from '@/assets/images/avatar.jpg';
 import { LoginModel } from '@/models/login.model';
 import classNames from 'classnames';
-import { LoginBody } from '@/api/user';
+import { LoginBody, LoginSuccessResult, LoginErrorResult } from '@/api/user';
 import { asyncAction } from 'mobx-utils';
-
 
 const { Item } = Form;
 
@@ -53,30 +52,54 @@ class LoginComponent extends React.Component<LoginComponentProps> {
     this.username = e.currentTarget.value
   };
 
-  @action
+
   submit = (e: SyntheticEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    this.isEntering = true;
-    const { form: { validateFields }, $Login } = this.props;
+
+    const { form: { validateFields } } = this.props;
     validateFields({ force: true }, async (error, { username, password, captcha }: LoginBody) => {
       if (!error) {
-        await $Login!.login({ username, password, captcha });
+        await this.loginFlow({ username, password, captcha });
       }
-      runInAction(() => {
-        this.isEntering = false;
-      });
     });
   };
 
   @asyncAction
-  * changeCaptcha() {
+  * loginFlow(body: LoginBody) {
+    this.isEntering = true;
+    const { $Login } = this.props;
+    const result: LoginErrorResult | LoginSuccessResult = yield $Login!.login(body);
+
+    if (result.status === 'OK') {
+      const realname = result && result.data && result.data.realname;
+      notification.success({
+        message: '登录成功',
+        description: realname && `欢迎你, ${realname}` || `欢迎你`
+      });
+    } else {
+      if (result.status === 'WRONG_CAPTCHA' && $Login!.captchaUrl || result.status === 'WRONG_PASSWORD') {
+        notification.error({
+          message: '登录失败',
+          description: result && result.msg || '登录错误'
+        });
+      }
+    }
+
+    if (result && (result as LoginErrorResult).data.captcha) {
+      yield this.captchaFlow();
+    }
+    this.isEntering = false;
+  }
+
+  @asyncAction
+  * captchaFlow() {
     this.isCaptchaLoading = true;
     yield new Promise(resolve => {
       setTimeout(() => {
         resolve();
       }, 1000);
     });
-    yield this.props.$Login!.captchaFlow();
+    yield this.props.$Login!.captcha();
     this.isCaptchaLoading = false;
   };
 
@@ -100,36 +123,36 @@ class LoginComponent extends React.Component<LoginComponentProps> {
     const { form: { getFieldDecorator: $ }, $Login } = this.props;
 
     const UserName = $('username', {
-      rules: [{ required: true, message: '请输入用户名' }]
-    })(<Input onChange={ this.handleChange } placeholder={ 'Username' } prefix={ <Icon type={ 'user' }/> }/>);
+      rules: [ { required: true, message: '请输入用户名' }]
+    })(<Input onChange={ this.handleChange } placeholder={ 'Username' } prefix={ <Icon type={ 'user' } /> } />);
 
     const Password = $('password', {
-      rules: [{ required: true, message: '请输入密码' }]
-    })(<Input type={ 'password' } placeholder={ 'Password' } prefix={ <Icon type={ 'lock' }/> }/>);
+      rules: [ { required: true, message: '请输入密码' }]
+    })(<Input type={ 'password' } placeholder={ 'Password' } prefix={ <Icon type={ 'lock' } /> } />);
 
     const Captcha = $('captcha', {
-      rules: [{ required: !!$Login!.captchaUrl, message: '请输入验证码' }]
-    })(<Input placeholder={ '验证码' } prefix={ <Icon type="edit"/> }/>);
+      rules: [ { required: !!$Login!.captchaUrl, message: '请输入验证码' }]
+    })(<Input placeholder={ '验证码' } prefix={ <Icon type="edit" /> } />);
 
     return (
       <Form onSubmit={ this.submit }>
         <Item>
           <div className={ styles.avatarWrapper }>
-            <Loading isLoading={ this.isAvatarLoading } isFullScreen={ false } showTips={ false }/>
-            <img src={ this.avatarUrl } alt={ 'avatar' }/>
+            <Loading isLoading={ this.isAvatarLoading } isFullScreen={ false } showTips={ false } />
+            <img src={ this.avatarUrl } alt={ 'avatar' } />
           </div>
         </Item>
         <Item>{ UserName }</Item>
         <Item>{ Password }</Item>
 
-        <Item className={ classNames({ [styles.hidden]: !$Login!.captchaUrl }) }>
+        <Item className={ classNames({ [ styles.hidden ]: !$Login!.captchaUrl }) }>
           <div className={ styles.captchaWrapper }>
             { Captcha }
             <Tooltip title={ '点击以更换验证码' } trigger={ 'hover' }>
               <div className={ styles.captchaImageWrapper }>
-                <Loading isLoading={ this.isCaptchaLoading } isFullScreen={ false } showTips={ false }/>
-                <img onClick={ this.changeCaptcha.bind(this) } className={ styles.captcha } src={ $Login!.captchaUrl }
-                     alt={ 'captcha' }/>
+                <Loading isLoading={ this.isCaptchaLoading } isFullScreen={ false } showTips={ false } />
+                <img onClick={ this.captchaFlow.bind(this) } className={ styles.captcha } src={ $Login!.captchaUrl }
+                  alt={ 'captcha' } />
               </div>
             </Tooltip>
           </div>
@@ -137,7 +160,7 @@ class LoginComponent extends React.Component<LoginComponentProps> {
 
         <div className={ styles.container }>
           <Button loading={ this.isEntering } className={ styles.submit } type={ 'primary' }
-                  htmlType={ 'submit' }>LOGIN</Button>
+            htmlType={ 'submit' }>LOGIN</Button>
         </div>
       </Form>
     );
