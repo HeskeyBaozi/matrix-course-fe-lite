@@ -1,18 +1,20 @@
 import React from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Layout, Menu, Icon, Avatar } from 'antd';
 import classNames from 'classnames';
 import logoTransUrl from '@/assets/images/logo-trans.png';
 import styles from './basic.layout.less';
 import { RouteComponentProps } from 'react-router';
 import { action, observable } from 'mobx';
+import { ProfileModel } from '@/models/profile.model';
 
 interface LoginLayoutProps extends RouteComponentProps<{}> {
-
+  $Profile?: ProfileModel;
 }
 
 const { Header, Sider, Content } = Layout;
 
+@inject('$Profile')
 @observer
 export default class BasicLayout extends React.Component<LoginLayoutProps> {
 
@@ -24,6 +26,11 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
   toggle = () => {
     this.collapsed = !this.collapsed;
   };
+
+  componentDidMount() {
+    const { $Profile } = this.props;
+    $Profile!.loadProfile();
+  }
 
   render() {
     return (

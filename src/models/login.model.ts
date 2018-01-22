@@ -3,14 +3,10 @@ import { asyncAction } from 'mobx-utils';
 import { notification } from 'antd';
 import { history } from '@/utils/history';
 import {
-  CaptchaResult,
-  fetchAvatar, fetchCaptcha, fetchUserLoginState, LoginBody, loginPost, LoginQueryResult,
-  LoginErrorResult,
-  LoginSuccessResult
+  fetchAvatar, fetchUserLoginState, LoginBody, loginPost, LoginQueryResult,
+  LoginErrorResult, LoginSuccessResult
 } from '@/api/user';
-
-'use strict';
-
+import { CaptchaResult, fetchCaptcha } from '@/api/captcha';
 
 export class LoginModel {
   @observable

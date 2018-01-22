@@ -69,7 +69,6 @@ class LoginComponent extends React.Component<LoginComponentProps> {
     this.isEntering = true;
     const { $Login } = this.props;
     const result: LoginErrorResult | LoginSuccessResult = yield $Login!.login(body);
-
     if (result.status === 'OK') {
       const realname = result && result.data && result.data.realname;
       notification.success({
