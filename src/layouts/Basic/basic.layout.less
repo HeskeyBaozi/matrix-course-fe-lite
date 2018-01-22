@@ -26,31 +26,42 @@
 }
 
 .contentLayout {
+    position: relative;
     transition: all 200ms;
     margin-left: 200px;
 }
 
 .contentLayoutCollapsed {
-    margin-left: 80px;
+    margin-left: 80px !important;
 }
 
 .contentHeader {
     position: fixed;
     padding: 0 1rem 0 0;
-    width: 100%;
+    transition: all 200ms;
+    left: 200px;
+    right: 0;
     background-color: white;
     box-shadow: 0 1px 4px rgba(0, 21, 41, .08)
 }
 
-.trigger {
-    font-size: 1.3rem;
-    line-height: 64px;
+.contentHeaderCollapsed {
+    left: 80px;
+}
+
+.buttonLike {
     cursor: pointer;
     transition: all 200ms;
-    padding: 0 2rem;
     &:hover {
         background-color: mix(white, black, 95%);
     }
+}
+
+.trigger {
+    .buttonLike;
+    font-size: 1.3rem;
+    line-height: 64px;
+    padding: 0 2rem;
 }
 
 .content {
@@ -61,4 +72,19 @@
 .hidden {
     display: none;
     opacity: 0;
+}
+
+.right {
+    float: right;
+    display: flex;
+    flex-flow: row nowrap;
+    height: 100%;
+}
+
+.action {
+    .buttonLike;
+    padding: 0 1rem;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
 }

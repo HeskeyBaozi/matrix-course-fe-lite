@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Avatar } from 'antd';
 import classNames from 'classnames';
 import logoTransUrl from '@/assets/images/logo-trans.png';
 import styles from './basic.layout.less';
@@ -50,9 +50,17 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
           </Menu>
         </Sider>
         <Layout className={ classNames(styles.contentLayout, { [ styles.contentLayoutCollapsed ]: this.collapsed }) }>
-          <Header className={ styles.contentHeader }>
+          <Header className={ classNames(styles.contentHeader, { [ styles.contentHeaderCollapsed ]: this.collapsed }) }>
             <Icon className={ styles.trigger } type={ this.collapsed ? 'menu-unfold' : 'menu-fold' }
               onClick={ this.toggle } />
+            <div className={ styles.right }>
+              <span className={ styles.action }>
+                <Icon type={ 'bell' } />
+              </span>
+              <span className={ styles.action }>
+                <Avatar size={ 'large' } icon={ 'user' } />
+              </span>
+            </div>
           </Header>
           <Content className={ styles.content }>
             Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />

@@ -1,5 +1,5 @@
 import React, { SyntheticEvent } from 'react';
-import { Tooltip, Form, Input, Icon, Button, notification } from 'antd';
+import { Tooltip, Form, Input, Icon, Button, notification, Avatar } from 'antd';
 import { inject, observer } from 'mobx-react';
 import { Loading } from '@/components/Loading/loading.component';
 import { action, autorunAsync, observable, IReactionDisposer, computed, runInAction } from 'mobx';
