@@ -9,8 +9,8 @@ import styles from './login.route.less';
 import defaultAvatarUrl from '@/assets/images/avatar.jpg';
 import { LoginModel } from '@/models/login.model';
 import classNames from 'classnames';
-import { LoginBody, LoginSuccessResult, LoginErrorResult } from '@/api/user';
 import { asyncAction } from 'mobx-utils';
+import { LoginBody, LoginResult, LoginSuccessData, LoginErrorData } from '@/api/interface';
 
 const { Item } = Form;
 
@@ -68,9 +68,9 @@ class LoginComponent extends React.Component<LoginComponentProps> {
   * loginFlow(body: LoginBody) {
     this.isEntering = true;
     const { $Login } = this.props;
-    const result: LoginErrorResult | LoginSuccessResult = yield $Login!.login(body);
+    const result: LoginResult = yield $Login!.login(body);
     if (result.status === 'OK') {
-      const realname = result && result.data && result.data.realname;
+      const realname = result && result.data && (result.data as LoginSuccessData).realname;
       notification.success({
         message: '登录成功',
         description: realname && `欢迎你, ${realname}` || `欢迎你`
@@ -84,7 +84,7 @@ class LoginComponent extends React.Component<LoginComponentProps> {
       }
     }
 
-    if (result && (result as LoginErrorResult).data.captcha) {
+    if (result && (result.data as LoginErrorData).captcha) {
       yield this.captchaFlow();
     }
     this.isEntering = false;
