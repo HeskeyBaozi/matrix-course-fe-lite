@@ -35,7 +35,8 @@ export class App extends React.Component<AppProps, {}> {
       const realname = result.data && (result.data as LoginSuccessData).realname;
       notification.success({
         message: '欢迎回来',
-        description: realname && `欢迎你, ${realname}` || `欢迎你`
+        description: realname && `欢迎你, ${realname}` || `欢迎你`,
+        duration: 1
       })
     }
     this.isLoading = false;
