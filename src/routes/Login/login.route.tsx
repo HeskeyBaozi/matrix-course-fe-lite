@@ -14,14 +14,14 @@ import { LoginBody, LoginResult, LoginSuccessData, LoginErrorData } from '@/api/
 
 const { Item } = Form;
 
-interface LoginComponentProps extends RouteComponentProps<{}>, FormComponentProps {
+interface LoginRouteProps extends RouteComponentProps<{}>, FormComponentProps {
   $Login?: LoginModel;
 }
 
 
 @inject('$Login')
 @observer
-class LoginComponent extends React.Component<LoginComponentProps> {
+class LoginRoute extends React.Component<LoginRouteProps> {
   @observable
   username = '';
 
@@ -167,5 +167,5 @@ class LoginComponent extends React.Component<LoginComponentProps> {
 }
 
 
-export default Form.create({})(LoginComponent);
+export default Form.create({})(LoginRoute);
 

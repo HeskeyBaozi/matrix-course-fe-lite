@@ -4,9 +4,10 @@ import { Layout, Menu, Icon, Avatar } from 'antd';
 import classNames from 'classnames';
 import logoTransUrl from '@/assets/images/logo-trans.png';
 import styles from './basic.layout.less';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, Switch, Route, Redirect } from 'react-router';
 import { action, observable } from 'mobx';
 import { ProfileModel } from '@/models/profile.model';
+import { ProfileRoute } from '@/utils/dynamic';
 
 interface LoginLayoutProps extends RouteComponentProps<{}> {
   $Profile?: ProfileModel;
@@ -33,6 +34,7 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
   }
 
   render() {
+    const { match } = this.props;
     return (
       <Layout>
         <Sider breakpoint={ 'md' } className={ styles.sider } trigger={ null } collapsible
@@ -70,10 +72,10 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
             </div>
           </Header>
           <Content className={ styles.content }>
-            Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />
-            Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />
-            Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />
-            Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />Content <br />
+            <Switch>
+              <Route key={ 'profile' } exact path={ `${match.path}profile` } component={ ProfileRoute } />
+              <Redirect to={ `${match.path}profile` } />
+            </Switch>
           </Content>
         </Layout>
       </Layout>

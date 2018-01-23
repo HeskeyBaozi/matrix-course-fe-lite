@@ -3,12 +3,10 @@ import { observer } from 'mobx-react';
 import styles from './login.layout.less';
 import { Layout, Icon } from 'antd';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import { dynamic } from '@/utils/dynamic';
+import { dynamic, ParticlesComponent, LoginRoute } from '@/utils/dynamic';
 import logoUrl from '@/assets/images/logo.svg';
 import GlobalFooter from 'ant-design-pro/lib/GlobalFooter';
 
-const LoginComponent = dynamic(() => import('@/routes/Login/login.route'));
-const ParticlesComponent = dynamic(() => import('@/components/Particles/particles.component'));
 
 interface ILink {
   key: string;
@@ -49,9 +47,8 @@ export default class LoginLayout extends React.Component<LoginLayoutProps> {
         <img className={ styles.logo } src={ logoUrl } alt={ 'logo' } />
         <div className={ styles.inner }>
           <Switch>
-            <Route key={ 'login' } exact path={ `${match.path}` }
-              component={ LoginComponent } />
-            <Redirect to={ { key: 'login' } } />
+            <Route key={ 'login' } exact path={ `${match.path}` } component={ LoginRoute } />
+            <Redirect to={ `${match.path}` } />
           </Switch>
         </div>
         <div className={ styles.footer }>

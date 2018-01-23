@@ -7,12 +7,10 @@ import { asyncAction } from 'mobx-utils';
 import RenderAuthorizeRoute from '@/components/Authorized'
 import { Router, Switch } from 'react-router';
 import { history } from '@/utils/history';
-import { dynamic } from '@/utils/dynamic';
-import { Layout,notification } from 'antd';
-import { LoginQueryResult } from '@/api/user';
+import { dynamic, LoginLayout, BasicLayout } from '@/utils/dynamic';
+import { Layout, notification } from 'antd';
+import { LoginQueryResult, LoginSuccessData } from '@/api/interface';
 
-const LoginLayout = dynamic(() => import('@/layouts/Login/login.layout'));
-const BasicLayout = dynamic(() => import('@/layouts/Basic/basic.layout'));
 
 interface AppProps {
   $Login?: LoginModel
@@ -33,8 +31,8 @@ export class App extends React.Component<AppProps, {}> {
   * initializeFlow() {
     this.isLoading = true;
     const result: LoginQueryResult = yield this.props.$Login!.QueryLoginStatus();
-    if(result.status === 'OK') {
-      const realname = result.data && result.data.realname;
+    if (result.status === 'OK') {
+      const realname = result.data && (result.data as LoginSuccessData).realname;
       notification.success({
         message: '欢迎回来',
         description: realname && `欢迎你, ${realname}` || `欢迎你`
