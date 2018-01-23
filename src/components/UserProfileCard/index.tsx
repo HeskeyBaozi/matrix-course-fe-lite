@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import classNames from 'classnames';
-import { Card, List, Icon } from 'antd';
+import { Card, List, Icon, Avatar } from 'antd';
 import { CardProps } from 'antd/lib/card';
 import { ProfileModel } from '@/models/profile.model';
 import styles from './index.less';
@@ -20,7 +20,7 @@ export default class UserProfile extends React.Component<UserProfileComponentPro
     const Cover = (
       <div className={ styles.coverAvatarWrapper }
            style={ { backgroundImage: `url(${$Profile!.avatarUrl})` } }>
-        <img className={ styles.coverAvatar } src={ $Profile!.avatarUrl } alt={ 'avatar' }/>
+        <Avatar className={ styles.coverAvatar } icon={ 'user' } src={ $Profile!.avatarUrl }/>
       </div>
     );
 

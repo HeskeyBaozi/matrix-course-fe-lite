@@ -20,11 +20,6 @@ export class LoginModel {
 
   @asyncAction
   * QueryLoginStatus() {
-    yield new Promise(resolve => {
-      setTimeout(() => {
-        resolve();
-      }, 1000);
-    });
     const { data }: { data: LoginQueryResult } = yield fetchUserLoginState();
     if (data.status === 'OK') {
       this.isLogin = true;

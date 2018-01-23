@@ -18,5 +18,3 @@ export const ProfileRoute = dynamic(() => import('@/routes/Profile'));
 
 // Dynamic Components
 export const ParticlesComponent = dynamic(() => import('@/components/Particles'));
-export const UserProfileComponent = dynamic(() => import('@/components/UserProfileCard'));
-export const CurrentCoursesComponent = dynamic(() => import('@/components/CurrentCoursesCard'));

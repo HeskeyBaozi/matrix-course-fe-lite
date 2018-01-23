@@ -3,19 +3,19 @@ import { observer } from 'mobx-react';
 import { Tooltip, Icon } from 'antd';
 import FieldCard from '@/components/FieldCard';
 
-interface CurrentCoursesCardProps {
+interface DeadlinesCardProps {
 
 }
 
 @observer
-export default class CurrentCoursesCard extends React.Component<CurrentCoursesCardProps> {
+export default class DeadlinesCard extends React.Component<DeadlinesCardProps> {
   render() {
     return (
       <FieldCard
-        title={ '正在进行课程数' }
-        icon={ 'book' }
-        times={ '门' }
-        total={ 2 }
+        title={ 'Deadlines剩余个数' }
+        icon={ 'meh-o' }
+        times={ '个' }
+        total={ 4 }
         hoverable
         action={ <Tooltip title="指标说明"><Icon type="info-circle-o"/></Tooltip> }/>
     );

@@ -4,7 +4,6 @@ import { asyncAction } from 'mobx-utils';
 import { Profile } from '@/api/interface';
 
 
-
 export class ProfileModel {
   @observable
   profile: Profile = {
@@ -29,6 +28,11 @@ export class ProfileModel {
 
   @asyncAction
   * LoadProfile() {
+    yield new Promise(resolve => {
+      setTimeout(() => {
+        resolve();
+      }, 1000);
+    });
     const { data: { data: profile } }: { data: { data: Profile } } = yield fetchProfile();
     this.profile = profile;
     yield this.FetchUserAvatar({ username: this.profile.username });
