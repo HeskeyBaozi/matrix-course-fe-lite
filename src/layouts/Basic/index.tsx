@@ -4,10 +4,11 @@ import { Layout, Menu, Icon, Avatar } from 'antd';
 import classNames from 'classnames';
 import logoTransUrl from '@/assets/images/logo-trans.png';
 import styles from './index.less';
-import { RouteComponentProps, Switch, Route, Redirect } from 'react-router';
+import { RouteComponentProps, Switch, Route } from 'react-router';
 import { action, observable, computed } from 'mobx';
 import { ProfileModel } from '@/models/profile.model';
 import { ProfileRoute } from '@/utils/dynamic';
+import { ClickParam } from 'antd/lib/menu';
 
 interface LoginLayoutProps extends RouteComponentProps<{}> {
   $Profile?: ProfileModel;
@@ -37,6 +38,11 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
     this.props.$Profile!.LoadProfile();
   }
 
+  navigate = ({ key }: ClickParam) => {
+    const { history } = this.props;
+    history.push(key);
+  };
+
   render() {
     const { match } = this.props;
     return (
@@ -46,19 +52,30 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
           <div className={ styles.logoWrapper }>
             <img src={ logoTransUrl } alt={ 'logo' }/>
           </div>
-          <Menu className={ styles.menu } theme={ 'dark' } mode="inline" defaultSelectedKeys={ ['1'] }
+          <Menu className={ styles.menu } theme={ 'dark' }
+                onClick={ this.navigate }
+                mode="inline" defaultSelectedKeys={ ['1'] }
+                selectedKeys={ [match.path] }
                 inlineCollapsed={ this.collapsed }>
-            <Menu.Item key="1">
-              <Icon type="user"/>
+            <Menu.Item key={ `/` }>
+              <Icon type={ 'home' }/>
               <span>概览</span>
             </Menu.Item>
-            <Menu.Item key="2">
-              <Icon type="video-camera"/>
-              <span>nav 2</span>
+            <Menu.Item key={ `/course` }>
+              <Icon type={ 'book' }/>
+              <span>课程</span>
             </Menu.Item>
-            <Menu.Item key="3">
-              <Icon type="upload"/>
-              <span>nav 3</span>
+            <Menu.Item key={ `/notification` }>
+              <Icon type="bell"/>
+              <span>消息</span>
+            </Menu.Item>
+            <Menu.Item key={ `/setting` }>
+              <Icon type="setting"/>
+              <span>设置</span>
+            </Menu.Item>
+            <Menu.Item key={ `/feedback` }>
+              <Icon type="smile-o"/>
+              <span>反馈</span>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -77,8 +94,7 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
           </Header>
           <Content className={ styles.content }>
             <Switch>
-              <Route key={ 'profile' } exact path={ `${match.path}profile` } component={ ProfileRoute }/>
-              <Redirect to={ `${match.path}profile` }/>
+              <Route key={ 'profile' } exact path={ match.path } component={ ProfileRoute }/>
             </Switch>
           </Content>
         </Layout>

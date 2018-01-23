@@ -12,7 +12,7 @@ interface ProfileRouteProps extends RouteComponentProps<{}> {
   $Profile?: ProfileModel;
 }
 
-const topRightResponsive: ColProps = { xs: 24, sm: 24, md: 24, lg: 24, xl: 12 };
+const topRightResponsive: ColProps = { xs: 24, sm: 24, md: 12, lg: 12, xl: 6, style: { marginBottom: '1rem' } };
 
 @inject('$Profile')
 @observer
@@ -25,18 +25,14 @@ export default class ProfileRoute extends React.Component<ProfileRouteProps> {
     const { $Profile } = this.props;
     return (
       <Row gutter={ 16 }>
-        <Col span={ 12 }>
+        <Col { ...topRightResponsive } xl={ 12 }>
           <UserProfileCard/>
         </Col>
-        <Col span={ 12 }>
-          <Row gutter={ 16 }>
-            <Col { ...topRightResponsive }>
-              <CurrentCoursesCard/>
-            </Col>
-            <Col { ...topRightResponsive }>
-              <DeadlinesCard/>
-            </Col>
-          </Row>
+        <Col { ...topRightResponsive }>
+          <CurrentCoursesCard/>
+        </Col>
+        <Col { ...topRightResponsive }>
+          <DeadlinesCard/>
         </Col>
       </Row>
     );

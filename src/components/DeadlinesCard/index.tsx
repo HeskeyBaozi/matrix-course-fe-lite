@@ -12,7 +12,7 @@ export default class DeadlinesCard extends React.Component<DeadlinesCardProps> {
   render() {
     return (
       <FieldCard
-        title={ 'Deadlines剩余个数' }
+        title={ '作业未提交个数' }
         icon={ 'meh-o' }
         times={ '个' }
         total={ 4 }
