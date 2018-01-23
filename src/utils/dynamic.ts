@@ -15,7 +15,7 @@ export const BasicLayout = dynamic(() => import('@/layouts/Basic'));
 // Dynamic Routes
 export const LoginRoute = dynamic(() => import('@/routes/Login'));
 export const ProfileRoute = dynamic(() => import('@/routes/Profile'));
-export const CourseRoute = dynamic(() => import('@/routes/Course'));
+export const CourseRoute = dynamic(() => import('@/routes/Courses'));
 
 // Dynamic Components
 export const ParticlesComponent = dynamic(() => import('@/components/Particles'));

@@ -62,7 +62,7 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
               <Icon type={ 'home' }/>
               <span>概览</span>
             </Menu.Item>
-            <Menu.Item key={ `${rootPath}course` }>
+            <Menu.Item key={ `${rootPath}courses` }>
               <Icon type={ 'book' }/>
               <span>课程</span>
             </Menu.Item>
@@ -96,7 +96,7 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
           <Content className={ styles.content }>
             <Switch>
               <Route key={ 'profile' } exact path={ `${rootPath}` } component={ ProfileRoute }/>
-              <Route key={ 'course' } path={ `${rootPath}course` } component={ CourseRoute }/>
+              <Route key={ 'course' } path={ `${rootPath}courses` } component={ CourseRoute }/>
             </Switch>
           </Content>
         </Layout>
