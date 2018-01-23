@@ -44,6 +44,7 @@ export interface Profile {
   nickname: string;
   phone: string;
   realname: string;
+  username: string;
   user_addition: null | object;
   user_id: number;
 }

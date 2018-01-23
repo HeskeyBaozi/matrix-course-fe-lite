@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import logoTransUrl from '@/assets/images/logo-trans.png';
 import styles from './basic.layout.less';
 import { RouteComponentProps, Switch, Route, Redirect } from 'react-router';
-import { action, observable } from 'mobx';
+import { action, observable, computed } from 'mobx';
 import { ProfileModel } from '@/models/profile.model';
 import { ProfileRoute } from '@/utils/dynamic';
 
@@ -22,15 +22,19 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
   @observable
   collapsed = true;
 
-
   @action
   toggle = () => {
     this.collapsed = !this.collapsed;
   };
 
-  componentDidMount() {
+  @computed
+  get headerAvatarUrl() {
     const { $Profile } = this.props;
-    $Profile!.loadProfile();
+    return $Profile!.avatarUrl.length ? $Profile!.avatarUrl : void 0;
+  }
+
+  componentDidMount() {
+    this.props.$Profile!.LoadProfile();
   }
 
   render() {
@@ -67,7 +71,7 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
                 <Icon type={ 'bell' } />
               </span>
               <span className={ styles.action }>
-                <Avatar size={ 'large' } icon={ 'user' } />
+                <Avatar size={ 'large' } icon={ 'user' } src={ this.headerAvatarUrl } />
               </span>
             </div>
           </Header>

@@ -1,12 +1,11 @@
 import React from 'react';
-import Exception from '../Exception/index';
 import CheckPermissions from './CheckPermissions';
 /**
  * 默认不能访问任何页面
  * default is "NULL"
  */
 const Exception403 = () => (
-  <Exception type="403" style={{ minHeight: 500, height: '80%' }} />
+  <div>403</div>
 );
 
 /**

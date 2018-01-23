@@ -42,7 +42,7 @@ class LoginRoute extends React.Component<LoginRouteProps> {
   @computed
   get avatarUrl() {
     const { $Login } = this.props;
-    return $Login!.avatar ? $Login!.avatar : defaultAvatarUrl
+    return $Login!.avatarUrl ? $Login!.avatarUrl : defaultAvatarUrl
   }
 
 
@@ -68,7 +68,7 @@ class LoginRoute extends React.Component<LoginRouteProps> {
   * loginFlow(body: LoginBody) {
     this.isEntering = true;
     const { $Login } = this.props;
-    const result: LoginResult = yield $Login!.login(body);
+    const result: LoginResult = yield $Login!.Login(body);
     if (result.status === 'OK') {
       const realname = result && result.data && (result.data as LoginSuccessData).realname;
       notification.success({
@@ -98,7 +98,7 @@ class LoginRoute extends React.Component<LoginRouteProps> {
         resolve();
       }, 1000);
     });
-    yield this.props.$Login!.captcha();
+    yield this.props.$Login!.Captcha();
     this.isCaptchaLoading = false;
   };
 
