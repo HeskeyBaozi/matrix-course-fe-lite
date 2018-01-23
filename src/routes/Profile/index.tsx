@@ -17,10 +17,6 @@ const topRightResponsive: ColProps = { xs: 24, sm: 24, md: 12, lg: 12, xl: 6, st
 @inject('$Profile')
 @observer
 export default class ProfileRoute extends React.Component<ProfileRouteProps> {
-  componentDidMount() {
-    console.log(this.props.$Profile!.profile);
-  }
-
   render() {
     const { $Profile } = this.props;
     return (

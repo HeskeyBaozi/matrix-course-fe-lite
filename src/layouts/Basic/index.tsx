@@ -7,7 +7,7 @@ import styles from './index.less';
 import { RouteComponentProps, Switch, Route } from 'react-router';
 import { action, observable, computed } from 'mobx';
 import { ProfileModel } from '@/models/profile.model';
-import { ProfileRoute } from '@/utils/dynamic';
+import { CourseRoute, ProfileRoute } from '@/utils/dynamic';
 import { ClickParam } from 'antd/lib/menu';
 
 interface LoginLayoutProps extends RouteComponentProps<{}> {
@@ -44,7 +44,8 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
   };
 
   render() {
-    const { match } = this.props;
+    const { match, location } = this.props;
+    const rootPath = match.path;
     return (
       <Layout>
         <Sider breakpoint={ 'md' } className={ styles.sider } trigger={ null } collapsible
@@ -55,25 +56,25 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
           <Menu className={ styles.menu } theme={ 'dark' }
                 onClick={ this.navigate }
                 mode="inline" defaultSelectedKeys={ ['1'] }
-                selectedKeys={ [match.path] }
+                selectedKeys={ [location.pathname] }
                 inlineCollapsed={ this.collapsed }>
-            <Menu.Item key={ `/` }>
+            <Menu.Item key={ `${rootPath}` }>
               <Icon type={ 'home' }/>
               <span>概览</span>
             </Menu.Item>
-            <Menu.Item key={ `/course` }>
+            <Menu.Item key={ `${rootPath}course` }>
               <Icon type={ 'book' }/>
               <span>课程</span>
             </Menu.Item>
-            <Menu.Item key={ `/notification` }>
+            <Menu.Item key={ `${rootPath}notification` }>
               <Icon type="bell"/>
               <span>消息</span>
             </Menu.Item>
-            <Menu.Item key={ `/setting` }>
+            <Menu.Item key={ `${rootPath}setting` }>
               <Icon type="setting"/>
               <span>设置</span>
             </Menu.Item>
-            <Menu.Item key={ `/feedback` }>
+            <Menu.Item key={ `${rootPath}feedback` }>
               <Icon type="smile-o"/>
               <span>反馈</span>
             </Menu.Item>
@@ -94,7 +95,8 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
           </Header>
           <Content className={ styles.content }>
             <Switch>
-              <Route key={ 'profile' } exact path={ match.path } component={ ProfileRoute }/>
+              <Route key={ 'profile' } exact path={ `${rootPath}` } component={ ProfileRoute }/>
+              <Route key={ 'course' } path={ `${rootPath}course` } component={ CourseRoute }/>
             </Switch>
           </Content>
         </Layout>

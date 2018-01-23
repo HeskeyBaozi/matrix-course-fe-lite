@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import styles from './index.less';
 import { Layout, Icon } from 'antd';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import { dynamic, ParticlesComponent, LoginRoute } from '@/utils/dynamic';
+import { ParticlesComponent, LoginRoute } from '@/utils/dynamic';
 import logoUrl from '@/assets/images/logo.svg';
 import GlobalFooter from '@/components/GlobalFooter';
 
@@ -31,7 +31,7 @@ const links: ILink[] = [
 ];
 
 
-const copyright = <div>Copyright <Icon type={ 'copyright' }/> VMatrix 第三方微系统</div>;
+const copyright = <div>Copyright <Icon type={ 'copyright' }/> VMatrix</div>;
 
 interface LoginLayoutProps extends RouteComponentProps<{}> {
 }

@@ -47,13 +47,13 @@ class LoginRoute extends React.Component<LoginRouteProps> {
 
 
   @action
-  handleChange = (e: SyntheticEvent<HTMLInputElement>) => {
+  observeUsername = (e: SyntheticEvent<HTMLInputElement>) => {
     e.preventDefault();
     this.username = e.currentTarget.value
   };
 
 
-  submit = (e: SyntheticEvent<HTMLButtonElement>) => {
+  handleSubmit = (e: SyntheticEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const { form: { validateFields } } = this.props;
@@ -62,6 +62,10 @@ class LoginRoute extends React.Component<LoginRouteProps> {
         await this.loginFlow({ username, password, captcha });
       }
     });
+  };
+
+  handleChangeCaptcha = () => {
+    this.captchaFlow();
   };
 
   @asyncAction
@@ -123,7 +127,7 @@ class LoginRoute extends React.Component<LoginRouteProps> {
 
     const UserName = $('username', {
       rules: [{ required: true, message: '请输入用户名' }]
-    })(<Input onChange={ this.handleChange } placeholder={ 'Username' } prefix={ <Icon type={ 'user' }/> }/>);
+    })(<Input onChange={ this.observeUsername } placeholder={ 'Username' } prefix={ <Icon type={ 'user' }/> }/>);
 
     const Password = $('password', {
       rules: [{ required: true, message: '请输入密码' }]
@@ -134,7 +138,7 @@ class LoginRoute extends React.Component<LoginRouteProps> {
     })(<Input placeholder={ '验证码' } prefix={ <Icon type="edit"/> }/>);
 
     return (
-      <Form onSubmit={ this.submit }>
+      <Form onSubmit={ this.handleSubmit }>
         <Item>
           <div className={ styles.avatarWrapper }>
             <Loading isLoading={ this.isAvatarLoading } isFullScreen={ false } showTips={ false }/>
@@ -150,7 +154,7 @@ class LoginRoute extends React.Component<LoginRouteProps> {
             <Tooltip title={ '点击以更换验证码' } trigger={ 'hover' }>
               <div className={ styles.captchaImageWrapper }>
                 <Loading isLoading={ this.isCaptchaLoading } isFullScreen={ false } showTips={ false }/>
-                <img onClick={ this.captchaFlow.bind(this) } className={ styles.captcha } src={ $Login!.captchaUrl }
+                <img onClick={ this.handleChangeCaptcha } className={ styles.captcha } src={ $Login!.captchaUrl }
                      alt={ 'captcha' }/>
               </div>
             </Tooltip>
