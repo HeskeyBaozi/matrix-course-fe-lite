@@ -18,7 +18,7 @@ useStrict(true);
 
 render((
   <Provider { ...stores }>
-    <App />
+    <App/>
   </Provider>
 ), document.getElementById('app'));
 

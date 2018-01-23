@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { observer } from 'mobx-react';
-import styles from './login.layout.less';
+import styles from './index.less';
 import { Layout, Icon } from 'antd';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import { dynamic, ParticlesComponent, LoginRoute } from '@/utils/dynamic';
@@ -31,7 +31,7 @@ const links: ILink[] = [
 ];
 
 
-const copyright = <div>Copyright <Icon type={ 'copyright' } /> VMatrix 第三方微系统</div>;
+const copyright = <div>Copyright <Icon type={ 'copyright' }/> VMatrix 第三方微系统</div>;
 
 interface LoginLayoutProps extends RouteComponentProps<{}> {
 }
@@ -43,16 +43,16 @@ export default class LoginLayout extends React.Component<LoginLayoutProps> {
     const { match } = this.props;
     return (
       <Layout className={ styles.container }>
-        <ParticlesComponent />
-        <img className={ styles.logo } src={ logoUrl } alt={ 'logo' } />
+        <ParticlesComponent/>
+        <img className={ styles.logo } src={ logoUrl } alt={ 'logo' }/>
         <div className={ styles.inner }>
           <Switch>
-            <Route key={ 'login' } exact path={ `${match.path}` } component={ LoginRoute } />
-            <Redirect to={ `${match.path}` } />
+            <Route key={ 'login' } exact path={ `${match.path}` } component={ LoginRoute }/>
+            <Redirect to={ `${match.path}` }/>
           </Switch>
         </div>
         <div className={ styles.footer }>
-          <GlobalFooter links={ links } copyright={ copyright } />
+          <GlobalFooter links={ links } copyright={ copyright }/>
         </div>
       </Layout>
     );

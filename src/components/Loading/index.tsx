@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Icon, Spin } from 'antd';
-import styles from './loading.component.less';
+import styles from './index.less';
 
 
 interface LoadingProps {
@@ -10,7 +10,7 @@ interface LoadingProps {
   isFullScreen: boolean;
 }
 
-export function Loading({ isLoading, isFullScreen, showTips = true }: LoadingProps) {
+export default function Loading({ isLoading, isFullScreen, showTips = true }: LoadingProps) {
   return (
     <div className={ classNames(styles.loading, {
       [styles.hidden]: !isLoading,

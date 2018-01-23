@@ -9,14 +9,14 @@ export function dynamic(resolve: () => Promise<ComponentType<any> | { default: C
 }
 
 // Dynamic Layouts
-export const LoginLayout = dynamic(() => import('@/layouts/Login/login.layout'));
-export const BasicLayout = dynamic(() => import('@/layouts/Basic/basic.layout'));
+export const LoginLayout = dynamic(() => import('@/layouts/Login'));
+export const BasicLayout = dynamic(() => import('@/layouts/Basic'));
 
 // Dynamic Routes
-export const LoginRoute = dynamic(() => import('@/routes/Login/login.route'));
-export const ProfileRoute = dynamic(() => import('@/routes/Profile/profile.route'));
+export const LoginRoute = dynamic(() => import('@/routes/Login'));
+export const ProfileRoute = dynamic(() => import('@/routes/Profile'));
 
 // Dynamic Components
-export const ParticlesComponent = dynamic(() => import('@/components/Particles/particles.component'));
-export const UserProfileComponent = dynamic(() => import('@/components/UserProfile/user-profile.component'));
-export const CurrentCoursesComponent = dynamic(() => import('@/components/CurrentCourses/current-courses.component'));
+export const ParticlesComponent = dynamic(() => import('@/components/Particles'));
+export const UserProfileComponent = dynamic(() => import('@/components/UserProfileCard'));
+export const CurrentCoursesComponent = dynamic(() => import('@/components/CurrentCoursesCard'));

@@ -1,6 +1,6 @@
 import React from 'react';
 import particlesConfig from '@/assets/jsons/particlesjs-config.json';
-import styles from './particles.component.less';
+import styles from './index.less';
 
 declare const particlesJS: (id: string, config: object) => void;
 declare const pJSDom: any[];

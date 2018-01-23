@@ -21,12 +21,12 @@ export default class ProfileRoute extends React.Component<ProfileRouteProps> {
     return (
       <Row gutter={ 16 }>
         <Col span={ 12 }>
-          <UserProfileComponent />
+          <UserProfileComponent/>
         </Col>
         <Col span={ 12 }>
           <Row gutter={ 16 }>
             <Col span={ 12 }>
-              <CurrentCoursesComponent />
+              <CurrentCoursesComponent/>
             </Col>
             <Col span={ 12 }>
               123

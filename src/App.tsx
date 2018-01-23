@@ -1,14 +1,14 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { LoginModel } from '@/models/login.model';
-import { Loading } from '@/components/Loading/loading.component';
+import Loading from '@/components/Loading/index';
 import { observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
 import RenderAuthorizeRoute from '@/components/Authorized'
 import { Router, Switch } from 'react-router';
 import { history } from '@/utils/history';
-import { dynamic, LoginLayout, BasicLayout } from '@/utils/dynamic';
-import { Layout, notification } from 'antd';
+import { LoginLayout, BasicLayout } from '@/utils/dynamic';
+import { notification } from 'antd';
 import { LoginQueryResult, LoginSuccessData } from '@/api/interface';
 
 
@@ -48,7 +48,7 @@ export class App extends React.Component<AppProps, {}> {
 
     return (
       <div>
-        <Loading isLoading={ this.isLoading } isFullScreen />
+        <Loading isLoading={ this.isLoading } isFullScreen/>
         <Router history={ history }>
           <Switch>
             <AuthorizedRoute

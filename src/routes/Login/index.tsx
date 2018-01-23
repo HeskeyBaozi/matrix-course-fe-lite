@@ -1,11 +1,11 @@
 import React, { SyntheticEvent } from 'react';
 import { Tooltip, Form, Input, Icon, Button, notification, Avatar } from 'antd';
 import { inject, observer } from 'mobx-react';
-import { Loading } from '@/components/Loading/loading.component';
+import Loading from '@/components/Loading';
 import { action, autorunAsync, observable, IReactionDisposer, computed, runInAction } from 'mobx';
 import { RouteComponentProps } from 'react-router';
 import { FormComponentProps } from 'antd/lib/form';
-import styles from './login.route.less';
+import styles from './index.less';
 import defaultAvatarUrl from '@/assets/images/avatar.jpg';
 import { LoginModel } from '@/models/login.model';
 import classNames from 'classnames';
@@ -122,36 +122,36 @@ class LoginRoute extends React.Component<LoginRouteProps> {
     const { form: { getFieldDecorator: $ }, $Login } = this.props;
 
     const UserName = $('username', {
-      rules: [ { required: true, message: '请输入用户名' }]
-    })(<Input onChange={ this.handleChange } placeholder={ 'Username' } prefix={ <Icon type={ 'user' } /> } />);
+      rules: [{ required: true, message: '请输入用户名' }]
+    })(<Input onChange={ this.handleChange } placeholder={ 'Username' } prefix={ <Icon type={ 'user' }/> }/>);
 
     const Password = $('password', {
-      rules: [ { required: true, message: '请输入密码' }]
-    })(<Input type={ 'password' } placeholder={ 'Password' } prefix={ <Icon type={ 'lock' } /> } />);
+      rules: [{ required: true, message: '请输入密码' }]
+    })(<Input type={ 'password' } placeholder={ 'Password' } prefix={ <Icon type={ 'lock' }/> }/>);
 
     const Captcha = $('captcha', {
-      rules: [ { required: !!$Login!.captchaUrl, message: '请输入验证码' }]
-    })(<Input placeholder={ '验证码' } prefix={ <Icon type="edit" /> } />);
+      rules: [{ required: !!$Login!.captchaUrl, message: '请输入验证码' }]
+    })(<Input placeholder={ '验证码' } prefix={ <Icon type="edit"/> }/>);
 
     return (
       <Form onSubmit={ this.submit }>
         <Item>
           <div className={ styles.avatarWrapper }>
-            <Loading isLoading={ this.isAvatarLoading } isFullScreen={ false } showTips={ false } />
-            <img src={ this.avatarUrl } alt={ 'avatar' } />
+            <Loading isLoading={ this.isAvatarLoading } isFullScreen={ false } showTips={ false }/>
+            <img src={ this.avatarUrl } alt={ 'avatar' }/>
           </div>
         </Item>
         <Item>{ UserName }</Item>
         <Item>{ Password }</Item>
 
-        <Item className={ classNames({ [ styles.hidden ]: !$Login!.captchaUrl }) }>
+        <Item className={ classNames({ [styles.hidden]: !$Login!.captchaUrl }) }>
           <div className={ styles.captchaWrapper }>
             { Captcha }
             <Tooltip title={ '点击以更换验证码' } trigger={ 'hover' }>
               <div className={ styles.captchaImageWrapper }>
-                <Loading isLoading={ this.isCaptchaLoading } isFullScreen={ false } showTips={ false } />
+                <Loading isLoading={ this.isCaptchaLoading } isFullScreen={ false } showTips={ false }/>
                 <img onClick={ this.captchaFlow.bind(this) } className={ styles.captcha } src={ $Login!.captchaUrl }
-                  alt={ 'captcha' } />
+                     alt={ 'captcha' }/>
               </div>
             </Tooltip>
           </div>
@@ -159,7 +159,7 @@ class LoginRoute extends React.Component<LoginRouteProps> {
 
         <div className={ styles.container }>
           <Button loading={ this.isEntering } className={ styles.submit } type={ 'primary' }
-            htmlType={ 'submit' }>LOGIN</Button>
+                  htmlType={ 'submit' }>LOGIN</Button>
         </div>
       </Form>
     );

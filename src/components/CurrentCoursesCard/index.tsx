@@ -1,14 +1,14 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Tooltip, Icon, Card, Avatar } from 'antd';
+import { Tooltip, Icon } from 'antd';
 import FieldCard from '@/components/FieldCard';
 
-interface CurrentCoursesProps {
+interface CurrentCoursesCardProps {
 
 }
 
 @observer
-export default class CurrentCourses extends React.Component<CurrentCoursesProps> {
+export default class CurrentCoursesCard extends React.Component<CurrentCoursesCardProps> {
   render() {
     return (
       <FieldCard
@@ -16,7 +16,7 @@ export default class CurrentCourses extends React.Component<CurrentCoursesProps>
         icon={ 'book' }
         total={ 2 }
         hoverable
-        action={ <Tooltip title="指标说明"><Icon type="info-circle-o" /></Tooltip> } />
+        action={ <Tooltip title="指标说明"><Icon type="info-circle-o"/></Tooltip> }/>
     );
   }
 }
