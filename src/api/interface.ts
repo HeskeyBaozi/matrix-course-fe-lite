@@ -70,6 +70,14 @@ export interface CoursesItem {
   unfinished_num: number;
 }
 
+// One Course
+export interface OneCourse extends CoursesItem {
+  created_at: string;
+  type: string;
+}
+
+
+// General
 export const RoleMap: Mapper = {
   student: '学生',
   teacher: '教师',

@@ -7,6 +7,7 @@ import { List, Card, Input, Icon } from 'antd';
 import { CoursesModel } from '@/models/courses.model';
 import { CoursesItem } from '@/api/interface';
 import OneCourseCard from '@/components/OneCourseCard';
+import { Link } from 'react-router-dom';
 
 const { Item } = List;
 
@@ -34,21 +35,23 @@ export default class CoursesList extends React.Component<CoursesListProps> {
 
   @action
   observeFilterChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    this.titleFilter = e.currentTarget.value;;
-  }
+    this.titleFilter = e.currentTarget.value;
+  };
 
   render() {
-    const { location, match, $Courses } = this.props;
+    const { $Courses } = this.props;
     const pagination = false; // todo: pagination
     return [
       <Card className={ styles.searchArea } key={ 'filter' }>
         <Input className={ styles.searchBar }
-          value={ this.titleFilter }
-          placeholder={ '按课程名称搜索' }
-          prefix={ <Icon type={ 'search' } /> }
-          onChange={ this.observeFilterChange } />
+               value={ this.titleFilter }
+               placeholder={ '按课程名称搜索' }
+               prefix={ <Icon type={ 'search' }/> }
+               onChange={ this.observeFilterChange }/>
       </Card>,
-      <List key={ 'list' } pagination={ pagination } grid={ { gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 } } dataSource={ this.filteredDataSource } renderItem={ renderItem } />
+      <List key={ 'list' } loading={ !$Courses!.isCoursesLoaded } pagination={ pagination }
+            grid={ { gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 } }
+            dataSource={ this.filteredDataSource } renderItem={ renderItem }/>
     ];
   }
 }
@@ -56,7 +59,9 @@ export default class CoursesList extends React.Component<CoursesListProps> {
 function renderItem(item: CoursesItem) {
   return (
     <Item>
-      <OneCourseCard item={ item } />
+      <Link to={ `/course/${item.course_id}/` }>
+        <OneCourseCard item={ item }/>
+      </Link>
     </Item>
   );
 }

@@ -1,10 +1,10 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { LoginModel } from '@/models/login.model';
-import Loading from '@/components/Loading/index';
+import Loading from '@/components/common/Loading/index';
 import { observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
-import RenderAuthorizeRoute from '@/components/Authorized'
+import RenderAuthorizeRoute from '@/components/common/Authorized'
 import { Router, Switch } from 'react-router';
 import { history } from '@/utils/history';
 import { LoginLayout, BasicLayout } from '@/utils/dynamic';

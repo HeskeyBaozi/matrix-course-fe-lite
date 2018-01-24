@@ -5,7 +5,7 @@ import { Layout, Icon } from 'antd';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import { ParticlesComponent, LoginRoute } from '@/utils/dynamic';
 import logoUrl from '@/assets/images/logo.svg';
-import GlobalFooter from '@/components/GlobalFooter';
+import GlobalFooter from '@/components/common/GlobalFooter';
 
 
 interface ILink {

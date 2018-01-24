@@ -1,18 +1,16 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { RouteComponentProps, Switch, Route, Redirect } from 'react-router';
-import PageHeader from '@/components/PageHeader';
+import PageHeader from '@/components/common/PageHeader';
 import styles from './index.less';
 import CoursesList from './List';
 import { Link } from 'react-router-dom';
+import { tabItem } from '@/types';
+import { breadcrumbNameMap } from '@/constants';
 
 interface CourseRouteProps extends RouteComponentProps<{}> {
 
 }
-
-const breadcrumbNameMap: BreadCrumbNameMap = {
-  '/courses': { name: '课程', href: '/courses' }
-};
 
 const tabList: tabItem[] = [
   {
@@ -54,11 +52,11 @@ export default class CourseRoute extends React.Component<CourseRouteProps> {
           linkElement={ Link }
           tabActiveKey={ location.pathname.replace(`${match.path}/`, '') }
           onTabChange={ this.handleTabChange }
-          title={ '所有课程' } {...breadcrumb} />
+          title={ '所有课程' } { ...breadcrumb } />
         <div className={ styles.containContainer }>
           <Switch>
-            <Route path={ `${match.path}/:status` } component={ CoursesList } />
-            <Redirect to={ `${match.path}/open` } />
+            <Route path={ `${match.path}/:status` } component={ CoursesList }/>
+            <Redirect to={ `${match.path}/open` }/>
           </Switch>
         </div>
       </div>
@@ -66,14 +64,4 @@ export default class CourseRoute extends React.Component<CourseRouteProps> {
   }
 }
 
-interface BreadCrumbNameMap {
-  [ path: string ]: {
-    name: string;
-    href: string;
-  }
-}
 
-interface tabItem {
-  key: string;
-  tab: string;
-}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { Tooltip, Icon } from 'antd';
-import FieldCard from '@/components/FieldCard';
+import FieldCard from '@/components/common/FieldCard';
 import { CoursesModel } from '@/models/courses.model';
 
 interface CurrentCoursesCardProps {
@@ -20,7 +20,8 @@ export default class CurrentCoursesCard extends React.Component<CurrentCoursesCa
         times={ '门' }
         total={ $Courses!.openCount }
         hoverable
-        action={ <Tooltip title="指标说明"><Icon type="info-circle-o" /></Tooltip> } />
+        loading={ !$Courses!.isCoursesLoaded }
+        action={ <Tooltip title="指标说明"><Icon type="info-circle-o"/></Tooltip> }/>
     );
   }
 }

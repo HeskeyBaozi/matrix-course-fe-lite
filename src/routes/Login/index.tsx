@@ -1,7 +1,7 @@
 import React, { SyntheticEvent } from 'react';
 import { Tooltip, Form, Input, Icon, Button, notification, Avatar } from 'antd';
 import { inject, observer } from 'mobx-react';
-import Loading from '@/components/Loading';
+import Loading from '@/components/common/Loading';
 import { action, autorunAsync, observable, IReactionDisposer, computed, runInAction } from 'mobx';
 import { RouteComponentProps } from 'react-router';
 import { FormComponentProps } from 'antd/lib/form';

@@ -3,8 +3,7 @@ import path from 'path';
 export default {
   entry: './src/entry-client.tsx',
   extraBabelPlugins: [
-    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
-    ['import', { libraryName: 'antd-design-pro', libraryDirectory: 'lib' }]
+    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]
   ],
   theme: './src/theme.js',
   browserslist: [
@@ -27,12 +26,12 @@ export default {
       },
       devtool: 'eval-source-map',
       proxy: {
-        "/api/*": {
-          "target": "http://test.vmatrix.org.cn",
-          "secure": false,
-          "changeOrigin": true,
-          "cookieDomainRewrite": "",
-          "ws": true
+        '/api/*': {
+          'target': 'http://test.vmatrix.org.cn',
+          'secure': false,
+          'changeOrigin': true,
+          'cookieDomainRewrite': '',
+          'ws': true
         }
       }
     },

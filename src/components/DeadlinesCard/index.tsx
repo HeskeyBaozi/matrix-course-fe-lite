@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Tooltip, Icon } from 'antd';
-import FieldCard from '@/components/FieldCard';
+import FieldCard from '@/components/common/FieldCard';
 
 interface DeadlinesCardProps {
 
