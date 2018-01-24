@@ -3,7 +3,8 @@ import path from 'path';
 export default {
   entry: './src/entry-client.tsx',
   extraBabelPlugins: [
-    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }]
+    ['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }],
+    ['import', { libraryName: 'antd-design-pro', libraryDirectory: 'lib' }]
   ],
   theme: './src/theme.js',
   browserslist: [

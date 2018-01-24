@@ -9,14 +9,16 @@ import { action, observable, computed } from 'mobx';
 import { ProfileModel } from '@/models/profile.model';
 import { CourseRoute, ProfileRoute } from '@/utils/dynamic';
 import { ClickParam } from 'antd/lib/menu';
+import { CoursesModel } from '@/models/courses.model';
 
 interface LoginLayoutProps extends RouteComponentProps<{}> {
   $Profile?: ProfileModel;
+  $Courses?: CoursesModel;
 }
 
 const { Header, Sider, Content } = Layout;
 
-@inject('$Profile')
+@inject('$Profile', '$Courses')
 @observer
 export default class BasicLayout extends React.Component<LoginLayoutProps> {
 
@@ -35,7 +37,11 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
   }
 
   componentDidMount() {
-    this.props.$Profile!.LoadProfile();
+    const { $Profile, $Courses } = this.props;
+    Promise.all([
+      $Profile!.LoadProfile(),
+      $Courses!.LoadCoursesList()
+    ]);
   }
 
   navigate = ({ key }: ClickParam) => {
@@ -49,54 +55,53 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
     return (
       <Layout>
         <Sider breakpoint={ 'md' } className={ styles.sider } trigger={ null } collapsible
-               collapsed={ this.collapsed }>
+          collapsed={ this.collapsed }>
           <div className={ styles.logoWrapper }>
-            <img src={ logoTransUrl } alt={ 'logo' }/>
+            <img src={ logoTransUrl } alt={ 'logo' } />
           </div>
           <Menu className={ styles.menu } theme={ 'dark' }
-                onClick={ this.navigate }
-                mode="inline" defaultSelectedKeys={ ['1'] }
-                selectedKeys={ [location.pathname] }
-                inlineCollapsed={ this.collapsed }>
+            onClick={ this.navigate }
+            mode="inline" defaultSelectedKeys={ [ `${rootPath}` ] }
+            inlineCollapsed={ this.collapsed }>
             <Menu.Item key={ `${rootPath}` }>
-              <Icon type={ 'home' }/>
+              <Icon type={ 'home' } />
               <span>概览</span>
             </Menu.Item>
             <Menu.Item key={ `${rootPath}courses` }>
-              <Icon type={ 'book' }/>
+              <Icon type={ 'book' } />
               <span>课程</span>
             </Menu.Item>
             <Menu.Item key={ `${rootPath}notification` }>
-              <Icon type="bell"/>
+              <Icon type="bell" />
               <span>消息</span>
             </Menu.Item>
             <Menu.Item key={ `${rootPath}setting` }>
-              <Icon type="setting"/>
+              <Icon type="setting" />
               <span>设置</span>
             </Menu.Item>
             <Menu.Item key={ `${rootPath}feedback` }>
-              <Icon type="smile-o"/>
+              <Icon type="smile-o" />
               <span>反馈</span>
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout className={ classNames(styles.contentLayout, { [styles.contentLayoutCollapsed]: this.collapsed }) }>
-          <Header className={ classNames(styles.contentHeader, { [styles.contentHeaderCollapsed]: this.collapsed }) }>
+        <Layout className={ classNames(styles.contentLayout, { [ styles.contentLayoutCollapsed ]: this.collapsed }) }>
+          <Header className={ classNames(styles.contentHeader, { [ styles.contentHeaderCollapsed ]: this.collapsed }) }>
             <Icon className={ styles.trigger } type={ this.collapsed ? 'menu-unfold' : 'menu-fold' }
-                  onClick={ this.toggle }/>
+              onClick={ this.toggle } />
             <div className={ styles.right }>
               <span className={ styles.action }>
-                <Icon type={ 'bell' }/>
+                <Icon type={ 'bell' } />
               </span>
               <span className={ styles.action }>
-                <Avatar size={ 'large' } icon={ 'user' } src={ this.headerAvatarUrl }/>
+                <Avatar size={ 'large' } icon={ 'user' } src={ this.headerAvatarUrl } />
               </span>
             </div>
           </Header>
           <Content className={ styles.content }>
             <Switch>
-              <Route key={ 'profile' } exact path={ `${rootPath}` } component={ ProfileRoute }/>
-              <Route key={ 'course' } path={ `${rootPath}courses` } component={ CourseRoute }/>
+              <Route key={ 'profile' } exact path={ `${rootPath}` } component={ ProfileRoute } />
+              <Route key={ 'course' } path={ `${rootPath}courses` } component={ CourseRoute } />
             </Switch>
           </Content>
         </Layout>

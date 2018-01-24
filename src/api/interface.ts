@@ -37,14 +37,50 @@ export interface UpdateProfileBody {
   nickname?: string | null;
 }
 
-export interface Profile {
-  email: string;
+interface User {
+  email: string | null;
   homepage: string | null;
+  phone: string | null;
+  realname: string;
+  username: string;
+
+}
+
+export interface Profile extends User {
   is_valid: number;
   nickname: string;
   phone: string;
-  realname: string;
-  username: string;
   user_addition: null | object;
   user_id: number;
+}
+
+// Courses
+export interface CoursesItem {
+  course_id: number;
+  course_name: string;
+  creator: User;
+  progressing_num: number;
+  role: string;
+  school_year: string;
+  semester: string;
+  status: 'open' | 'close';
+  student_num: number;
+  teacher: string;
+  term: string;
+  unfinished_num: number;
+}
+
+export const RoleMap: Mapper = {
+  student: '学生',
+  teacher: '教师',
+  TA: '助教'
+};
+
+export const CourseStatusMap: Mapper = {
+  open: '进行中',
+  close: '已关闭'
+};
+
+interface Mapper {
+  [ key: string ]: string;
 }

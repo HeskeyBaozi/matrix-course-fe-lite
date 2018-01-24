@@ -38,6 +38,7 @@ export class LoginModel {
     const { data }: { data: LoginResult } = yield loginPost(body);
     if (data.status === 'OK') {
       this.isLogin = true;
+      URL.revokeObjectURL(this.avatarUrl);
     }
     return data;
   }
