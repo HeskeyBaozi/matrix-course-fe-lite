@@ -10,6 +10,7 @@ import { ProfileModel } from '@/models/profile.model';
 import { CourseRoute, ProfileRoute } from '@/utils/dynamic';
 import { ClickParam } from 'antd/lib/menu';
 import { CoursesModel } from '@/models/courses.model';
+import MenuFactory, { MenuItem } from '@/components/MenuFactory';
 
 interface LoginLayoutProps extends RouteComponentProps<{}> {
   $Profile?: ProfileModel;
@@ -17,6 +18,16 @@ interface LoginLayoutProps extends RouteComponentProps<{}> {
 }
 
 const { Header, Sider, Content } = Layout;
+
+const FirstMenu = MenuFactory({
+  menuList: [
+    { key: '/', icon: 'home', title: '概览' },
+    { key: '/courses', icon: 'book', title: '课程' },
+    { key: '/notification', icon: 'bell', title: '消息' },
+    { key: '/setting', icon: 'setting', title: '设置' },
+    { key: '/feedback', icon: 'smile-o', title: '反馈' },
+  ], defaultSelectedKeys: [ '/' ]
+});
 
 @inject('$Profile', '$Courses')
 @observer
@@ -50,7 +61,7 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
   };
 
   render() {
-    const { match, location } = this.props;
+    const { match, location, history } = this.props;
     const rootPath = match.path;
     return (
       <Layout>
@@ -59,31 +70,7 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
           <div className={ styles.logoWrapper }>
             <img src={ logoTransUrl } alt={ 'logo' } />
           </div>
-          <Menu className={ styles.menu } theme={ 'dark' }
-            onClick={ this.navigate }
-            mode="inline" defaultSelectedKeys={ [ `${rootPath}` ] }
-            inlineCollapsed={ this.collapsed }>
-            <Menu.Item key={ `${rootPath}` }>
-              <Icon type={ 'home' } />
-              <span>概览</span>
-            </Menu.Item>
-            <Menu.Item key={ `${rootPath}courses` }>
-              <Icon type={ 'book' } />
-              <span>课程</span>
-            </Menu.Item>
-            <Menu.Item key={ `${rootPath}notification` }>
-              <Icon type="bell" />
-              <span>消息</span>
-            </Menu.Item>
-            <Menu.Item key={ `${rootPath}setting` }>
-              <Icon type="setting" />
-              <span>设置</span>
-            </Menu.Item>
-            <Menu.Item key={ `${rootPath}feedback` }>
-              <Icon type="smile-o" />
-              <span>反馈</span>
-            </Menu.Item>
-          </Menu>
+          <FirstMenu history={ history } collapsed={ this.collapsed } />
         </Sider>
         <Layout className={ classNames(styles.contentLayout, { [ styles.contentLayoutCollapsed ]: this.collapsed }) }>
           <Header className={ classNames(styles.contentHeader, { [ styles.contentHeaderCollapsed ]: this.collapsed }) }>

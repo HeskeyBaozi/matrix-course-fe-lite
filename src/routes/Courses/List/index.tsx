@@ -48,7 +48,7 @@ export default class CoursesList extends React.Component<CoursesListProps> {
           prefix={ <Icon type={ 'search' } /> }
           onChange={ this.observeFilterChange } />
       </Card>,
-      <List key={ 'list' } pagination={ pagination } grid={ { gutter: 24, lg: 3, md: 1, sm: 1, xs: 1 } } dataSource={ this.filteredDataSource } renderItem={ renderItem } />
+      <List key={ 'list' } pagination={ pagination } grid={ { gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 } } dataSource={ this.filteredDataSource } renderItem={ renderItem } />
     ];
   }
 }
