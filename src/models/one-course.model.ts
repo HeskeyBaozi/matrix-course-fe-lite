@@ -1,6 +1,6 @@
-import { observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
-import { fetchCourseDetail } from '@/api/one-course';
+import { fetchCourseDetail, fetchCoursePersonalGrades, fetchCoursePersonalRank } from '@/api/one-course';
 import { OneCourse } from '@/api/interface';
 
 export class OneCourseModel {
@@ -31,11 +31,34 @@ export class OneCourseModel {
   @observable
   isOneCourseLoaded = false;
 
+  @computed
+  get courseId() {
+    return this.one.course_id;
+  }
+
+  @observable
+  myRank = {};
+
+  @observable
+  myGrades = {};
+
   @asyncAction
   * LoadOneCourse(courseId: number) {
     this.isOneCourseLoaded = false;
     const { data: { data: course } } = yield fetchCourseDetail({ courseId });
     this.one = course;
+    const [
+      { data: { data: myRank } },
+      { data: { data: myGrades } }
+    ] = yield Promise.all([
+      fetchCoursePersonalRank({ courseId: this.courseId }),
+      fetchCoursePersonalGrades({ courseId: this.courseId })
+    ]);
+    this.myRank = myRank;
+    this.myGrades = myGrades;
+
+    console.log('rank', myRank);
+    console.log('grade', myGrades);
     this.isOneCourseLoaded = true;
   }
 }

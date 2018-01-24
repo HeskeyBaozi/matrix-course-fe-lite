@@ -13,7 +13,6 @@ import { asyncAction } from 'mobx-utils';
 import { fetchAvatar } from '@/api/user';
 import { CourseStatusMap, RoleMap } from '@/api/interface';
 import DescriptionList from '@/components/common/DescriptionList';
-import Info from '@/components/common/Info';
 
 const { Description } = DescriptionList;
 
@@ -86,7 +85,7 @@ export default class OneCourseRoute extends React.Component<OneCourseRouteProps>
         </Description>
       </DescriptionList>
     ];
-    
+
     return (
       <div className={ styles.innerContainer }>
         <Loading isLoading={ !$OneCourse!.isOneCourseLoaded } modifyClassName={ styles.modifyLoading }
