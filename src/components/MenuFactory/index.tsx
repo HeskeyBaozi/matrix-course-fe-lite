@@ -42,26 +42,7 @@ export default function ({ menuList, defaultSelectedKeys }: MenuFactoryProps) {
                     inlineCollapsed={ collapsed }
                     onClick={ this.navigate }
                     mode="inline" defaultSelectedKeys={ defaultSelectedKeys }>
-                    <Menu.Item key={ `/` }>
-                        <Icon type={ 'home' } />
-                        <span>概览</span>
-                    </Menu.Item>
-                    <Menu.Item key={ `/courses` }>
-                        <Icon type={ 'book' } />
-                        <span>课程</span>
-                    </Menu.Item>
-                    <Menu.Item key={ `/notification` }>
-                        <Icon type="bell" />
-                        <span>消息</span>
-                    </Menu.Item>
-                    <Menu.Item key={ `/setting` }>
-                        <Icon type="setting" />
-                        <span>设置</span>
-                    </Menu.Item>
-                    <Menu.Item key={ `/feedback` }>
-                        <Icon type="smile-o" />
-                        <span>反馈</span>
-                    </Menu.Item>
+                    { list }
                 </Menu>
             );
         }

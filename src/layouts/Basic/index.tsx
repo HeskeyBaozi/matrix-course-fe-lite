@@ -70,7 +70,9 @@ export default class BasicLayout extends React.Component<LoginLayoutProps> {
           <div className={ styles.logoWrapper }>
             <img src={ logoTransUrl } alt={ 'logo' } />
           </div>
-          <FirstMenu history={ history } collapsed={ this.collapsed } />
+          <Switch>
+            <Route path={ '/' } render={ ({ history }) => <FirstMenu history={ history } collapsed={ this.collapsed } /> } />
+          </Switch>
         </Sider>
         <Layout className={ classNames(styles.contentLayout, { [ styles.contentLayoutCollapsed ]: this.collapsed }) }>
           <Header className={ classNames(styles.contentHeader, { [ styles.contentHeaderCollapsed ]: this.collapsed }) }>
