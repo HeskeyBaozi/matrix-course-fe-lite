@@ -1,14 +1,15 @@
-import React from 'react';
-import { observer } from 'mobx-react';
-import { Tooltip, Icon } from 'antd';
 import FieldCard from '@/components/common/FieldCard';
+import { Icon, Tooltip } from 'antd';
+import { observer } from 'mobx-react';
+import React from 'react';
 
-interface DeadlinesCardProps {
+// tslint:disable-next-line:no-empty-interface
+interface IDeadlinesCardProps {
 
 }
 
 @observer
-export default class DeadlinesCard extends React.Component<DeadlinesCardProps> {
+export default class DeadlinesCard extends React.Component<IDeadlinesCardProps> {
   render() {
     return (
       <FieldCard
@@ -16,8 +17,9 @@ export default class DeadlinesCard extends React.Component<DeadlinesCardProps> {
         icon={ 'meh-o' }
         times={ '个' }
         total={ 4 }
-        hoverable
-        action={ <Tooltip title="指标说明"><Icon type="info-circle-o"/></Tooltip> }/>
+        hoverable={ true }
+        action={ <Tooltip title='指标说明'><Icon type='info-circle-o' /></Tooltip> }
+      />
     );
   }
 }

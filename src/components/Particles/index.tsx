@@ -1,5 +1,5 @@
-import React from 'react';
 import particlesConfig from '@/assets/jsons/particlesjs-config.json';
+import React from 'react';
 import styles from './index.less';
 
 declare const particlesJS: (id: string, config: object) => void;
@@ -13,9 +13,8 @@ export default class Particles extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    console.log('unmount particles');
     if (Array.isArray(pJSDom) && pJSDom.length) {
-      pJSDom.forEach(pJS => {
+      pJSDom.forEach((pJS) => {
         pJS.pJS.fn.vendors.destroypJS();
       });
 
@@ -26,7 +25,6 @@ export default class Particles extends React.PureComponent {
   }
 
   render() {
-    return <div className={ styles.particles } id={ id }/>;
+    return <div className={ styles.particles } id={ id } />;
   }
 }
-

@@ -1,5 +1,5 @@
 import { xios } from '@/api/instance';
-import { MatrixResponse, OneCourse } from '@/api/interface';
+import { IMatrixResponse, IOneCourse } from '@/api/interface';
 
 /******************************
  *           Detail
@@ -7,17 +7,17 @@ import { MatrixResponse, OneCourse } from '@/api/interface';
 
 // https://api.vmatrix.org.cn/#/course/get_api_courses__course_id_
 export function fetchCourseDetail({ courseId }: { courseId: number }) {
-  return xios.get<MatrixResponse<OneCourse>>(`/api/courses/${courseId}`);
+  return xios.get<IMatrixResponse<IOneCourse>>(`/api/courses/${courseId}`);
 }
 
 // https://api.vmatrix.org.cn/#/course/get_api_courses__course_id__personalRank
 export function fetchCoursePersonalRank({ courseId }: { courseId: number }) {
-  return xios.get<MatrixResponse<any>>(`/api/courses/${courseId}/personalRank`);
+  return xios.get<IMatrixResponse<any>>(`/api/courses/${courseId}/personalRank`);
 }
 
 // https://api.vmatrix.org.cn/#/course/get_api_courses__course_id__personalgrades
 export function fetchCoursePersonalGrades({ courseId }: { courseId: number }) {
-  return xios.get<MatrixResponse<any>>(`/api/courses/${courseId}/personalgrades`);
+  return xios.get<IMatrixResponse<any>>(`/api/courses/${courseId}/personalgrades`);
 }
 
 /******************************
@@ -26,7 +26,7 @@ export function fetchCoursePersonalGrades({ courseId }: { courseId: number }) {
 
 // https://api.vmatrix.org.cn/#/course_assignment/get_api_courses__course_id__assignments
 export function fetchAssignments({ courseId }: { courseId: number }) {
-  return xios.get<MatrixResponse<any>>(`/api/courses/${courseId}/assignments`);
+  return xios.get<IMatrixResponse<any>>(`/api/courses/${courseId}/assignments`);
 }
 
 /******************************
@@ -35,5 +35,5 @@ export function fetchAssignments({ courseId }: { courseId: number }) {
 
 // https://api.vmatrix.org.cn/#/course_discussion/get_api_courses__course_id__discussion
 export function fetchCourseDiscussions({ courseId }: { courseId: number }) {
-  return xios.get<MatrixResponse<any>>(`/api/courses/${courseId}/discussion`);
+  return xios.get<IMatrixResponse<any>>(`/api/courses/${courseId}/discussion`);
 }

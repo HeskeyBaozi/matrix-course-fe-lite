@@ -1,23 +1,22 @@
-import React from 'react';
-import { observable, computed } from 'mobx';
-import { Card, Row, Col, Icon, Avatar, Badge } from 'antd';
-import { CoursesItem, RoleMap, CourseStatusMap } from '@/api/interface';
-import styles from './index.less';
+import { CourseStatusMap, ICoursesItem, RoleMap } from '@/api/interface';
+import { fetchAvatar } from '@/api/user';
 import DescriptionList from '@/components/common/DescriptionList';
 import Info from '@/components/common/Info';
+import { Avatar, Badge, Card, Col, Icon, Row } from 'antd';
+import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';
 import { asyncAction } from 'mobx-utils';
-import { fetchAvatar } from '@/api/user';
+import React from 'react';
+import styles from './index.less';
 
-interface OneCourseCardProps {
-  item: CoursesItem
+interface IOneCourseCardProps {
+  item: ICoursesItem;
 }
 
 const { Description } = DescriptionList;
 
-
 @observer
-export default class OneCourseCard extends React.Component<OneCourseCardProps> {
+export default class OneCourseCard extends React.Component<IOneCourseCardProps> {
   @observable
   avatarUrl = '';
 
@@ -42,40 +41,42 @@ export default class OneCourseCard extends React.Component<OneCourseCardProps> {
   }
 
   render() {
+
     const {
       item: { course_name, teacher, school_year, term, student_num, progressing_num, role, creator, status }
     } = this.props;
+
     const title = (
       <div className={ styles.titleWrapper }>
         <div className={ styles.left }>
-          <Avatar icon={ 'user' } src={ this.displayAvatarUrl }/>
+          <Avatar icon={ 'user' } src={ this.displayAvatarUrl } />
           <span>{ `${creator.realname} / ${course_name}` }</span>
         </div>
         <div className={ styles.right }>
-          <Badge status={ status === 'open' ? 'success' : 'error' } text={ CourseStatusMap[status] }/>
+          <Badge status={ status === 'open' ? 'success' : 'error' } text={ CourseStatusMap[ status ] } />
         </div>
       </div>
     );
 
     return (
-      <Card hoverable title={ title }>
+      <Card hoverable={ true } title={ title }>
         <DescriptionList style={ { marginBottom: '1.5rem' } } layout={ 'vertical' } title={ null } col={ 2 }>
-          <Description term={ <span><Icon type={ 'contacts' }/> 教师</span> }>
+          <Description term={ <span><Icon type={ 'contacts' } /> 教师</span> }>
             { teacher }
           </Description>
-          <Description term={ <span><Icon type={ 'calendar' }/> 学期</span> }>
+          <Description term={ <span><Icon type={ 'calendar' } /> 学期</span> }>
             { `${school_year} ${term}` }
           </Description>
         </DescriptionList>
         <Row>
           <Col sm={ 8 } xs={ 24 }>
-            <Info title={ '学生人数' } value={ `${student_num}人` } bordered/>
+            <Info title={ '学生人数' } value={ `${student_num}人` } bordered={ true } />
           </Col>
           <Col sm={ 8 } xs={ 24 }>
-            <Info title={ '进行中作业' } value={ `${progressing_num}个` } bordered/>
+            <Info title={ '进行中作业' } value={ `${progressing_num}个` } bordered={ true } />
           </Col>
           <Col sm={ 8 } xs={ 24 }>
-            <Info title={ '我的角色' } value={ RoleMap[role] }/>
+            <Info title={ '我的角色' } value={ RoleMap[ role ] } />
           </Col>
         </Row>
       </Card>

@@ -1,16 +1,16 @@
-import React from 'react';
-import { observer, inject } from 'mobx-react';
-import { Tooltip, Icon } from 'antd';
 import FieldCard from '@/components/common/FieldCard';
 import { CoursesModel } from '@/models/courses.model';
+import { Icon, Tooltip } from 'antd';
+import { inject, observer } from 'mobx-react';
+import React from 'react';
 
-interface CurrentCoursesCardProps {
+interface ICurrentCoursesCardProps {
   $Courses?: CoursesModel;
 }
 
 @inject('$Courses')
 @observer
-export default class CurrentCoursesCard extends React.Component<CurrentCoursesCardProps> {
+export default class CurrentCoursesCard extends React.Component<ICurrentCoursesCardProps> {
   render() {
     const { $Courses } = this.props;
     return (
@@ -19,9 +19,10 @@ export default class CurrentCoursesCard extends React.Component<CurrentCoursesCa
         icon={ 'book' }
         times={ '门' }
         total={ $Courses!.openCount }
-        hoverable
+        hoverable={ true }
         loading={ !$Courses!.isCoursesLoaded }
-        action={ <Tooltip title="指标说明"><Icon type="info-circle-o"/></Tooltip> }/>
+        action={ <Tooltip title='指标说明'><Icon type='info-circle-o' /></Tooltip> }
+      />
     );
   }
 }

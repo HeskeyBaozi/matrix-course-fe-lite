@@ -7,13 +7,12 @@ interface InfoProps {
   bordered?: boolean;
 }
 
-
 export default function Info({ title, value, bordered }: InfoProps) {
   return (
-    <div className={ styles.infoWrapper }>
-      <span>{ title }</span>
-      <p className={ styles.infoValue }>{ value }</p>
-      { bordered && <em/> }
+    <div className={styles.infoWrapper}>
+      <span>{title}</span>
+      <p className={styles.infoValue}>{value}</p>
+      {bordered && <em/>}
     </div>
   );
 }

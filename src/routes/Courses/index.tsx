@@ -1,18 +1,18 @@
-import React from 'react';
-import { observer } from 'mobx-react';
-import { RouteComponentProps, Switch, Route, Redirect } from 'react-router';
 import PageHeader from '@/components/common/PageHeader';
+import { breadcrumbNameMap } from '@/constants';
+import { ItabItem } from '@/types';
+import { observer } from 'mobx-react';
+import React from 'react';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
+import { Link } from 'react-router-dom';
 import styles from './index.less';
 import CoursesList from './List';
-import { Link } from 'react-router-dom';
-import { tabItem } from '@/types';
-import { breadcrumbNameMap } from '@/constants';
 
-interface CourseRouteProps extends RouteComponentProps<{}> {
+interface ICourseRouteProps extends RouteComponentProps<{}> {
 
 }
 
-const tabList: tabItem[] = [
+const tabList: ItabItem[] = [
   {
     key: 'open',
     tab: '进行中'
@@ -24,7 +24,7 @@ const tabList: tabItem[] = [
 ];
 
 @observer
-export default class CourseRoute extends React.Component<CourseRouteProps> {
+export default class CourseRoute extends React.Component<ICourseRouteProps> {
 
   handleTabChange = (key: string) => {
     const { match, history } = this.props;
@@ -38,12 +38,13 @@ export default class CourseRoute extends React.Component<CourseRouteProps> {
       default:
         break;
     }
-  };
+  }
 
   render() {
     const { location, match } = this.props;
     const breadcrumb = {
-      location, breadcrumbNameMap
+      breadcrumbNameMap,
+      location
     };
     return (
       <div className={ styles.innerContainer }>
@@ -52,16 +53,16 @@ export default class CourseRoute extends React.Component<CourseRouteProps> {
           linkElement={ Link }
           tabActiveKey={ location.pathname.replace(`${match.path}/`, '') }
           onTabChange={ this.handleTabChange }
-          title={ '所有课程' } { ...breadcrumb } />
+          title={ '所有课程' }
+          {...breadcrumb}
+        />
         <div className={ styles.containContainer }>
           <Switch>
-            <Route path={ `${match.path}/:status` } component={ CoursesList }/>
-            <Redirect to={ `${match.path}/open` }/>
+            <Route path={ `${match.path}/:status` } component={ CoursesList } />
+            <Redirect to={ `${match.path}/open` } />
           </Switch>
         </div>
       </div>
     );
   }
 }
-
-

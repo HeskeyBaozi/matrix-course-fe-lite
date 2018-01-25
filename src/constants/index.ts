@@ -1,6 +1,8 @@
-import { BreadCrumbNameMap } from '@/types';
+import { IBreadCrumbNameMap } from '@/types';
 
-export const breadcrumbNameMap: BreadCrumbNameMap = {
+// tslint:disable:object-literal-sort-keys
+
+export const breadcrumbNameMap: IBreadCrumbNameMap = {
   '/courses': { name: '课程' },
   '/course/:courseId': { name: '课程详情' },
   '/course/:courseId/assignments': { name: '作业' },

@@ -1,21 +1,20 @@
-import { observable, computed } from 'mobx';
-import { fetchProfile, fetchAvatar } from '@/api/user';
+import { IProfile } from '@/api/interface';
+import { fetchAvatar, fetchProfile } from '@/api/user';
+import { computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
-import { Profile } from '@/api/interface';
-
 
 export class ProfileModel {
   @observable
-  profile: Profile = {
+  profile: IProfile = {
     email: '',
     homepage: null,
     is_valid: -1,
     nickname: '',
     phone: '',
     realname: '',
-    username: '',
     user_addition: null,
-    user_id: -1
+    user_id: -1,
+    username: ''
   };
 
   @observable
@@ -28,7 +27,7 @@ export class ProfileModel {
 
   @asyncAction
   * LoadProfile() {
-    const { data: { data: profile } }: { data: { data: Profile } } = yield fetchProfile();
+    const { data: { data: profile } }: { data: { data: IProfile } } = yield fetchProfile();
     this.profile = profile;
     yield this.FetchUserAvatar({ username: this.profile.username });
   }

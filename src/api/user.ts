@@ -1,7 +1,6 @@
 import { xios } from '@/api/instance';
+import { ILoginBody, ILoginQueryResult, ILoginResult, IProfile, IUpdateProfileBody } from '@/api/interface';
 import { stringify } from 'qs';
-import { LoginQueryResult, LoginBody, LoginResult, Profile, UpdateProfileBody } from '@/api/interface';
-
 
 /******************************
  *           Login
@@ -9,12 +8,12 @@ import { LoginQueryResult, LoginBody, LoginResult, Profile, UpdateProfileBody } 
 
 // https://api.vmatrix.org.cn/#/user/get_api_users_login
 export function fetchUserLoginState() {
-  return xios.get<LoginQueryResult>('/api/users/login');
+  return xios.get<ILoginQueryResult>('/api/users/login');
 }
 
 // https://api.vmatrix.org.cn/#/user/post_api_users_login
-export function loginPost(body: LoginBody) {
-  return xios.post<LoginResult>('/api/users/login', body);
+export function loginPost(body: ILoginBody) {
+  return xios.post<ILoginResult>('/api/users/login', body);
 }
 
 // https://api.vmatrix.org.cn/#/user/post_api_users_logout
@@ -22,19 +21,18 @@ export function logoutPost() {
   return xios.post('/api/users/logout');
 }
 
-
 /******************************
  *           Profile
  ******************************/
 
 // https://api.vmatrix.org.cn/#/user/get_api_users_profile
 export function fetchProfile() {
-  return xios.get<{ data: Profile }>(`/api/users/profile`);
+  return xios.get<{ data: IProfile }>(`/api/users/profile`);
 }
 
 // https://api.vmatrix.org.cn/#/user/post_api_users_profile
-export function updateProfile(body: UpdateProfileBody, avatar: File) {
-
+export function updateProfile(body: IUpdateProfileBody, avatar: File) {
+  //
 }
 
 // https://api.vmatrix.org.cn/#/user/get_api_users_profile_avatar

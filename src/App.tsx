@@ -1,24 +1,23 @@
-import React from 'react';
-import { inject, observer } from 'mobx-react';
-import { LoginModel } from '@/models/login.model';
+import { ILoginQueryResult, ILoginSuccessData } from '@/api/interface';
+import RenderAuthorizeRoute from '@/components/common/Authorized';
 import Loading from '@/components/common/Loading/index';
-import { observable } from 'mobx';
-import { asyncAction } from 'mobx-utils';
-import RenderAuthorizeRoute from '@/components/common/Authorized'
-import { Router, Switch } from 'react-router';
+import { LoginModel } from '@/models/login.model';
+import { BasicLayout, LoginLayout } from '@/utils/dynamic';
 import { history } from '@/utils/history';
-import { LoginLayout, BasicLayout } from '@/utils/dynamic';
 import { notification } from 'antd';
-import { LoginQueryResult, LoginSuccessData } from '@/api/interface';
+import { observable } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import { asyncAction } from 'mobx-utils';
+import React from 'react';
+import { Router, Switch } from 'react-router';
 
-
-interface AppProps {
-  $Login?: LoginModel
+interface IAppProps {
+  $Login?: LoginModel;
 }
 
 @inject('$Login')
 @observer
-export class App extends React.Component<AppProps, {}> {
+export class App extends React.Component<IAppProps, {}> {
 
   @observable
   isLoading = true;
@@ -30,14 +29,14 @@ export class App extends React.Component<AppProps, {}> {
   @asyncAction
   * initializeFlow() {
     this.isLoading = true;
-    const result: LoginQueryResult = yield this.props.$Login!.QueryLoginStatus();
+    const result: ILoginQueryResult = yield this.props.$Login!.QueryLoginStatus();
     if (result.status === 'OK') {
-      const realname = result.data && (result.data as LoginSuccessData).realname;
+      const realname = result.data && (result.data as ILoginSuccessData).realname;
       notification.success({
-        message: '欢迎回来',
         description: realname && `欢迎你, ${realname}` || `欢迎你`,
-        duration: 1
-      })
+        duration: 1,
+        message: '欢迎回来'
+      });
     }
     this.isLoading = false;
   }
@@ -48,18 +47,18 @@ export class App extends React.Component<AppProps, {}> {
 
     return (
       <div>
-        <Loading isLoading={ this.isLoading } isFullScreen/>
+        <Loading isLoading={ this.isLoading } isFullScreen={ true } />
         <Router history={ history }>
           <Switch>
             <AuthorizedRoute
               path={ '/login' }
-              render={ props => <LoginLayout { ...props } /> }
+              component={ LoginLayout }
               authority={ 'GUEST' }
               redirectPath={ '/' }
             />
             <AuthorizedRoute
               path={ '/' }
-              render={ props => <BasicLayout { ...props } /> }
+              component={ BasicLayout }
               authority={ 'USER' }
               redirectPath={ '/login' }
             />
@@ -69,5 +68,3 @@ export class App extends React.Component<AppProps, {}> {
     );
   }
 }
-
-

@@ -1,19 +1,18 @@
-import { observable, computed } from 'mobx';
-import { asyncAction } from 'mobx-utils';
 import { fetchCoursesList } from '@/api/courses';
-import { CoursesItem } from '@/api/interface';
-
+import { ICoursesItem } from '@/api/interface';
+import { computed, observable } from 'mobx';
+import { asyncAction } from 'mobx-utils';
 
 export class CoursesModel {
   @observable
-  courses: CoursesItem[] = [];
+  courses: ICoursesItem[] = [];
 
   @observable
   isCoursesLoaded = false;
 
   @computed
   get openList() {
-    return this.courses.filter(item => item.status === 'open');
+    return this.courses.filter((item) => item.status === 'open');
   }
 
   @computed
@@ -23,7 +22,7 @@ export class CoursesModel {
 
   @computed
   get closeList() {
-    return this.courses.filter(item => item.status === 'close');
+    return this.courses.filter((item) => item.status === 'close');
   }
 
   @asyncAction

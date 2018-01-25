@@ -1,5 +1,5 @@
-import Loadable from 'react-loadable';
 import { ComponentType } from 'react';
+import Loadable from 'react-loadable';
 
 export function dynamic(resolve: () => Promise<ComponentType<any> | { default: ComponentType<any> }>) {
   return Loadable({

@@ -1,12 +1,19 @@
+import { fetchCaptcha } from '@/api/captcha';
+import {
+  ICaptchaResult,
+  ILoginBody,
+  ILoginQueryResult,
+  ILoginResult
+} from '@/api/interface';
+import {
+  fetchAvatar,
+  fetchUserLoginState,
+  loginPost
+} from '@/api/user';
+import { history } from '@/utils/history';
+import { notification } from 'antd';
 import { observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
-import { notification } from 'antd';
-import { history } from '@/utils/history';
-import {
-  fetchAvatar, fetchUserLoginState, loginPost
-} from '@/api/user';
-import { CaptchaResult, fetchCaptcha } from '@/api/captcha';
-import { LoginQueryResult, LoginBody, LoginResult } from '@/api/interface';
 
 export class LoginModel {
   @observable
@@ -20,7 +27,7 @@ export class LoginModel {
 
   @asyncAction
   * QueryLoginStatus() {
-    const { data }: { data: LoginQueryResult } = yield fetchUserLoginState();
+    const { data }: { data: ILoginQueryResult } = yield fetchUserLoginState();
     if (data.status === 'OK') {
       this.isLogin = true;
     }
@@ -34,20 +41,23 @@ export class LoginModel {
   }
 
   @asyncAction
-  * Login(body: LoginBody) {
-    const { data }: { data: LoginResult } = yield loginPost(body);
+  * Login(body: ILoginBody) {
+    const { data }: { data: ILoginResult } = yield loginPost(body);
     if (data.status === 'OK') {
       this.isLogin = true;
       URL.revokeObjectURL(this.avatarUrl);
+      URL.revokeObjectURL(this.captchaUrl);
     }
     return data;
   }
 
   @asyncAction
   * Captcha() {
-    const { data }: { data: CaptchaResult } = yield fetchCaptcha();
+    const { data }: { data: ICaptchaResult } = yield fetchCaptcha();
     const svg = new Blob([ data.data.captcha ], { type: 'image/svg+xml' });
+    if (this.captchaUrl) {
+      URL.revokeObjectURL(this.captchaUrl);
+    }
     this.captchaUrl = URL.createObjectURL(svg);
   }
-
 }

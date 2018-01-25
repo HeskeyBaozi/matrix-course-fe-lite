@@ -1,12 +1,11 @@
-import React, { ReactNode } from 'react';
-import { observer } from 'mobx-react';
-import styles from './index.less';
-import { Layout, Icon } from 'antd';
-import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import { ParticlesComponent, LoginRoute } from '@/utils/dynamic';
 import logoUrl from '@/assets/images/logo.svg';
 import GlobalFooter from '@/components/common/GlobalFooter';
-
+import { LoginRoute, ParticlesComponent } from '@/utils/dynamic';
+import { Icon, Layout } from 'antd';
+import { observer } from 'mobx-react';
+import React, { ReactNode } from 'react';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
+import styles from './index.less';
 
 interface ILink {
   key: string;
@@ -17,42 +16,41 @@ interface ILink {
 
 const links: ILink[] = [
   {
-    key: 'about-us',
-    title: '关于我们',
+    blankTarget: true,
     href: 'https://about.vmatrix.org.cn/',
-    blankTarget: true
+    key: 'about-us',
+    title: '关于我们'
   },
   {
-    key: 'blog',
-    title: '技术博客',
+    blankTarget: true,
     href: 'https://blog.vmatrix.org.cn/',
-    blankTarget: true
+    key: 'blog',
+    title: '技术博客'
   }
 ];
 
+const copyright = <div>Copyright <Icon type={ 'copyright' } /> VMatrix</div>;
 
-const copyright = <div>Copyright <Icon type={ 'copyright' }/> VMatrix</div>;
-
-interface LoginLayoutProps extends RouteComponentProps<{}> {
+interface ILoginLayoutProps extends RouteComponentProps<{}> {
 }
 
 @observer
-export default class LoginLayout extends React.Component<LoginLayoutProps> {
+export default class LoginLayout extends React.Component<ILoginLayoutProps> {
 
   render() {
     const { match } = this.props;
     return (
       <Layout className={ styles.container }>
-        <ParticlesComponent/>
-        <img className={ styles.logo } src={ logoUrl } alt={ 'logo' }/>
+        <ParticlesComponent />
+        <img className={ styles.logo } src={ logoUrl } alt={ 'logo' } />
         <div className={ styles.inner }>
           <Switch>
-            <Route key={ 'login' } exact path={ `${match.path}` } component={ LoginRoute }/>
-            <Redirect to={ `${match.path}` }/>
+            <Route key={ 'login' } exact={ true } path={ `${match.path}` } component={ LoginRoute } />
+            <Redirect to={ `${match.path}` } />
           </Switch>
         </div>
         <div className={ styles.footer }>
-          <GlobalFooter links={ links } copyright={ copyright }/>
+          <GlobalFooter links={ links } copyright={ copyright } />
         </div>
       </Layout>
     );

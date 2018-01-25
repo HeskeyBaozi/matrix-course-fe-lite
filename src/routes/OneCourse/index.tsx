@@ -1,29 +1,28 @@
-import React from 'react';
-import { inject, observer } from 'mobx-react';
-import { Route, RouteComponentProps, Switch } from 'react-router';
-import { Link } from 'react-router-dom';
-import styles from './index.less';
+import { CourseStatusMap, RoleMap } from '@/api/interface';
+import { fetchAvatar } from '@/api/user';
+import DescriptionList from '@/components/common/DescriptionList';
+import Loading from '@/components/common/Loading';
 import PageHeader from '@/components/common/PageHeader';
 import { breadcrumbNameMap } from '@/constants';
 import { OneCourseModel } from '@/models/one-course.model';
-import Loading from '@/components/common/Loading';
-import { Avatar, Icon, Row, Col, Badge } from 'antd';
+import { Avatar, Badge, Col, Icon, Row } from 'antd';
 import { computed, observable } from 'mobx';
+import { inject, observer } from 'mobx-react';
 import { asyncAction } from 'mobx-utils';
-import { fetchAvatar } from '@/api/user';
-import { CourseStatusMap, RoleMap } from '@/api/interface';
-import DescriptionList from '@/components/common/DescriptionList';
+import React from 'react';
+import { Route, RouteComponentProps, Switch } from 'react-router';
+import { Link } from 'react-router-dom';
+import styles from './index.less';
 
 const { Description } = DescriptionList;
 
-interface OneCourseRouteProps extends RouteComponentProps<{ courseId: string }> {
+interface IOneCourseRouteProps extends RouteComponentProps<{ courseId: string }> {
   $OneCourse?: OneCourseModel;
 }
 
-
 @inject('$OneCourse')
 @observer
-export default class OneCourseRoute extends React.Component<OneCourseRouteProps> {
+export default class OneCourseRoute extends React.Component<IOneCourseRouteProps> {
 
   @observable
   avatarUrl = '';
@@ -41,7 +40,6 @@ export default class OneCourseRoute extends React.Component<OneCourseRouteProps>
     this.avatarUrl = URL.createObjectURL(data);
   }
 
-
   componentWillUnmount() {
     URL.revokeObjectURL(this.avatarUrl);
   }
@@ -53,12 +51,12 @@ export default class OneCourseRoute extends React.Component<OneCourseRouteProps>
     await this.LoadAvatar();
   }
 
-
   render() {
     const { match, location, $OneCourse } = this.props;
     const { one } = $OneCourse!;
     const breadcrumb = {
-      location, breadcrumbNameMap
+      breadcrumbNameMap,
+      location
     };
     const title = (
       <div className={ styles.titleWrapper }>
@@ -66,41 +64,50 @@ export default class OneCourseRoute extends React.Component<OneCourseRouteProps>
           <span>{ `${one.creator.realname} / ${one.course_name}` }</span>
         </div>
         <div className={ styles.right }>
-          <Badge status={ one.status === 'open' ? 'success' : 'error' } text={ CourseStatusMap[one.status] }/>
+          <Badge status={ one.status === 'open' ? 'success' : 'error' } text={ CourseStatusMap[ one.status ] } />
         </div>
       </div>
     );
 
-    const content = [
-      <DescriptionList key={ 'basic' } style={ { marginBottom: '1.5rem' } }
-                       title={ null } col={ 3 }>
-        <Description term={ <span><Icon type={ 'contacts' }/> 教师</span> }>
+    const content = [ (
+      <DescriptionList
+        key={ 'basic' }
+        style={ { marginBottom: '1.5rem' } }
+        title={ null }
+        col={ 3 }
+      >
+        <Description term={ <span><Icon type={ 'contacts' } /> 教师</span> }>
           { one.teacher }
         </Description>
-        <Description term={ <span><Icon type={ 'calendar' }/> 学期</span> }>
+        <Description term={ <span><Icon type={ 'calendar' } /> 学期</span> }>
           { `${one.school_year} ${one.term}` }
         </Description>
-        <Description term={ <span><Icon type={ 'user' }/> 我的角色</span> }>
-          { RoleMap[one.role] }
+        <Description term={ <span><Icon type={ 'user' } /> 我的角色</span> }>
+          { RoleMap[ one.role ] }
         </Description>
       </DescriptionList>
-    ];
+    ) ];
 
     return (
       <div className={ styles.innerContainer }>
-        <Loading isLoading={ !$OneCourse!.isOneCourseLoaded } modifyClassName={ styles.modifyLoading }
-                 isFullScreen={ false }/>
+        <Loading
+          isLoading={ !$OneCourse!.isOneCourseLoaded }
+          modifyClassName={ styles.modifyLoading }
+          isFullScreen={ false }
+        />
         <PageHeader
           key={ 'pageHeader' }
           linkElement={ Link }
           style={ { position: 'relative' } }
-          logo={ <Avatar icon={ 'user' } src={ this.displayAvatarUrl }/> }
+          logo={ <Avatar icon={ 'user' } src={ this.displayAvatarUrl } /> }
           title={ title }
           content={ content }
-          { ...breadcrumb } />
+          {...breadcrumb}
+        />
         <div key={ 'route' } className={ styles.containContainer }>
           <Switch>
-            <Route path={ `${match.url}` } component={ () => <div>hello</div> }/>
+            {/* tslint:disable-next-line:jsx-no-lambda */ }
+            <Route path={ `${match.url}` } component={ () => <div>hello</div> } />
           </Switch>
         </div>
       </div>

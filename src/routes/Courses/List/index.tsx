@@ -1,23 +1,23 @@
-import React, { SyntheticEvent } from 'react';
-import { computed, observable, action } from 'mobx';
-import { observer, inject } from 'mobx-react';
-import { RouteComponentProps } from 'react-router';
-import styles from './index.less';
-import { List, Card, Input, Icon } from 'antd';
-import { CoursesModel } from '@/models/courses.model';
-import { CoursesItem } from '@/api/interface';
+import { ICoursesItem } from '@/api/interface';
 import OneCourseCard from '@/components/OneCourseCard';
+import { CoursesModel } from '@/models/courses.model';
+import { Card, Icon, Input, List } from 'antd';
+import { action, computed, observable } from 'mobx';
+import { inject, observer } from 'mobx-react';
+import React, { SyntheticEvent } from 'react';
+import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
+import styles from './index.less';
 
 const { Item } = List;
 
-interface CoursesListProps extends RouteComponentProps<{ status: string }> {
-  $Courses?: CoursesModel
+interface ICoursesListProps extends RouteComponentProps<{ status: string }> {
+  $Courses?: CoursesModel;
 }
 
 @inject('$Courses')
 @observer
-export default class CoursesList extends React.Component<CoursesListProps> {
+export default class CoursesList extends React.Component<ICoursesListProps> {
 
   @observable
   titleFilter = '';
@@ -30,37 +30,44 @@ export default class CoursesList extends React.Component<CoursesListProps> {
 
   @computed
   get filteredDataSource() {
-    return this.dataSource.filter(item => item.course_name.indexOf(this.titleFilter) !== -1);
+    return this.dataSource.filter((item) => item.course_name.indexOf(this.titleFilter) !== -1);
   }
 
   @action
   observeFilterChange = (e: SyntheticEvent<HTMLInputElement>) => {
     this.titleFilter = e.currentTarget.value;
-  };
+  }
 
   render() {
     const { $Courses } = this.props;
     const pagination = false; // todo: pagination
-    return [
+    return [ (
       <Card className={ styles.searchArea } key={ 'filter' }>
-        <Input className={ styles.searchBar }
-               value={ this.titleFilter }
-               placeholder={ '按课程名称搜索' }
-               prefix={ <Icon type={ 'search' }/> }
-               onChange={ this.observeFilterChange }/>
-      </Card>,
-      <List key={ 'list' } loading={ !$Courses!.isCoursesLoaded } pagination={ pagination }
-            grid={ { gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 } }
-            dataSource={ this.filteredDataSource } renderItem={ renderItem }/>
-    ];
+        <Input
+          className={ styles.searchBar }
+          value={ this.titleFilter }
+          placeholder={ '按课程名称搜索' }
+          prefix={ <Icon type={ 'search' } /> }
+          onChange={ this.observeFilterChange }
+        />
+      </Card>), (
+      <List
+        key={ 'list' }
+        loading={ !$Courses!.isCoursesLoaded }
+        pagination={ pagination }
+        grid={ { gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 } }
+        dataSource={ this.filteredDataSource }
+        renderItem={ renderItem }
+      />
+    ) ];
   }
 }
 
-function renderItem(item: CoursesItem) {
+function renderItem(item: ICoursesItem) {
   return (
     <Item>
       <Link to={ `/course/${item.course_id}/` }>
-        <OneCourseCard item={ item }/>
+        <OneCourseCard item={ item } />
       </Link>
     </Item>
   );
