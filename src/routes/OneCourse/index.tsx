@@ -24,40 +24,27 @@ interface IOneCourseRouteProps extends RouteComponentProps<{ courseId: string }>
 @observer
 export default class OneCourseRoute extends React.Component<IOneCourseRouteProps> {
 
-  @observable
-  avatarUrl = '';
-
   @computed
   get displayAvatarUrl() {
-    return this.avatarUrl.length ? this.avatarUrl : void 0;
-  }
-
-  @asyncAction
-  * LoadAvatar() {
     const { $OneCourse } = this.props;
-    const { username } = $OneCourse!.one.creator;
-    const { data }: { data: Blob } = yield fetchAvatar(username);
-    this.avatarUrl = URL.createObjectURL(data);
+    return $OneCourse!.creatorAvatarUrl.length ? $OneCourse!.creatorAvatarUrl : void 0;
   }
 
   componentWillUnmount() {
-    URL.revokeObjectURL(this.avatarUrl);
+    const { $OneCourse } = this.props;
+    $OneCourse!.releaseCreatorAvatarUrl();
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { $OneCourse, match } = this.props;
     const courseId = Number.parseInt(match.params.courseId);
-    await $OneCourse!.LoadOneCourse(courseId);
-    await this.LoadAvatar();
+    $OneCourse!.LoadOneCourse(courseId);
   }
 
   render() {
     const { match, location, $OneCourse } = this.props;
     const { one } = $OneCourse!;
-    const breadcrumb = {
-      breadcrumbNameMap,
-      location
-    };
+    const breadcrumb = { breadcrumbNameMap, location };
     const title = (
       <div className={ styles.titleWrapper }>
         <div className={ styles.left }>

@@ -1,5 +1,5 @@
 import { xios } from '@/api/instance';
-import { IMatrixResponse, IOneCourse } from '@/api/interface';
+import { IAssignmentItem, IDiscussionItem, IMatrixResponse, IOneCourse } from '@/api/interface';
 
 /******************************
  *           Detail
@@ -26,7 +26,7 @@ export function fetchCoursePersonalGrades({ courseId }: { courseId: number }) {
 
 // https://api.vmatrix.org.cn/#/course_assignment/get_api_courses__course_id__assignments
 export function fetchAssignments({ courseId }: { courseId: number }) {
-  return xios.get<IMatrixResponse<any>>(`/api/courses/${courseId}/assignments`);
+  return xios.get<IMatrixResponse<IAssignmentItem[]>>(`/api/courses/${courseId}/assignments`);
 }
 
 /******************************
@@ -34,6 +34,6 @@ export function fetchAssignments({ courseId }: { courseId: number }) {
  ******************************/
 
 // https://api.vmatrix.org.cn/#/course_discussion/get_api_courses__course_id__discussion
-export function fetchCourseDiscussions({ courseId }: { courseId: number }) {
-  return xios.get<IMatrixResponse<any>>(`/api/courses/${courseId}/discussion`);
+export function fetchDiscussions({ courseId }: { courseId: number }) {
+  return xios.get<IMatrixResponse<IDiscussionItem[]>>(`/api/courses/${courseId}/discussion`);
 }

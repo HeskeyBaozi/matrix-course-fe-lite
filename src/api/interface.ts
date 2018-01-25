@@ -83,6 +83,39 @@ export interface IOneCourse extends ICoursesItem {
   type: string;
 }
 
+export interface IAssignmentItem {
+  asgn_id: number;
+  ca_id: number;
+  course_id: number;
+  enddate: string;
+  grade: number | null;
+  grade_at_end: number;
+  last_submission_time: string | null;
+  ptype_id: number;
+  standard_score: number;
+  startdate: string;
+  submit_limitation: number; // 0 = 无限制
+  submit_times: number; // 已经提交的次数
+  title: string;
+  type: string;
+}
+
+export interface IDiscussionItem {
+  answers: number;
+  ca_id: number;
+  date: string;
+  id: number;
+  lastDate: string;
+  nickname: string;
+  prob_title: string;
+  prob_type: string;
+  state: number;
+  title: string;
+  username: string;
+  vote_bad: null;
+  vote_great: number;
+}
+
 // General
 export const RoleMap: IMapper = {
   TA: '助教',

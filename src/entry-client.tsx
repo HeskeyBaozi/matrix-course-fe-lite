@@ -3,7 +3,6 @@ import { stores } from '@/models';
 import { notification } from 'antd';
 import { useStrict } from 'mobx';
 import { Provider } from 'mobx-react';
-import 'normalize.css';
 import 'particles.js';
 import React from 'react';
 import { render } from 'react-dom';
