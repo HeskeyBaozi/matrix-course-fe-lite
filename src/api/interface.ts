@@ -80,6 +80,7 @@ export interface ICoursesItem {
 // One Course
 export interface IOneCourse extends ICoursesItem {
   created_at: string;
+  description: string;
   type: string;
 }
 
@@ -101,19 +102,19 @@ export interface IAssignmentItem {
 }
 
 export interface IDiscussionItem {
-  answers: number;
-  ca_id: number;
+  answers: number | null;
+  ca_id: number | null;
   date: string;
   id: number;
-  lastDate: string;
+  lastDate: string | null;
   nickname: string;
-  prob_title: string;
-  prob_type: string;
+  prob_title: string | null;
+  prob_type: string | null;
   state: number;
   title: string;
   username: string;
-  vote_bad: null;
-  vote_great: number;
+  vote_bad: number | null;
+  vote_great: number | null;
 }
 
 // General

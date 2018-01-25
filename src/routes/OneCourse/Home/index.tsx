@@ -1,3 +1,4 @@
+import Markdown from '@/components/common/Markdown';
 import { OneCourseModel } from '@/models/one-course.model';
 import { Card, Col, Row } from 'antd';
 import { inject, observer } from 'mobx-react';
@@ -12,17 +13,17 @@ interface IOneCourseHomeProps extends RouteComponentProps<{}> {
 @observer
 export default class OneCourseHome extends React.Component<IOneCourseHomeProps> {
   render() {
-    // tslint:disable-next-line:no-console
-    console.log(this.props.match.params);
+    const { $OneCourse } = this.props;
+    const { one } = $OneCourse!;
     return (
       <Row gutter={ 16 }>
         <Col span={ 16 }>
           <Card>
-            Description
+            <Markdown source={ one.description } />
           </Card>
         </Col>
         <Col span={ 8 }>
-          <Row>
+          <Row gutter={ 16 }>
             <Col span={ 12 }>
               <Card>
                 Description

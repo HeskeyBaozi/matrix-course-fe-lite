@@ -1,6 +1,7 @@
 import { IAssignmentItem, IDiscussionItem, IOneCourse } from '@/api/interface';
 import { fetchAssignments, fetchCourseDetail, fetchDiscussions } from '@/api/one-course';
 import { fetchAvatar } from '@/api/user';
+import { isAfter, isBefore, isWithinInterval } from 'date-fns/esm';
 import { computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
 
@@ -17,6 +18,7 @@ export class OneCourseModel {
       realname: '',
       username: ''
     },
+    description: '',
     progressing_num: 0,
     role: '',
     school_year: '',
@@ -37,6 +39,22 @@ export class OneCourseModel {
 
   @observable
   assignments: IAssignmentItem[] = [];
+
+  @computed
+  get notStarted() {
+    return this.assignments.filter(({ startdate }) => isAfter(startdate, Date.now()));
+  }
+
+  @computed
+  get inProgress() {
+    return this.assignments
+      .filter(({ startdate, enddate }) => isWithinInterval(Date.now(), { start: startdate, end: enddate }));
+  }
+
+  @computed
+  get outOfDate() {
+    return this.assignments.filter(({ enddate }) => isBefore(enddate, Date.now()));
+  }
 
   @observable
   isAssignmentsLoaded = false;
@@ -84,6 +102,8 @@ export class OneCourseModel {
     this.isAssignmentsLoaded = false;
     const { data: { data: assignments } } = yield fetchAssignments({ courseId });
     this.assignments = assignments;
+    // tslint:disable-next-line:no-console
+    console.log(this);
     this.isAssignmentsLoaded = true;
   }
 

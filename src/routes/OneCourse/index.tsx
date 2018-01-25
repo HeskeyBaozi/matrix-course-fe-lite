@@ -5,12 +5,13 @@ import Loading from '@/components/common/Loading';
 import PageHeader from '@/components/common/PageHeader';
 import { breadcrumbNameMap } from '@/constants';
 import { OneCourseModel } from '@/models/one-course.model';
+import { OneCourseHomeRoute } from '@/utils/dynamic';
 import { Avatar, Badge, Col, Icon, Row } from 'antd';
 import { computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { asyncAction } from 'mobx-utils';
 import React from 'react';
-import { Route, RouteComponentProps, Switch } from 'react-router';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import { Link } from 'react-router-dom';
 import styles from './index.less';
 
@@ -93,8 +94,8 @@ export default class OneCourseRoute extends React.Component<IOneCourseRouteProps
         />
         <div key={ 'route' } className={ styles.containContainer }>
           <Switch>
-            {/* tslint:disable-next-line:jsx-no-lambda */ }
-            <Route path={ `${match.url}` } component={ () => <div>hello</div> } />
+            <Route path={ `${match.url}/home` } component={ OneCourseHomeRoute } />
+            <Redirect to={ `${match.url}/home` } />
           </Switch>
         </div>
       </div>
