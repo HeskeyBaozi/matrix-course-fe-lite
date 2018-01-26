@@ -103,7 +103,6 @@ export class OneCourseModel {
     const { data: { data: assignments } } = yield fetchAssignments({ courseId });
     this.assignments = assignments;
     // tslint:disable-next-line:no-console
-    console.log(this);
     this.isAssignmentsLoaded = true;
   }
 

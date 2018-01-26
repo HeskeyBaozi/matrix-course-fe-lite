@@ -18,8 +18,8 @@ export default class OneCourseHome extends React.Component<IOneCourseHomeProps> 
     return (
       <Row gutter={ 16 }>
         <Col span={ 16 }>
-          <Card>
-            <Markdown source={ one.description } />
+          <Card loading={ !$OneCourse!.isOneCourseLoaded }>
+            <Markdown source={ one.description }/>
           </Card>
         </Col>
         <Col span={ 8 }>
@@ -36,7 +36,7 @@ export default class OneCourseHome extends React.Component<IOneCourseHomeProps> 
             </Col>
           </Row>
         </Col>
-      </Row >
+      </Row>
     );
   }
 }

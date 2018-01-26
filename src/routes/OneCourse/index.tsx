@@ -46,13 +46,19 @@ export default class OneCourseRoute extends React.Component<IOneCourseRouteProps
     const { match, location, $OneCourse } = this.props;
     const { one } = $OneCourse!;
     const breadcrumb = { breadcrumbNameMap, location };
+    const restClassNames = { className: styles.topPageHeader };
     const title = (
       <div className={ styles.titleWrapper }>
+        <Loading
+          isLoading={ !$OneCourse!.isOneCourseLoaded }
+          modifyClassName={ styles.modifyLoading }
+          isFullScreen={ false }
+        />
         <div className={ styles.left }>
           <span>{ `${one.creator.realname} / ${one.course_name}` }</span>
         </div>
         <div className={ styles.right }>
-          <Badge status={ one.status === 'open' ? 'success' : 'error' } text={ CourseStatusMap[ one.status ] } />
+          <Badge status={ one.status === 'open' ? 'success' : 'error' } text={ CourseStatusMap[ one.status ] }/>
         </div>
       </div>
     );
@@ -64,13 +70,13 @@ export default class OneCourseRoute extends React.Component<IOneCourseRouteProps
         title={ null }
         col={ 3 }
       >
-        <Description term={ <span><Icon type={ 'contacts' } /> 教师</span> }>
+        <Description term={ <span><Icon type={ 'contacts' }/> 教师</span> }>
           { one.teacher }
         </Description>
-        <Description term={ <span><Icon type={ 'calendar' } /> 学期</span> }>
+        <Description term={ <span><Icon type={ 'calendar' }/> 学期</span> }>
           { `${one.school_year} ${one.term}` }
         </Description>
-        <Description term={ <span><Icon type={ 'user' } /> 我的角色</span> }>
+        <Description term={ <span><Icon type={ 'user' }/> 我的角色</span> }>
           { RoleMap[ one.role ] }
         </Description>
       </DescriptionList>
@@ -78,24 +84,19 @@ export default class OneCourseRoute extends React.Component<IOneCourseRouteProps
 
     return (
       <div className={ styles.innerContainer }>
-        <Loading
-          isLoading={ !$OneCourse!.isOneCourseLoaded }
-          modifyClassName={ styles.modifyLoading }
-          isFullScreen={ false }
-        />
         <PageHeader
           key={ 'pageHeader' }
           linkElement={ Link }
-          style={ { position: 'relative' } }
-          logo={ <Avatar icon={ 'user' } src={ this.displayAvatarUrl } /> }
+          logo={ <Avatar icon={ 'user' } src={ this.displayAvatarUrl }/> }
           title={ title }
           content={ content }
-          {...breadcrumb}
+          { ...breadcrumb }
+          { ...restClassNames }
         />
         <div key={ 'route' } className={ styles.containContainer }>
           <Switch>
-            <Route path={ `${match.url}/home` } component={ OneCourseHomeRoute } />
-            <Redirect to={ `${match.url}/home` } />
+            <Route path={ `${match.url}/home` } component={ OneCourseHomeRoute }/>
+            <Redirect to={ `${match.url}/home` }/>
           </Switch>
         </div>
       </div>

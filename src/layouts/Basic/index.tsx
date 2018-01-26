@@ -64,14 +64,12 @@ export default class BasicLayout extends React.Component<ILoginLayoutProps> {
   }
 
   renderOneCourseMenu = (props: RouteComponentProps<{ courseId: string }>) => (
-    <OneCourseMenu {...props} collapsed={ this.collapsed } />
+    <OneCourseMenu { ...props } collapsed={ this.collapsed }/>
   )
 
-  renderFirstMenu = (props: RouteComponentProps<{}>) => <FirstMenu {...props} collapsed={ this.collapsed } />;
+  renderFirstMenu = (props: RouteComponentProps<{}>) => <FirstMenu { ...props } collapsed={ this.collapsed }/>;
 
   render() {
-    const { match } = this.props;
-    const rootPath = match.path;
     return (
       <Layout>
         <Sider
@@ -82,7 +80,7 @@ export default class BasicLayout extends React.Component<ILoginLayoutProps> {
           collapsed={ this.collapsed }
         >
           <div className={ styles.logoWrapper }>
-            <img src={ logoTransUrl } alt={ 'logo' } />
+            <img src={ logoTransUrl } alt={ 'logo' }/>
           </div>
           <Switch>
             <Route
@@ -104,19 +102,19 @@ export default class BasicLayout extends React.Component<ILoginLayoutProps> {
             />
             <div className={ styles.right }>
               <span className={ styles.action }>
-                <Icon type={ 'bell' } />
+                <Icon type={ 'bell' }/>
               </span>
               <span className={ styles.action }>
-                <Avatar size={ 'large' } icon={ 'user' } src={ this.headerAvatarUrl } />
+                <Avatar size={ 'large' } icon={ 'user' } src={ this.headerAvatarUrl }/>
               </span>
             </div>
           </Header>
           <Content className={ styles.content }>
             <Switch>
-              <Route exact={ true } path={ `/` } component={ ProfileRoute } />
-              <Route path={ `/courses` } component={ CoursesRoute } />
-              <Route path={ '/course/:courseId' } component={ OneCourseRoute } />
-              <Redirect to={ '/' } />
+              <Route exact={ true } path={ `/` } component={ ProfileRoute }/>
+              <Route path={ `/courses` } component={ CoursesRoute }/>
+              <Route path={ '/course/:courseId' } component={ OneCourseRoute }/>
+              <Redirect to={ '/' }/>
             </Switch>
           </Content>
         </Layout>

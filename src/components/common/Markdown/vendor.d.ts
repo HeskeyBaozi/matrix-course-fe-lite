@@ -11,3 +11,8 @@ declare module 'react-highlight' {
   const content: any;
   export default content;
 }
+
+declare module 'react-prism' {
+  const content: any;
+  export default content;
+}

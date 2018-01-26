@@ -1,9 +1,10 @@
 import classNames from 'classnames';
-import 'highlight.js/styles/atom-one-light.css';
+import 'prismjs';
+import 'prismjs/themes/prism-tomorrow.css';
 import React from 'react';
-import Highlight from 'react-highlight';
-import ReactMarkdown, { ReactMarkdownProps } from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import MathJax from 'react-mathjax';
+import PrismCode from 'react-prism';
 import RemarkMathPlugin from 'remark-math';
 import styles from './index.less';
 
@@ -11,65 +12,65 @@ interface IMarkdownProps {
   source: string;
 }
 
-const { Context, Node } = MathJax;
+const renderers = {
+  code: renderCode,
+  image: renderPicture,
+  inlineCode: renderInlineCode,
+  inlineMath: renderInlineMath,
+  math: renderMath
+};
+
+const markdownPlugins = { plugins: [ RemarkMathPlugin ] };
 
 export default class Markdown extends React.PureComponent<IMarkdownProps> {
   render() {
     const { source } = this.props;
-    const renderers = {
-      code: renderCode,
-      image: renderPicture,
-      inlineCode: renderInlineCode,
-      inlineMath: renderInlineMath,
-      math: renderMath
-    };
-    const rest = {
-      plugins: [ RemarkMathPlugin ]
-    };
     return (
-      <Context>
-        <ReactMarkdown source={ source } renderers={ renderers } {...rest} />
-      </Context>
+      <MathJax.Context>
+        <ReactMarkdown source={ source } renderers={ renderers } { ...markdownPlugins } />
+      </MathJax.Context>
     );
   }
 }
 
 function renderMath({ value }: { value: string }) {
   return (
-    <Node>{ value }</Node>
+    <div className={ styles.math }>
+      <MathJax.Node>
+        { value }
+      </MathJax.Node>
+    </div>
   );
 }
 
 function renderInlineMath({ value }: { value: string }) {
   return (
-    <Node inline={ true }>{ value }</Node>
+    <MathJax.Node inline={ true }>
+      { value }
+    </MathJax.Node>
   );
 }
 
 function renderPicture({ src }: { src: string }) {
   return (
-    <img src={ src } className={ styles.image } />
+    <img src={ src } className={ styles.image }/>
   );
 }
 
 function renderCode(props: { value: string, language: string }) {
-  // tslint:disable-next-line:no-console
-  console.log(props);
-
-  const klassNames = classNames(props.language, styles.codeFamily);
+  const klassNames = classNames(`language-${props.language}`, styles.codeFamily);
   return (
-    <Highlight
-      className={ klassNames }
-    >{ props.value }
-    </Highlight>
+    <PrismCode className={ klassNames } component={ 'pre' }>{ props.value }</PrismCode>
   );
 }
 
 function renderInlineCode(props: { value: string, language: string }) {
-  // tslint:disable-next-line:no-console
-  console.log(props);
-  const klassNames = classNames(styles.codeFamily, styles.inlineCode);
   return (
-    <code className={ klassNames }>{ props.value }</code>
+    <PrismCode
+      className={ classNames(styles.codeFamily, styles.inlineCode) }
+      component={ 'code' }
+    >
+      { props.value }
+    </PrismCode>
   );
 }
