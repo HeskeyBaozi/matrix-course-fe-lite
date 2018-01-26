@@ -17,7 +17,8 @@ const renderers = {
   image: renderPicture,
   inlineCode: renderInlineCode,
   inlineMath: renderInlineMath,
-  math: renderMath
+  math: renderMath,
+  table: renderTable
 };
 
 const markdownPlugins = { plugins: [ RemarkMathPlugin ] };
@@ -35,11 +36,9 @@ export default class Markdown extends React.PureComponent<IMarkdownProps> {
 
 function renderMath({ value }: { value: string }) {
   return (
-    <div className={ styles.math }>
-      <MathJax.Node>
-        { value }
-      </MathJax.Node>
-    </div>
+    <MathJax.Node>
+      { value }
+    </MathJax.Node>
   );
 }
 
@@ -53,7 +52,7 @@ function renderInlineMath({ value }: { value: string }) {
 
 function renderPicture({ src }: { src: string }) {
   return (
-    <img src={ src } className={ styles.image }/>
+    <img src={ src } className={ styles.image } />
   );
 }
 
@@ -68,9 +67,18 @@ function renderInlineCode(props: { value: string, language: string }) {
   return (
     <PrismCode
       className={ classNames(styles.codeFamily, styles.inlineCode) }
-      component={ 'code' }
     >
       { props.value }
     </PrismCode>
+  );
+}
+
+function renderTable(props: any) {
+  // tslint:disable-next-line:no-console
+  console.log(props);
+  return (
+    <table className={ styles.table }>
+      { props.children }
+    </table>
   );
 }
