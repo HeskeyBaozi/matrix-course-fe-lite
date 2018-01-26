@@ -5,8 +5,9 @@ import { LoginModel } from '@/models/login.model';
 import { BasicLayout, LoginLayout } from '@/utils/dynamic';
 import { history } from '@/utils/history';
 import { notification } from 'antd';
-import { observable } from 'mobx';
+import { computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
+import DevTools from 'mobx-react-devtools';
 import { asyncAction } from 'mobx-utils';
 import React from 'react';
 import { Router, Switch } from 'react-router';
@@ -47,7 +48,8 @@ export class App extends React.Component<IAppProps, {}> {
 
     return (
       <div>
-        <Loading isLoading={ this.isLoading } isFullScreen={ true } />
+        <DevTools/>
+        <Loading isLoading={ this.isLoading } isFullScreen={ true }/>
         <Router history={ history }>
           <Switch>
             <AuthorizedRoute

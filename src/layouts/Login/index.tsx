@@ -29,7 +29,7 @@ const links: ILink[] = [
   }
 ];
 
-const copyright = <div>Copyright <Icon type={ 'copyright' } /> VMatrix</div>;
+const copyright = <div>Copyright <Icon type={ 'copyright' }/> VMatrix</div>;
 
 interface ILoginLayoutProps extends RouteComponentProps<{}> {
 }
@@ -41,16 +41,16 @@ export default class LoginLayout extends React.Component<ILoginLayoutProps> {
     const { match } = this.props;
     return (
       <Layout className={ styles.container }>
-        <ParticlesComponent />
-        <img className={ styles.logo } src={ logoUrl } alt={ 'logo' } />
+        <ParticlesComponent/>
+        <img className={ styles.logo } src={ logoUrl } alt={ 'logo' }/>
         <div className={ styles.inner }>
           <Switch>
-            <Route key={ 'login' } exact={ true } path={ `${match.path}` } component={ LoginRoute } />
-            <Redirect to={ `${match.path}` } />
+            <Route path={ `${match.url}` } component={ LoginRoute }/>
+            <Redirect to={ `${match.url}` }/>
           </Switch>
         </div>
         <div className={ styles.footer }>
-          <GlobalFooter links={ links } copyright={ copyright } />
+          <GlobalFooter links={ links } copyright={ copyright }/>
         </div>
       </Layout>
     );

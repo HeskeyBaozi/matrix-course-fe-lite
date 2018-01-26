@@ -30,7 +30,7 @@ const FirstMenu = MenuFactory({
 
 const OneCourseMenu = MenuFactory({
   menuList: [
-    { key: '/', icon: 'area-chart', title: '详情概览' },
+    { key: '/home', icon: 'area-chart', title: '详情概览' },
     { key: '/assignments', icon: 'edit', title: '作业' },
     { key: '/discussions', icon: 'coffee', title: '讨论' }
   ],

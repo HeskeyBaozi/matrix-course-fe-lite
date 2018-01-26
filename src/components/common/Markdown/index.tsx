@@ -52,7 +52,7 @@ function renderInlineMath({ value }: { value: string }) {
 
 function renderPicture({ src }: { src: string }) {
   return (
-    <img src={ src } className={ styles.image } />
+    <img src={ src } className={ styles.image }/>
   );
 }
 
@@ -74,8 +74,6 @@ function renderInlineCode(props: { value: string, language: string }) {
 }
 
 function renderTable(props: any) {
-  // tslint:disable-next-line:no-console
-  console.log(props);
   return (
     <table className={ styles.table }>
       { props.children }

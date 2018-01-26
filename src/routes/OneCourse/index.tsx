@@ -1,15 +1,13 @@
 import { CourseStatusMap, RoleMap } from '@/api/interface';
-import { fetchAvatar } from '@/api/user';
 import DescriptionList from '@/components/common/DescriptionList';
 import Loading from '@/components/common/Loading';
 import PageHeader from '@/components/common/PageHeader';
 import { breadcrumbNameMap } from '@/constants';
 import { OneCourseModel } from '@/models/one-course.model';
-import { OneCourseHomeRoute } from '@/utils/dynamic';
-import { Avatar, Badge, Col, Icon, Row } from 'antd';
-import { computed, observable } from 'mobx';
+import { OneCourseAssignmentsRoute, OneCourseHomeRoute } from '@/utils/dynamic';
+import { Avatar, Badge, Icon } from 'antd';
+import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
-import { asyncAction } from 'mobx-utils';
 import React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -29,11 +27,6 @@ export default class OneCourseRoute extends React.Component<IOneCourseRouteProps
   get displayAvatarUrl() {
     const { $OneCourse } = this.props;
     return $OneCourse!.creatorAvatarUrl.length ? $OneCourse!.creatorAvatarUrl : void 0;
-  }
-
-  componentWillUnmount() {
-    const { $OneCourse } = this.props;
-    $OneCourse!.releaseCreatorAvatarUrl();
   }
 
   componentDidMount() {
@@ -96,6 +89,7 @@ export default class OneCourseRoute extends React.Component<IOneCourseRouteProps
         <div key={ 'route' } className={ styles.containContainer }>
           <Switch>
             <Route path={ `${match.url}/home` } component={ OneCourseHomeRoute }/>
+            <Route path={ `${match.url}/assignments` } component={ OneCourseAssignmentsRoute }/>
             <Redirect to={ `${match.url}/home` }/>
           </Switch>
         </div>

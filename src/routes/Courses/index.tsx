@@ -30,10 +30,10 @@ export default class CourseRoute extends React.Component<ICourseRouteProps> {
     const { match, history } = this.props;
     switch (key) {
       case 'open':
-        history.push(`${match.path}/open`);
+        history.push(`${match.url}/open`);
         break;
       case 'close':
-        history.push(`${match.path}/close`);
+        history.push(`${match.url}/close`);
         break;
       default:
         break;
@@ -51,15 +51,15 @@ export default class CourseRoute extends React.Component<ICourseRouteProps> {
         <PageHeader
           tabList={ tabList }
           linkElement={ Link }
-          tabActiveKey={ location.pathname.replace(`${match.path}/`, '') }
+          tabActiveKey={ location.pathname.replace(`${match.url}/`, '') }
           onTabChange={ this.handleTabChange }
           title={ '所有课程' }
-          {...breadcrumb}
+          { ...breadcrumb }
         />
         <div className={ styles.containContainer }>
           <Switch>
-            <Route path={ `${match.path}/:status` } component={ CoursesList } />
-            <Redirect to={ `${match.path}/open` } />
+            <Route path={ `${match.url}/:status` } component={ CoursesList }/>
+            <Redirect to={ `${match.url}/open` }/>
           </Switch>
         </div>
       </div>

@@ -25,7 +25,7 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
 
   const mappedList = menuList.map(({ key, icon, title }) => (
     <Menu.Item key={ key }>
-      <Icon type={ icon } />
+      <Icon type={ icon }/>
       <span>{ title }</span>
     </Menu.Item>
   ));
@@ -45,7 +45,10 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
         }
       } else {
         const generalPath = match.url.replace(generalPathRegexp, '');
-        history.push(`${generalPath}${key}`);
+        if (`${generalPath}${key}` !== location.pathname) {
+          console.log('push to ', `${generalPath}${key}`);
+          history.push(`${generalPath}${key}`);
+        }
       }
     }
 
@@ -63,7 +66,7 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
       const children = returnTo ?
         [ (
           <Menu.Item className={ styles.returnItem } key={ 'RETURN' }>
-            <Icon type={ 'rollback' } />
+            <Icon type={ 'rollback' }/>
             <span>{ '返回上一级' }</span>
           </Menu.Item>
         ), ...mappedList ]
