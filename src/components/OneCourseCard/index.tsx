@@ -49,34 +49,34 @@ export default class OneCourseCard extends React.Component<IOneCourseCardProps> 
     const title = (
       <div className={ styles.titleWrapper }>
         <div className={ styles.left }>
-          <Avatar icon={ 'user' } src={ this.displayAvatarUrl } />
+          <Avatar icon={ 'user' } src={ this.displayAvatarUrl }/>
           <span>{ `${creator.realname} / ${course_name}` }</span>
         </div>
         <div className={ styles.right }>
-          <Badge status={ status === 'open' ? 'success' : 'error' } text={ CourseStatusMap[ status ] } />
+          <Badge status={ status === 'open' ? 'success' : 'error' } text={ CourseStatusMap[ status ] }/>
         </div>
       </div>
     );
 
     return (
-      <Card hoverable={ true } title={ title }>
+      <Card hoverable={ true } title={ title } bodyStyle={ { height: '12rem' } }>
         <DescriptionList style={ { marginBottom: '1.5rem' } } layout={ 'vertical' } title={ null } col={ 2 }>
-          <Description term={ <span><Icon type={ 'contacts' } /> 教师</span> }>
+          <Description term={ <span><Icon type={ 'contacts' }/> 教师</span> }>
             { teacher }
           </Description>
-          <Description term={ <span><Icon type={ 'calendar' } /> 学期</span> }>
+          <Description term={ <span><Icon type={ 'calendar' }/> 学期</span> }>
             { `${school_year} ${term}` }
           </Description>
         </DescriptionList>
         <Row>
           <Col sm={ 8 } xs={ 24 }>
-            <Info title={ '学生人数' } value={ `${student_num}人` } bordered={ true } />
+            <Info title={ '学生人数' } value={ `${student_num}人` } bordered={ true }/>
           </Col>
           <Col sm={ 8 } xs={ 24 }>
-            <Info title={ '进行中作业' } value={ `${progressing_num}个` } bordered={ true } />
+            <Info title={ '进行中作业' } value={ `${progressing_num}个` } bordered={ true }/>
           </Col>
           <Col sm={ 8 } xs={ 24 }>
-            <Info title={ '我的角色' } value={ RoleMap[ role ] } />
+            <Info title={ '我的角色' } value={ RoleMap[ role ] }/>
           </Col>
         </Row>
       </Card>

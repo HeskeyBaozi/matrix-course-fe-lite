@@ -20,6 +20,7 @@ export const CoursesRoute = dynamic(() => import('@/routes/Courses'));
 export const OneCourseRoute = dynamic(() => import('@/routes/OneCourse'));
 export const OneCourseHomeRoute = dynamic(() => import('@/routes/OneCourse/Home'));
 export const OneCourseAssignmentsRoute = dynamic(() => import('@/routes/OneCourse/Assignments'));
+export const OneCourseDiscussionsRoute = dynamic(() => import('@/routes/OneCourse/Discussions'));
 
 // Dynamic Components
 export const ParticlesComponent = dynamic(() => import('@/components/Particles'));

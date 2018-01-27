@@ -5,31 +5,33 @@ import { isAfter, isBefore, isWithinInterval } from 'date-fns/esm';
 import { computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
 
+const voidOne: IOneCourse = {
+  course_id: 0,
+  course_name: '',
+  created_at: Date.now().toString(),
+  creator: {
+    email: null,
+    homepage: null,
+    phone: null,
+    realname: '',
+    username: ''
+  },
+  description: '',
+  progressing_num: 0,
+  role: '',
+  school_year: '',
+  semester: '',
+  status: 'close',
+  student_num: 0,
+  teacher: '',
+  term: '',
+  type: '',
+  unfinished_num: 0
+};
+
 export class OneCourseModel {
   @observable
-  one: IOneCourse = {
-    course_id: 0,
-    course_name: '',
-    created_at: Date.now().toString(),
-    creator: {
-      email: null,
-      homepage: null,
-      phone: null,
-      realname: '',
-      username: ''
-    },
-    description: '',
-    progressing_num: 0,
-    role: '',
-    school_year: '',
-    semester: '',
-    status: 'close',
-    student_num: 0,
-    teacher: '',
-    term: '',
-    type: '',
-    unfinished_num: 0
-  };
+  one: IOneCourse = voidOne;
 
   @observable
   creatorAvatarUrl = '';
@@ -82,7 +84,7 @@ export class OneCourseModel {
   * LoadDetail(courseId: number) {
     this.isOneCourseLoaded = false;
     const { data: { data: course } } = yield fetchCourseDetail({ courseId });
-    this.one = course;
+    this.one = course && course.creator && course.creator.realname && course || voidOne;
     this.isOneCourseLoaded = true;
     yield this.LoadAvatar();
   }
@@ -102,8 +104,6 @@ export class OneCourseModel {
     this.isAssignmentsLoaded = false;
     const { data: { data: assignments } } = yield fetchAssignments({ courseId });
     this.assignments = Array.isArray(assignments) && assignments || [];
-    // tslint:disable-next-line:no-console
-    console.log(assignments);
     this.isAssignmentsLoaded = true;
   }
 

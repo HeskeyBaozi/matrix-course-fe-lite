@@ -1,0 +1,29 @@
+@import "~antd/lib/style/themes/default.less";
+
+.extraContent {
+  > * {
+    margin-right: 1rem;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.cardTitle {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  .extraContent;
+}
+
+.extraContentSearch {
+  width: 16rem;
+}
+
+.listItem {
+  border-bottom: none !important;
+}
+
+.discussionTitle {
+  font-size: 1.2rem;
+}

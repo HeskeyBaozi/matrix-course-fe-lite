@@ -4,7 +4,7 @@ import Loading from '@/components/common/Loading';
 import PageHeader from '@/components/common/PageHeader';
 import { breadcrumbNameMap } from '@/constants';
 import { OneCourseModel } from '@/models/one-course.model';
-import { OneCourseAssignmentsRoute, OneCourseHomeRoute } from '@/utils/dynamic';
+import { OneCourseAssignmentsRoute, OneCourseDiscussionsRoute, OneCourseHomeRoute } from '@/utils/dynamic';
 import { Avatar, Badge, Icon } from 'antd';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -90,6 +90,7 @@ export default class OneCourseRoute extends React.Component<IOneCourseRouteProps
           <Switch>
             <Route path={ `${match.url}/home` } component={ OneCourseHomeRoute }/>
             <Route path={ `${match.url}/assignments` } component={ OneCourseAssignmentsRoute }/>
+            <Route path={ `${match.url}/discussions` } component={ OneCourseDiscussionsRoute }/>
             <Redirect to={ `${match.url}/home` }/>
           </Switch>
         </div>

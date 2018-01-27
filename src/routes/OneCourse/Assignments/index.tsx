@@ -1,7 +1,7 @@
 import { IAssignmentItem } from '@/api/interface';
 import DescriptionList from '@/components/common/DescriptionList';
 import { OneCourseModel } from '@/models/one-course.model';
-import { Badge, Card, Col, Icon, Input, List, Progress, Radio, Row } from 'antd';
+import { Badge, Card, Icon, Input, List, Progress, Radio } from 'antd';
 import { format } from 'date-fns/esm';
 import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -62,7 +62,16 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
     const { $OneCourse } = this.props;
     const { one } = $OneCourse!;
     return [ 'TA', 'teacher' ].some((role) => role === one.role) ? (
-      <Radio.Button value={ 'not-started' }>未开始</Radio.Button>
+      <Radio.Button value={ 'not-started' }>
+        <div className={ styles.radioContainer }>
+          <span>未开始</span>
+          <Badge
+            className={ styles.count }
+            showZero={ true }
+            count={ $OneCourse!.notStarted.length }
+          />
+        </div>
+      </Radio.Button>
     ) : null;
   }
 
@@ -104,8 +113,26 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
       <div className={ styles.extraContent }>
         <Radio.Group value={ this.statusFilter } onChange={ this.handleStatusFilterChange }>
           { this.notStartedRadio }
-          <Radio.Button value={ 'in-progress' }>进行中</Radio.Button>
-          <Radio.Button value={ 'out-of-date' }>已结束</Radio.Button>
+          <Radio.Button value={ 'in-progress' }>
+            <div className={ styles.radioContainer }>
+              <span>进行中</span>
+              <Badge
+                className={ styles.count }
+                showZero={ true }
+                count={ $OneCourse!.inProgress.length }
+              />
+            </div>
+          </Radio.Button>
+          <Radio.Button value={ 'out-of-date' }>
+            <div className={ styles.radioContainer }>
+              <span>已结束</span>
+              <Badge
+                className={ styles.count }
+                showZero={ true }
+                count={ $OneCourse!.outOfDate.length }
+              />
+            </div>
+          </Radio.Button>
         </Radio.Group>
         <Radio.Group value={ this.submitFilter } onChange={ this.handleSubmitFilterChange }>
           <Radio.Button value={ 'all' }>全部</Radio.Button>
@@ -115,7 +142,7 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
         <Input.Search
           className={ styles.extraContentSearch }
           value={ this.search }
-          placeholder={ '请输入' }
+          placeholder={ '按作业题目搜索' }
           onChange={ this.handleSearchChange }
         />
       </div>
@@ -127,13 +154,13 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
           style={ { marginBottom: '1rem' } }
           title={ '课程作业' }
           extra={ extraContent }
-          loading={ !$OneCourse!.isAssignmentsLoaded }
         />
       ),
       (
         <List
           key={ 'list' }
           grid={ { xl: 2, lg: 1, gutter: 16 } }
+          loading={ !$OneCourse!.isAssignmentsLoaded }
           dataSource={ this.displayDataSource }
           renderItem={ renderItem }
           pagination={ this.pagination }
@@ -164,6 +191,7 @@ function renderItem({
     <List.Item className={ styles.listItem }>
       <Card
         hoverable={ true }
+        bodyStyle={ { height: '10rem' } }
         title={ <span key={ 'title' } className={ styles.assignmentTitle }>{ title }</span> }
         extra={ <Badge key={ 'state' } className={ styles.badgeStatus } status={ status[ 0 ] } text={ status[ 1 ] }/> }
       >
