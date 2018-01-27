@@ -1,8 +1,16 @@
 @import "~antd/lib/style/themes/default.less";
 
+.extraContent {
+  > * {
+    margin-right: 1rem;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
 .extraContentSearch {
   width: 16rem;
-  margin-left: 1rem;
 }
 
 .assignmentTitle {

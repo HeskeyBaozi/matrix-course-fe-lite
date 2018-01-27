@@ -20,7 +20,10 @@ interface IOnceCourseAssignments extends RouteComponentProps<{}> {
 export default class OneCourseAssignments extends React.Component<IOnceCourseAssignments> {
 
   @observable
-  status: 'in-progress' | 'out-of-date' | 'not-started' = 'in-progress';
+  statusFilter: 'in-progress' | 'out-of-date' | 'not-started' = 'in-progress';
+
+  @observable
+  submitFilter: 'all' | 'submitted' | 'not-submitted' = 'all';
 
   @observable
   search = '';
@@ -31,12 +34,19 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
   @computed
   get dataSource() {
     const { $OneCourse } = this.props;
-    const statusData = this.status === 'in-progress' ? $OneCourse!.inProgress : (
-      this.status === 'out-of-date' ? $OneCourse!.outOfDate : (
-        this.status === 'not-started' ? $OneCourse!.notStarted : []
+    const statusData = this.statusFilter === 'in-progress' ? $OneCourse!.inProgress : (
+      this.statusFilter === 'out-of-date' ? $OneCourse!.outOfDate : (
+        this.statusFilter === 'not-started' ? $OneCourse!.notStarted : []
       )
     );
-    return statusData.filter((assignment) => assignment.title.toLowerCase().indexOf(this.search.toLowerCase()) !== -1);
+
+    const submitData = statusData.filter((assignment) => this.submitFilter === 'submitted'
+      ? assignment.last_submission_time !== null
+      : assignment.last_submission_time === null);
+
+    const resultData = this.submitFilter === 'all' ? statusData : submitData;
+
+    return resultData.filter((assignment) => assignment.title.toLowerCase().indexOf(this.search.toLowerCase()) !== -1);
   }
 
   @computed
@@ -74,8 +84,8 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
   }
 
   @action
-  handleAssignmentsChange = ({ target }: SyntheticEvent<HTMLInputElement>) => {
-    this.status = (target as HTMLInputElement).value as 'in-progress' | 'out-of-date' | 'not-started';
+  handleStatusFilterChange = ({ target }: SyntheticEvent<HTMLInputElement>) => {
+    this.statusFilter = (target as HTMLInputElement).value as 'in-progress' | 'out-of-date' | 'not-started';
   }
 
   @action
@@ -83,14 +93,24 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
     this.search = currentTarget.value;
   }
 
+  @action
+  handleSubmitFilterChange = ({ target }: SyntheticEvent<HTMLInputElement>) => {
+    this.submitFilter = (target as HTMLInputElement).value as 'all' | 'submitted' | 'not-submitted';
+  }
+
   render() {
     const { $OneCourse } = this.props;
     const extraContent = (
       <div className={ styles.extraContent }>
-        <Radio.Group value={ this.status } onChange={ this.handleAssignmentsChange }>
+        <Radio.Group value={ this.statusFilter } onChange={ this.handleStatusFilterChange }>
           { this.notStartedRadio }
           <Radio.Button value={ 'in-progress' }>进行中</Radio.Button>
           <Radio.Button value={ 'out-of-date' }>已结束</Radio.Button>
+        </Radio.Group>
+        <Radio.Group value={ this.submitFilter } onChange={ this.handleSubmitFilterChange }>
+          <Radio.Button value={ 'all' }>全部</Radio.Button>
+          <Radio.Button value={ 'not-submitted' }>未提交</Radio.Button>
+          <Radio.Button value={ 'submitted' }>已提交</Radio.Button>
         </Radio.Group>
         <Input.Search
           className={ styles.extraContentSearch }
@@ -136,7 +156,7 @@ function renderItem({
 
   const percent = (grade || 0) * 100 / standard_score;
   const status: [ 'success' | 'processing' | 'default' | 'error' | 'warning', string ] = last_submission_time ? (
-    grade !== null ? (percent < 60 ? [ 'error', '已批改 低分数' ] : [ 'success', '已批改' ]) : [ 'processing', '已提交' ]
+    grade !== null ? (percent < 60 ? [ 'error', '已批改 低分数' ] : [ 'success', '已批改' ]) : [ 'processing', '已提交 未批改' ]
   ) : [ 'default', '未提交' ];
   const progressStatus = last_submission_time && grade !== null ? (percent >= 60 ? 'success' : 'exception') : 'active';
 
@@ -153,13 +173,13 @@ function renderItem({
           col={ 2 }
           style={ { marginBottom: '1rem' } }
         >
-          <Description term={ <span><Icon type={ 'contacts' }/> 题型</span> }>
+          <Description term={ <span><Icon type={ 'info-circle-o' }/> 题型</span> }>
             { type }
           </Description>
           <Description term={ <span><Icon type={ 'calendar' }/> 截止日期</span> }>
             { format(enddate, 'HH:mm A, Do MMM. YYYY') }
           </Description>
-          <Description term={ <span><Icon type={ 'calendar' }/> 提交次数</span> }>
+          <Description term={ <span><Icon type={ 'upload' }/> 提交次数</span> }>
             { `${submit_times} / ${submit_limitation === 0 ? 'No Limits' : submit_limitation}` }
           </Description>
         </DescriptionList>
