@@ -100,24 +100,26 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
         />
       </div>
     );
-    return (
-      <Row gutter={ 16 }>
-        <Col span={ 24 } style={ { marginBottom: '1rem' } }>
-          <Card title={ '课程作业' } extra={ extraContent } loading={ !$OneCourse!.isAssignmentsLoaded }/>
-        </Col>
-        <Col span={ 24 }>
-          <List
-            grid={ { xl: 2, lg: 1, gutter: 16 } }
-            dataSource={ this.displayDataSource }
-            pagination={ this.pagination }
-            renderItem={ renderItem }
-            itemLayout={ 'vertical' }
-            split={ false }
-            bordered={ false }
-          />
-        </Col>
-      </Row>
-    );
+    return [
+      (
+        <Card
+          key={ 'filter' }
+          style={ { marginBottom: '1rem' } }
+          title={ '课程作业' }
+          extra={ extraContent }
+          loading={ !$OneCourse!.isAssignmentsLoaded }
+        />
+      ),
+      (
+        <List
+          key={ 'list' }
+          grid={ { xl: 2, lg: 1, gutter: 16 } }
+          dataSource={ this.displayDataSource }
+          renderItem={ renderItem }
+          pagination={ this.pagination }
+        />
+      )
+    ];
   }
 }
 
@@ -131,44 +133,36 @@ function renderItem({
                       standard_score,
                       last_submission_time
                     }: IAssignmentItem) {
-  const status: [ 'success' | 'processing' | 'default' | 'error' | 'warning', string ] = last_submission_time ? (
-    grade !== null ? (grade === 0 ? [ 'error', '已批改 0分?' ] : [ 'success', '已批改' ]) : [ 'processing', '已提交' ]
-  ) : [ 'default', '未提交' ];
-
-  const titleWrap = [
-    <span key={ 'title' } className={ styles.assignmentTitle }>{ title }</span>,
-    <Badge key={ 'state' } className={ styles.badgeStatus } status={ status[ 0 ] } text={ status[ 1 ] }/>
-  ];
-
-  const description = (
-    <DescriptionList
-      key={ 'basic' }
-      title={ null }
-      col={ 2 }
-      style={ { marginBottom: '1rem' } }
-    >
-      <Description term={ <span><Icon type={ 'contacts' }/> 题型</span> }>
-        { type }
-      </Description>
-      <Description term={ <span><Icon type={ 'calendar' }/> 截止日期</span> }>
-        { format(enddate, 'HH:mm A, Do MMM. YYYY') }
-      </Description>
-      <Description term={ <span><Icon type={ 'calendar' }/> 提交次数</span> }>
-        { `${submit_times} / ${submit_limitation === 0 ? 'No Limits' : submit_limitation}` }
-      </Description>
-    </DescriptionList>
-  );
 
   const percent = (grade || 0) * 100 / standard_score;
+  const status: [ 'success' | 'processing' | 'default' | 'error' | 'warning', string ] = last_submission_time ? (
+    grade !== null ? (percent < 60 ? [ 'error', '已批改 低分数' ] : [ 'success', '已批改' ]) : [ 'processing', '已提交' ]
+  ) : [ 'default', '未提交' ];
   const progressStatus = last_submission_time && grade !== null ? (percent >= 60 ? 'success' : 'exception') : 'active';
 
   return (
-    <List.Item>
+    <List.Item className={ styles.listItem }>
       <Card
         hoverable={ true }
-        title={ titleWrap }
+        title={ <span key={ 'title' } className={ styles.assignmentTitle }>{ title }</span> }
+        extra={ <Badge key={ 'state' } className={ styles.badgeStatus } status={ status[ 0 ] } text={ status[ 1 ] }/> }
       >
-        { description }
+        <DescriptionList
+          key={ 'basic' }
+          title={ null }
+          col={ 2 }
+          style={ { marginBottom: '1rem' } }
+        >
+          <Description term={ <span><Icon type={ 'contacts' }/> 题型</span> }>
+            { type }
+          </Description>
+          <Description term={ <span><Icon type={ 'calendar' }/> 截止日期</span> }>
+            { format(enddate, 'HH:mm A, Do MMM. YYYY') }
+          </Description>
+          <Description term={ <span><Icon type={ 'calendar' }/> 提交次数</span> }>
+            { `${submit_times} / ${submit_limitation === 0 ? 'No Limits' : submit_limitation}` }
+          </Description>
+        </DescriptionList>
         <Progress
           strokeWidth={ 5 }
           format={ progressFormat }

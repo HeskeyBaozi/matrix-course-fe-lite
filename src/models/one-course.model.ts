@@ -101,7 +101,7 @@ export class OneCourseModel {
   * LoadAssignments(courseId: number) {
     this.isAssignmentsLoaded = false;
     const { data: { data: assignments } } = yield fetchAssignments({ courseId });
-    this.assignments = assignments;
+    this.assignments = Array.isArray(assignments) && assignments || [];
     // tslint:disable-next-line:no-console
     console.log(assignments);
     this.isAssignmentsLoaded = true;
@@ -111,7 +111,7 @@ export class OneCourseModel {
   * LoadDiscussions(courseId: number) {
     this.isDiscussionsLoaded = false;
     const { data: { data: discussions } } = yield fetchDiscussions({ courseId });
-    this.discussions = discussions;
+    this.discussions = Array.isArray(discussions) && discussions || [];
     this.isDiscussionsLoaded = true;
   }
 
