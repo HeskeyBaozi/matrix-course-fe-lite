@@ -1,11 +1,15 @@
 import { IAssignmentItem } from '@/api/interface';
+import DescriptionList from '@/components/common/DescriptionList';
 import { OneCourseModel } from '@/models/one-course.model';
-import { Card, Col, Input, List, Radio, Row } from 'antd';
+import { Badge, Card, Col, Icon, Input, List, Progress, Radio, Row } from 'antd';
+import { format } from 'date-fns/esm';
 import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React, { SyntheticEvent } from 'react';
 import { RouteComponentProps } from 'react-router';
 import styles from './index.less';
+
+const { Description } = DescriptionList;
 
 interface IOnceCourseAssignments extends RouteComponentProps<{}> {
   $OneCourse?: OneCourseModel;
@@ -32,7 +36,7 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
         this.status === 'not-started' ? $OneCourse!.notStarted : []
       )
     );
-    return statusData.filter((assignment) => assignment.title.indexOf(this.search) !== -1);
+    return statusData.filter((assignment) => assignment.title.toLowerCase().indexOf(this.search.toLowerCase()) !== -1);
   }
 
   @computed
@@ -57,7 +61,7 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
     return {
       showQuickJumper: true,
       current: this.currentPage,
-      pageSize: 20,
+      pageSize: 12,
       size: 'small',
       total: this.dataSource.length,
       onChange: this.handlePaginationChange
@@ -98,25 +102,85 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
     );
     return (
       <Row gutter={ 16 }>
-        <Col sm={ 24 } md={ 24 } lg={ 24 } xl={ 24 }>
-          <Card title={ '课程作业' } extra={ extraContent } loading={ !$OneCourse!.isAssignmentsLoaded }>
-            <List
-              grid={ { xl: 2, lg: 1, gutter: 16 } }
-              dataSource={ this.displayDataSource }
-              pagination={ this.pagination }
-              renderItem={ renderItem }
-            />
-          </Card>
+        <Col span={ 24 } style={ { marginBottom: '1rem' } }>
+          <Card title={ '课程作业' } extra={ extraContent } loading={ !$OneCourse!.isAssignmentsLoaded }/>
+        </Col>
+        <Col span={ 24 }>
+          <List
+            grid={ { xl: 2, lg: 1, gutter: 16 } }
+            dataSource={ this.displayDataSource }
+            pagination={ this.pagination }
+            renderItem={ renderItem }
+            itemLayout={ 'vertical' }
+            split={ false }
+            bordered={ false }
+          />
         </Col>
       </Row>
     );
   }
 }
 
-function renderItem({ title }: IAssignmentItem) {
+function renderItem({
+                      title,
+                      type,
+                      submit_times,
+                      submit_limitation,
+                      enddate,
+                      grade,
+                      standard_score,
+                      last_submission_time
+                    }: IAssignmentItem) {
+  const status: [ 'success' | 'processing' | 'default' | 'error' | 'warning', string ] = last_submission_time ? (
+    grade !== null ? (grade === 0 ? [ 'error', '已批改 0分?' ] : [ 'success', '已批改' ]) : [ 'processing', '已提交' ]
+  ) : [ 'default', '未提交' ];
+
+  const titleWrap = [
+    <span key={ 'title' } className={ styles.assignmentTitle }>{ title }</span>,
+    <Badge key={ 'state' } className={ styles.badgeStatus } status={ status[ 0 ] } text={ status[ 1 ] }/>
+  ];
+
+  const description = (
+    <DescriptionList
+      key={ 'basic' }
+      title={ null }
+      col={ 2 }
+      style={ { marginBottom: '1rem' } }
+    >
+      <Description term={ <span><Icon type={ 'contacts' }/> 题型</span> }>
+        { type }
+      </Description>
+      <Description term={ <span><Icon type={ 'calendar' }/> 截止日期</span> }>
+        { format(enddate, 'HH:mm A, Do MMM. YYYY') }
+      </Description>
+      <Description term={ <span><Icon type={ 'calendar' }/> 提交次数</span> }>
+        { `${submit_times} / ${submit_limitation === 0 ? 'No Limits' : submit_limitation}` }
+      </Description>
+    </DescriptionList>
+  );
+
+  const percent = (grade || 0) * 100 / standard_score;
+  const progressStatus = last_submission_time && grade !== null ? (percent >= 60 ? 'success' : 'exception') : 'active';
+
   return (
     <List.Item>
-      <List.Item.Meta title={ title }/>
+      <Card
+        hoverable={ true }
+        title={ titleWrap }
+      >
+        { description }
+        <Progress
+          strokeWidth={ 5 }
+          format={ progressFormat }
+          width={ 64 }
+          status={ progressStatus }
+          percent={ percent }
+        />
+      </Card>
     </List.Item>
   );
+}
+
+function progressFormat(percent: number) {
+  return percent >= 100 ? 'full marks' : `${percent}%`;
 }

@@ -47,7 +47,7 @@ export default class CoursesList extends React.Component<ICoursesListProps> {
           className={ styles.searchBar }
           value={ this.titleFilter }
           placeholder={ '按课程名称搜索' }
-          prefix={ <Icon type={ 'search' } /> }
+          prefix={ <Icon type={ 'search' }/> }
           onChange={ this.observeFilterChange }
         />
       </Card>), (
@@ -55,7 +55,7 @@ export default class CoursesList extends React.Component<ICoursesListProps> {
         key={ 'list' }
         loading={ !$Courses!.isCoursesLoaded }
         pagination={ pagination }
-        grid={ { gutter: 24, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 } }
+        grid={ { gutter: 16, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 } }
         dataSource={ this.filteredDataSource }
         renderItem={ renderItem }
       />
@@ -67,7 +67,7 @@ function renderItem(item: ICoursesItem) {
   return (
     <Item>
       <Link to={ `/course/${item.course_id}/` }>
-        <OneCourseCard item={ item } />
+        <OneCourseCard item={ item }/>
       </Link>
     </Item>
   );

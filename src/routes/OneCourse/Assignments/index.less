@@ -1,8 +1,19 @@
-.extraContent {
-
-}
+@import "~antd/lib/style/themes/default.less";
 
 .extraContentSearch {
   width: 16rem;
   margin-left: 1rem;
+}
+
+.assignmentTitle {
+  font-size: 1.3rem;
+  margin-right: 1rem;
+}
+
+.badgeStatus {
+  :global {
+    .ant-badge-status-processing {
+      background-color: @blue-6;
+    }
+  }
 }
