@@ -2,7 +2,7 @@ import logoTransUrl from '@/assets/images/logo-trans.png';
 import MenuFactory from '@/components/common/MenuFactory';
 import { CoursesModel } from '@/models/courses.model';
 import { ProfileModel } from '@/models/profile.model';
-import { CoursesRoute, OneCourseRoute, ProfileRoute } from '@/utils/dynamic';
+import { CoursesRoute, OneAssignmentRoute, OneCourseRoute, ProfileRoute } from '@/utils/dynamic';
 import { Avatar, Icon, Layout } from 'antd';
 import classNames from 'classnames';
 import { action, computed, observable } from 'mobx';
@@ -113,7 +113,8 @@ export default class BasicLayout extends React.Component<ILoginLayoutProps> {
             <Switch>
               <Route exact={ true } path={ `/` } component={ ProfileRoute }/>
               <Route path={ `/courses` } component={ CoursesRoute }/>
-              <Route path={ '/course/:courseId' } component={ OneCourseRoute }/>
+              <Route path={ '/course/:course_id/assignment/:ca_id' } component={ OneAssignmentRoute }/>
+              <Route path={ '/course/:course_id' } component={ OneCourseRoute }/>
               <Redirect to={ '/' }/>
             </Switch>
           </Content>

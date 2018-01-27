@@ -1,12 +1,14 @@
 import { IAssignmentItem } from '@/api/interface';
 import DescriptionList from '@/components/common/DescriptionList';
 import { OneCourseModel } from '@/models/one-course.model';
+import { descriptionRender, formatter, getBadgeStatus, IDescriptionItem } from '@/utils/helpers';
 import { Badge, Card, Icon, Input, List, Progress, Radio } from 'antd';
 import { format } from 'date-fns/esm';
 import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React, { SyntheticEvent } from 'react';
 import { RouteComponentProps } from 'react-router';
+import { Link } from 'react-router-dom';
 import styles from './index.less';
 
 const { Description } = DescriptionList;
@@ -41,8 +43,7 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
     );
 
     const submitData = statusData.filter((assignment) => this.submitFilter === 'submitted'
-      ? assignment.last_submission_time !== null
-      : assignment.last_submission_time === null);
+      ? assignment.submit_times : !assignment.submit_times);
 
     const resultData = this.submitFilter === 'all' ? statusData : submitData;
 
@@ -178,51 +179,71 @@ function renderItem({
                       enddate,
                       grade,
                       standard_score,
+                      course_id,
+                      ca_id,
                       last_submission_time
                     }: IAssignmentItem) {
 
   const percent = (grade || 0) * 100 / standard_score;
-  const status: [ 'success' | 'processing' | 'default' | 'error' | 'warning', string ] = last_submission_time ? (
-    grade !== null ? (percent < 60 ? [ 'error', '已批改 低分数' ] : [ 'success', '已批改' ]) : [ 'processing', '已提交 未批改' ]
-  ) : [ 'default', '未提交' ];
+  const status = getBadgeStatus(!!last_submission_time, grade, standard_score);
   const progressStatus = last_submission_time && grade !== null ? (percent >= 60 ? 'success' : 'exception') : 'active';
+
+  const descriptions: IDescriptionItem[] = [
+    {
+      term: '题型',
+      key: 'type',
+      icon: 'info-circle-o',
+      value: type
+    },
+    {
+      term: '截止日期',
+      key: 'ddl',
+      icon: 'calendar',
+      value: format(enddate, 'HH:mm A, Do MMM. YYYY')
+    },
+    {
+      term: '提交次数',
+      key: 'submissiont-times',
+      icon: 'upload',
+      value: `${submit_times} / ${submit_limitation === 0 ? 'No Limits' : submit_limitation}`
+    }
+  ];
+
+  const content = (
+    <DescriptionList
+      style={ { marginBottom: '1rem' } }
+      title={ null }
+      col={ 2 }
+    >
+      { descriptions.map(descriptionRender) }
+    </DescriptionList>
+  );
 
   return (
     <List.Item className={ styles.listItem }>
-      <Card
-        hoverable={ true }
-        bodyStyle={ { height: '10rem' } }
-        title={ <span key={ 'title' } className={ styles.assignmentTitle }>{ title }</span> }
-        extra={ <Badge key={ 'state' } className={ styles.badgeStatus } status={ status[ 0 ] } text={ status[ 1 ] }/> }
-      >
-        <DescriptionList
-          key={ 'basic' }
-          title={ null }
-          col={ 2 }
-          style={ { marginBottom: '1rem' } }
+      <Link to={ `/course/${course_id}/assignment/${ca_id}/` }>
+        <Card
+          hoverable={ true }
+          bodyStyle={ { height: '10rem' } }
+          title={ <span className={ styles.assignmentTitle }>{ title }</span> }
+          extra={ <Badge className={ styles.badgeStatus } status={ status[ 0 ] } text={ status[ 1 ] }/> }
         >
-          <Description term={ <span><Icon type={ 'info-circle-o' }/> 题型</span> }>
-            { type }
-          </Description>
-          <Description term={ <span><Icon type={ 'calendar' }/> 截止日期</span> }>
-            { format(enddate, 'HH:mm A, Do MMM. YYYY') }
-          </Description>
-          <Description term={ <span><Icon type={ 'upload' }/> 提交次数</span> }>
-            { `${submit_times} / ${submit_limitation === 0 ? 'No Limits' : submit_limitation}` }
-          </Description>
-        </DescriptionList>
-        <Progress
-          strokeWidth={ 5 }
-          format={ progressFormat }
-          width={ 64 }
-          status={ progressStatus }
-          percent={ percent }
-        />
-      </Card>
+          <DescriptionList
+            title={ null }
+            col={ 2 }
+            style={ { marginBottom: '1rem' } }
+          >
+            { content }
+          </DescriptionList>
+          <Progress
+            strokeWidth={ 5 }
+            format={ formatter(grade || 0, standard_score) }
+            width={ 64 }
+            status={ progressStatus }
+            percent={ percent }
+          />
+        </Card>
+      </Link>
     </List.Item>
   );
-}
-
-function progressFormat(percent: number) {
-  return percent >= 100 ? 'full marks' : `${percent}%`;
 }

@@ -1,4 +1,7 @@
+@import "~antd/lib/style/themes/default.less";
+
 .titleWrapper {
+
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -7,6 +10,14 @@
     margin-right: 1rem;
     &:last-child {
       margin-right: 0;
+    }
+  }
+}
+
+.badgeStatus {
+  :global {
+    .ant-badge-status-processing {
+      background-color: @blue-6;
     }
   }
 }

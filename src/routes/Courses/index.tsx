@@ -47,7 +47,7 @@ export default class CourseRoute extends React.Component<ICourseRouteProps> {
       location
     };
     return (
-      <div className={ styles.innerContainer }>
+      <div style={ { margin: '-1.5rem' } }>
         <PageHeader
           tabList={ tabList }
           linkElement={ Link }
@@ -56,7 +56,7 @@ export default class CourseRoute extends React.Component<ICourseRouteProps> {
           title={ '所有课程' }
           { ...breadcrumb }
         />
-        <div className={ styles.containContainer }>
+        <div style={ { padding: '1.5rem' } }>
           <Switch>
             <Route path={ `${match.url}/:status` } component={ CoursesList }/>
             <Redirect to={ `${match.url}/open` }/>

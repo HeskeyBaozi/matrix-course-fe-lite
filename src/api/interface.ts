@@ -1,3 +1,5 @@
+import { AssignmentTimeStatus } from '@/constants';
+
 export interface IMatrixResponse<T, P = {}> {
   data: T;
   msg: string;
@@ -90,7 +92,7 @@ export interface IAssignmentItem {
   course_id: number;
   enddate: string;
   grade: number | null;
-  grade_at_end: number;
+  grade_at_end: 0 | 1;
   last_submission_time: string | null;
   ptype_id: number;
   standard_score: number;
@@ -117,6 +119,39 @@ export interface IDiscussionItem {
   vote_great: number | null;
 }
 
+// One Assignment
+
+export interface IAssignment<C = object> {
+  asgn_id: number;
+  author: {
+    realname: string,
+    email: string
+  };
+  ca_id: number;
+  config: C;
+  course_id: number;
+  description: string;
+  enddate: string;
+  files?: any[];
+  grade_at_end: 0 | 1;
+  plcheck: 0 | 1;
+  ptype_id: number;
+  pub_answer: 0 | 1;
+  standard_score: number;
+  startdate: string;
+  submit_limitation: number;
+  title: string;
+  type: string;
+  updated_at: string;
+}
+
+export interface ISubmission<C = object, R = object> {
+  config: C;
+  grade: number | null;
+  report: R | null;
+  sub_ca_id: number;
+}
+
 // General
 export const RoleMap: IMapper = {
   TA: '助教',
@@ -128,6 +163,22 @@ export const CourseStatusMap: IMapper = {
   close: '已关闭',
   open: '进行中'
 };
+
+export const AssignmentTimeStatusMap: IBadgeMapper = {
+  [ AssignmentTimeStatus.OutOfDate ]: 'default',
+  [ AssignmentTimeStatus.InProgressing ]: 'processing',
+  [ AssignmentTimeStatus.NotStarted ]: 'default'
+};
+
+export const AssignmentTimeStatusTextMap: IMapper = {
+  [ AssignmentTimeStatus.OutOfDate ]: '已过截止日期',
+  [ AssignmentTimeStatus.InProgressing ]: '进行中',
+  [ AssignmentTimeStatus.NotStarted ]: '未开始'
+};
+
+interface IBadgeMapper {
+  [key: string]: 'success' | 'error' | 'default' | 'processing' | 'warning';
+}
 
 interface IMapper {
   [ key: string ]: string;
