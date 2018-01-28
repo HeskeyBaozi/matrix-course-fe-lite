@@ -1,5 +1,6 @@
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import ProgrammingDescription from '@/routes/OneAssignment/Programming/Description';
+import ProgrammingSubmit from '@/routes/OneAssignment/Programming/Submit';
 import { ProgrammingKeys } from '@/types/constants';
 import { IDescriptionItem } from '@/utils/helpers';
 import { Tabs } from 'antd';
@@ -34,16 +35,23 @@ export default class Programming extends React.Component<IProgrammingProps> {
     ];
   }
 
-  render() {
+  @computed
+  get activeKey() {
     const { $OneAssignment } = this.props;
-    const { assignment } = $OneAssignment!;
+    return $OneAssignment!.tabActiveKey;
+  }
+
+  render() {
     return (
       <Tabs
-        activeKey={ $OneAssignment!.tabActiveKey }
+        activeKey={ this.activeKey }
         tabBarStyle={ { display: 'none' } }
       >
         <TabPane key={ ProgrammingKeys.Description } tab={ ProgrammingKeys.Description }>
           <ProgrammingDescription/>
+        </TabPane>
+        <TabPane key={ ProgrammingKeys.Submit } tab={ ProgrammingKeys.Submit }>
+          <ProgrammingSubmit/>
         </TabPane>
         <TabPane key={ ProgrammingKeys.Recordings } tab={ ProgrammingKeys.Recordings }>
           Recording

@@ -3,11 +3,14 @@ import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { AssignmentTimeStatusMap, AssignmentTimeStatusTextMap } from '@/types/api';
 import { PType } from '@/types/constants';
 import { OneAssignmentProgrammingRoute } from '@/utils/dynamic';
+import 'codemirror/lib/codemirror.css';
 import { format } from 'date-fns/esm';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
+import './code.less';
+import './github.theme.less';
 
 interface IOneAssignmentParams {
   ca_id: string;
