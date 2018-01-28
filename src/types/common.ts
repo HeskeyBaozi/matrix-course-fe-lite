@@ -7,7 +7,8 @@ export interface IBreadCrumbNameMap {
   };
 }
 
-export interface ItabItem {
-  key: string;
+export interface ItabItem<K = string> {
+  key: K;
   tab: string;
+  icon?: string;
 }

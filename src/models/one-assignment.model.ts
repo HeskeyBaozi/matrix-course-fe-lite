@@ -1,8 +1,9 @@
 import { FetchAssignmentDetail, FetchLastSubmission, IOneAssignmentArgs } from '@/api/one-assignment';
 import { IAssignment, ISubmission } from '@/types/api';
-import { AssignmentTimeStatus } from '@/types/constants';
+import { ItabItem } from '@/types/common';
+import { AssignmentTimeStatus, GeneralKey, ProgrammingKey, PType } from '@/types/constants';
 import { isAfter, isBefore, isWithinInterval } from 'date-fns/esm';
-import { computed, observable } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
 
 const voidAssignment: IAssignment = {
@@ -51,9 +52,75 @@ export class OneAssignmentModel {
   @observable
   isLastSubmitLoaded = false;
 
+  @observable
+  tabActiveKey: GeneralKey = 'description';
+
+  @action
+  changeTab(next: GeneralKey) {
+    this.tabActiveKey = next;
+  }
+
+  @action
+  needReload() {
+    this.isDetailLoaded = false;
+  }
+
   @computed
   get isBaseInformationLoaded() {
     return this.isDetailLoaded && this.isLastSubmitLoaded;
+  }
+
+  @computed
+  get tabList(): Array<ItabItem<GeneralKey>> {
+    switch (this.assignment.ptype_id) {
+      case PType.Programming:
+        return [
+          {
+            tab: '题目描述',
+            key: 'description',
+            icon: 'file-text'
+          },
+          {
+            tab: '提交',
+            key: 'submit',
+            icon: 'upload'
+          },
+          {
+            tab: '成绩反馈',
+            key: 'grade-feedback',
+            icon: 'check'
+          },
+          {
+            tab: '历史记录',
+            key: 'recording',
+            icon: 'calendar'
+          },
+          {
+            tab: '排名',
+            key: 'rank',
+            icon: 'bar-chart'
+          },
+          {
+            tab: '讨论',
+            key: 'discussion',
+            icon: 'message'
+          }
+        ] as Array<ItabItem<ProgrammingKey>>;
+      case PType.Choice:
+        return [];
+      case PType.FileUpload:
+        return [];
+      case PType.ProgramBlankFilling:
+        return [];
+      case PType.ProgramOutput:
+        return [];
+      case PType.Report:
+        return [];
+      case PType.ShortAnswer:
+        return [];
+      default:
+        return [];
+    }
   }
 
   @computed
@@ -80,7 +147,7 @@ export class OneAssignmentModel {
 
   @asyncAction
   * LoadDetail(args: IOneAssignmentArgs) {
-    this.isDetailLoaded = false;
+    this.needReload();
     try {
       const { data: { data: assignment } } = yield FetchAssignmentDetail(args);
       this.assignment = assignment;

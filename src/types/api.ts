@@ -1,4 +1,4 @@
-import { AssignmentTimeStatus } from '@/types/constants';
+import { AssignmentTimeStatus, PType } from '@/types/constants';
 
 export interface IMatrixResponse<T, P = {}> {
   data: T;
@@ -94,7 +94,7 @@ export interface IAssignmentItem {
   grade: number | null;
   grade_at_end: 0 | 1;
   last_submission_time: string | null;
-  ptype_id: number;
+  ptype_id: PType;
   standard_score: number;
   startdate: string;
   submit_limitation: number; // 0 = 无限制
@@ -135,7 +135,7 @@ export interface IAssignment<C = object> {
   files?: any[];
   grade_at_end: 0 | 1;
   plcheck: 0 | 1;
-  ptype_id: number;
+  ptype_id: PType;
   pub_answer: 0 | 1;
   standard_score: number;
   startdate: string;

@@ -1,12 +1,14 @@
 import logoTransUrl from '@/assets/images/logo-trans.png';
-import MenuFactory from '@/components/common/MenuFactory';
+import FirstMenu from '@/layouts/Basic/Menu';
 import { CoursesModel } from '@/models/courses.model';
 import { GlobalModel } from '@/models/global.model';
 import { ProfileModel } from '@/models/profile.model';
+import GeneralAssignmentMenu from '@/routes/OneAssignment/Menu';
+import OneCourseMenu from '@/routes/OneCourse/Menu';
 import { CoursesRoute, OneAssignmentRoute, OneCourseRoute, ProfileRoute } from '@/utils/dynamic';
 import { Avatar, Icon, Layout } from 'antd';
 import classNames from 'classnames';
-import { action, computed, observable } from 'mobx';
+import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
@@ -19,25 +21,6 @@ interface ILoginLayoutProps extends RouteComponentProps<{}> {
 }
 
 const { Header, Sider, Content } = Layout;
-
-const FirstMenu = MenuFactory({
-  menuList: [
-    { key: '/', icon: 'home', title: '概览' },
-    { key: '/courses', icon: 'book', title: '课程' },
-    { key: '/notification', icon: 'bell', title: '消息' },
-    { key: '/setting', icon: 'setting', title: '设置' },
-    { key: '/feedback', icon: 'smile-o', title: '反馈' }
-  ]
-});
-
-const OneCourseMenu = MenuFactory({
-  menuList: [
-    { key: '/home', icon: 'area-chart', title: '详情概览' },
-    { key: '/assignments', icon: 'edit', title: '作业' },
-    { key: '/discussions', icon: 'coffee', title: '讨论' }
-  ],
-  returnTo: '/courses'
-});
 
 @inject('$Profile', '$Courses', '$Global')
 @observer
@@ -77,7 +60,8 @@ export default class BasicLayout extends React.Component<ILoginLayoutProps> {
             <img src={ logoTransUrl } alt={ 'logo' }/>
           </div>
           <Switch>
-            <Route path={ '/course/:courseId' } component={ OneCourseMenu }/>
+            <Route path={ '/course/:course_id/assignment/:ca_id' } component={ GeneralAssignmentMenu }/>
+            <Route path={ '/course/:course_id' } component={ OneCourseMenu }/>
             <Route path={ '/' } component={ FirstMenu }/>
           </Switch>
         </Sider>

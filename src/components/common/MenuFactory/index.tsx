@@ -1,6 +1,6 @@
 import { GlobalModel } from '@/models/global.model';
 import { Icon, Menu } from 'antd';
-import { ClickParam } from 'antd/lib/menu';
+import { ClickParam } from 'antd/es/menu';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -12,9 +12,9 @@ export interface IMenuItem {
   title: string;
 }
 
-interface IMenuFactoryProps {
+interface IMenuFactoryProps<P> {
   menuList: IMenuItem[];
-  returnTo?: boolean | string;
+  returnTo?: (params: P) => string;
 }
 
 interface IGeneralMenuProps<P> extends RouteComponentProps<P> {
@@ -23,7 +23,7 @@ interface IGeneralMenuProps<P> extends RouteComponentProps<P> {
 
 const generalPathRegexp = /\/?$/;
 
-export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactoryProps) {
+export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactoryProps<P>) {
 
   const mappedList = menuList.map(({ key, icon, title }) => (
     <Menu.Item key={ key }>
@@ -40,16 +40,8 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
       navigate = ({ key }: ClickParam) => {
         const { history, match, location } = this.props;
         const urlToEnd = new RegExp(`${match.url}.*$`);
-        if (key === 'RETURN') {
-          if (typeof returnTo === 'string') {
-            console.log('push to ', location.pathname.replace(urlToEnd, '') + returnTo);
-            history.push(location.pathname.replace(urlToEnd, '') + returnTo);
-          } else if (typeof returnTo === 'boolean') {
-            console.log('push to ', location.pathname.replace(urlToEnd, '/'));
-            history.push(location.pathname.replace(urlToEnd, '/'));
-          } else {
-            throw new TypeError(`returnTo should be string or boolean, but got ${typeof returnTo}`);
-          }
+        if (key === 'RETURN' && returnTo) {
+          history.push(returnTo(match.params));
         } else {
           const generalPath = match.url.replace(generalPathRegexp, '');
           if (`${generalPath}${key}` !== location.pathname) {
