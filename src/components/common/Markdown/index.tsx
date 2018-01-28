@@ -1,11 +1,11 @@
 import classNames from 'classnames';
 import 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import MathJax from 'react-mathjax';
 import PrismCode from 'react-prism';
 import RemarkMathPlugin from 'remark-math';
+import './github.theme.less';
 import styles from './index.less';
 
 interface IMarkdownProps {

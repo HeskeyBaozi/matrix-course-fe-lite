@@ -87,7 +87,6 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
         badgeStatus={ AssignmentTimeStatusMap[ $OneAssignment!.timeStatus ] }
         badgeText={ AssignmentTimeStatusTextMap[ $OneAssignment!.timeStatus ] }
         descriptionsList={ this.descriptionsList }
-        avatarIcon={ 'edit' }
         col={ 2 }
       >
         <this.AssignmentView/>

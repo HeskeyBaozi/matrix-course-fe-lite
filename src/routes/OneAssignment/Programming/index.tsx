@@ -1,16 +1,15 @@
-import DescriptionList from '@/components/common/DescriptionList';
-import Markdown from '@/components/common/Markdown';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
+import ProgrammingDescription from '@/routes/OneAssignment/Programming/Description';
 import { ProgrammingKeys } from '@/types/constants';
-import { descriptionRender, IDescriptionItem } from '@/utils/helpers';
-import { Card, Col, Row, Tabs } from 'antd';
+import { IDescriptionItem } from '@/utils/helpers';
+import { Tabs } from 'antd';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 
 const { TabPane } = Tabs;
 
-interface IProgrammingConfig {
+export interface IProgrammingConfig {
   compilers: string[];
   limits: {
     memory: number;
@@ -44,29 +43,7 @@ export default class Programming extends React.Component<IProgrammingProps> {
         tabBarStyle={ { display: 'none' } }
       >
         <TabPane key={ ProgrammingKeys.Description } tab={ ProgrammingKeys.Description }>
-          <Row type={ 'flex' } gutter={ 16 }>
-            <Col
-              lg={ { span: 18, order: 1 } }
-              sm={ { span: 24, order: 2 } }
-              xs={ { span: 24, order: 2 } }
-            >
-              <Card title={ '题目描述' }>
-                <Markdown source={ assignment.description }/>
-              </Card>
-            </Col>
-            <Col
-              lg={ { span: 6, order: 2 } }
-              sm={ { span: 24, order: 1 } }
-              xs={ { span: 24, order: 1 } }
-              style={ { marginBottom: '1rem' } }
-            >
-              <Card title={ '题目要求' }>
-                <DescriptionList title={ null } col={ 1 }>
-                  { this.programmingLimits.map(descriptionRender) }
-                </DescriptionList>
-              </Card>
-            </Col>
-          </Row>
+          <ProgrammingDescription/>
         </TabPane>
         <TabPane key={ ProgrammingKeys.Recordings } tab={ ProgrammingKeys.Recordings }>
           Recording
