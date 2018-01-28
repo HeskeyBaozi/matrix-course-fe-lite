@@ -22,7 +22,6 @@
     "mobx-utils": "^3.2.2",
     "particles.js": "^2.0.0",
     "path-to-regexp": "^2.1.0",
-    "prismjs": "^1.10.0",
     "prop-types": "^15.6.0",
     "qs": "^6.5.1",
     "react": "^16.2.0",
@@ -31,7 +30,6 @@
     "react-loadable": "^5.3.1",
     "react-markdown": "^3.1.4",
     "react-mathjax": "https://github.com/wko27/react-mathjax",
-    "react-prism": "^4.3.2",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "remark-math": "^1.0.3"
@@ -50,7 +48,7 @@
     "babel-plugin-import": "^1.6.3",
     "less": "^2.7.3",
     "mobx-react-devtools": "^4.2.15",
-    "roadhog": "^2.1.0",
+    "roadhog": "^2.2.0",
     "tslint": "^5.9.1",
     "tslint-react": "^3.4.0",
     "typescript": "^2.6.2"

@@ -1,11 +1,9 @@
+import CodeBlock from '@/components/common/CodeBlock';
 import classNames from 'classnames';
-import 'prismjs';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import MathJax from 'react-mathjax';
-import PrismCode from 'react-prism';
 import RemarkMathPlugin from 'remark-math';
-import './github.theme.less';
 import styles from './index.less';
 
 interface IMarkdownProps {
@@ -57,19 +55,19 @@ function renderPicture({ src }: { src: string }) {
 }
 
 function renderCode(props: { value: string, language: string }) {
-  const klassNames = classNames(`language-${props.language}`, styles.codeFamily);
+  console.log(props.language);
   return (
-    <PrismCode className={ klassNames } component={ 'pre' }>{ props.value }</PrismCode>
+    <CodeBlock value={ props.value } markdown={ true } readOnly={ true } language={ props.language }/>
   );
 }
 
 function renderInlineCode(props: { value: string, language: string }) {
   return (
-    <PrismCode
+    <span
       className={ classNames(styles.codeFamily, styles.inlineCode) }
     >
       { props.value }
-    </PrismCode>
+    </span>
   );
 }
 

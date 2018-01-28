@@ -1,11 +1,8 @@
+import CodeBlock from '@/components/common/CodeBlock';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { Card, Col, Row } from 'antd';
-import * as codemirror from 'codemirror';
-import 'codemirror/mode/clike/clike';
-import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
-import { IInstance, UnControlled as CodeMirror } from 'react-codemirror2';
 
 interface IProgrammingSubmitProps {
   $OneAssignment?: OneAssignmentModel;
@@ -15,47 +12,36 @@ interface IProgrammingSubmitProps {
 @observer
 export default class ProgrammingSubmit extends React.Component<IProgrammingSubmitProps> {
 
-  @observable
-  code = `#include <iostream>
-using namespace std;
-
-int main() {
-	cout << "Hello" << endl;
-	return 0;
-}`;
-
-  @action
-  onBeforeChange = (editor: IInstance, data: codemirror.EditorChange, value: string) => {
-    this.code = value;
-  }
-
-  @action
-  onChange = (editor: IInstance, data: codemirror.EditorChange, value: string) => {
-    console.log(editor, data, value);
-  }
-
-  @computed
-  get CodeOptions() {
-    return {
-      mode: 'text/x-c++src',
-      theme: 'github',
-      tabSize: 2,
-      lineNumbers: true,
-      // readOnly: 'nocursor',
-      foldGutter: true
-    };
-  }
-
   render() {
+    const code = `
+#include "binary.h"
+
+namespace binary
+{
+
+int convert(std::string const& text)
+{
+    int result = 0;
+    if (text.length() > sizeof(int)*8-1) {
+        return 0;
+    }
+    for (const char x : text) {
+        result <<=  1;
+        if (x == '1') {
+            result |= 1;
+        } else if (x != '0') {
+            return 0;
+        }
+    }
+    return result;
+}
+
+}`;
     return (
       <Row type={ 'flex' } gutter={ 16 }>
         <Col lg={ 12 } md={ 24 } sm={ 24 } xs={ 24 } style={ { marginBottom: '1rem' } }>
           <Card>
-            <CodeMirror
-              value={ this.code }
-              options={ this.CodeOptions }
-              onChange={ this.onChange }
-            />
+            <CodeBlock value={ code } readOnly={ false }/>
           </Card>
         </Col>
         <Col lg={ 12 } md={ 24 } sm={ 24 } xs={ 24 }>
