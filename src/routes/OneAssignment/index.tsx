@@ -1,17 +1,11 @@
 import { AssignmentTimeStatusMap, AssignmentTimeStatusTextMap } from '@/api/interface';
-import DescriptionList from '@/components/common/DescriptionList';
-import Loading from '@/components/common/Loading';
-import PageHeader from '@/components/common/PageHeader';
-import { breadcrumbNameMap } from '@/constants';
+import PageWithHeader from '@/components/common/PageWithHeader';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
-import { descriptionRender, formatter, getBadgeStatus, IDescriptionItem } from '@/utils/helpers';
-import { Avatar, Badge, Progress } from 'antd';
 import { format } from 'date-fns/esm';
+import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import { Link } from 'react-router-dom';
-import styles from './index.less';
 
 interface IOneAssignmentParams {
   ca_id: string;
@@ -28,37 +22,11 @@ const test = () => <div>Home</div>;
 @observer
 export default class OneAssignment extends React.Component<IOneAssignment> {
 
-  componentDidMount() {
-    const { $OneAssignment, match } = this.props;
-    const { ca_id, course_id } = match.params;
-    $OneAssignment!.LoadOneAssignment({
-      ca_id: Number.parseInt(ca_id),
-      course_id: Number.parseInt(course_id)
-    });
-  }
-
-  render() {
-    const { $OneAssignment, match, location } = this.props;
-    const { assignment, last } = $OneAssignment!;
-    const breadcrumb = { breadcrumbNameMap, location };
-    const percent = (last.grade || 0) * 100 / assignment.standard_score;
-    const status = getBadgeStatus($OneAssignment!.hasLastSubmission, last.grade, assignment.standard_score);
-    const title = (
-      <div className={ styles.titleWrapper }>
-        <Loading
-          isLoading={ !$OneAssignment!.isBaseInformationLoaded }
-          isFullScreen={ false }
-        />
-        <span>{ assignment.title }</span>
-        <Badge
-          className={ styles.badgeStatus }
-          status={ AssignmentTimeStatusMap[ $OneAssignment!.timeStatus ] }
-          text={ AssignmentTimeStatusTextMap[ $OneAssignment!.timeStatus ] }
-        />
-      </div>
-    );
-
-    const descriptions: IDescriptionItem[] = [
+  @computed
+  get descriptionsList() {
+    const { $OneAssignment } = this.props;
+    const { assignment } = $OneAssignment!;
+    return [
       {
         term: '题型',
         key: 'assignment-type',
@@ -84,37 +52,36 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
         value: assignment.author.realname
       }
     ];
+  }
 
-    const progressStatus = $OneAssignment!.hasLastSubmission && last.grade !== null ?
-      (percent >= 60 ? 'success' : 'exception') : 'active';
+  componentDidMount() {
+    const { $OneAssignment, match } = this.props;
+    const { ca_id, course_id } = match.params;
+    $OneAssignment!.LoadOneAssignment({
+      ca_id: Number.parseInt(ca_id),
+      course_id: Number.parseInt(course_id)
+    });
+  }
 
-    const content = (
-      <DescriptionList
-        key={ 'description' }
-        style={ { marginBottom: '1.5rem' } }
-        title={ null }
+  render() {
+    const { $OneAssignment, match } = this.props;
+    const { assignment } = $OneAssignment!;
+
+    return (
+      <PageWithHeader
+        loading={ !$OneAssignment!.isBaseInformationLoaded }
+        title={ assignment.title }
+        badgeStatus={ AssignmentTimeStatusMap[ $OneAssignment!.timeStatus ] }
+        badgeText={ AssignmentTimeStatusTextMap[ $OneAssignment!.timeStatus ] }
+        descriptionsList={ this.descriptionsList }
+        avatarIcon={ 'edit' }
         col={ 2 }
       >
-        { descriptions.map(descriptionRender) }
-      </DescriptionList>
-    );
-    return (
-      <div style={ { margin: '-1.5rem' } }>
-        <PageHeader
-          linkElement={ Link }
-          logo={ <Avatar icon={ 'edit' } src={ '' }/> }
-          title={ title }
-          content={ content }
-          style={ { position: 'relative' } }
-          { ...breadcrumb }
-        />
-        <div style={ { padding: '1.5rem' } }>
-          <Switch>
-            <Route path={ `${match.url}/home` } component={ test }/>
-            <Redirect to={ `${match.url}/home` }/>
-          </Switch>
-        </div>
-      </div>
+        <Switch>
+          <Route path={ `${match.url}/home` } component={ test }/>
+          <Redirect to={ `${match.url}/home` }/>
+        </Switch>
+      </PageWithHeader>
     );
   }
 }

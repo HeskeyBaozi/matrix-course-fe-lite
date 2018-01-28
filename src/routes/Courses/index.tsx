@@ -1,30 +1,33 @@
-import PageHeader from '@/components/common/PageHeader';
-import { breadcrumbNameMap } from '@/constants';
+import PageWithHeader from '@/components/common/PageWithHeader';
+import { CoursesModel } from '@/models/courses.model';
 import { ItabItem } from '@/types';
-import { observer } from 'mobx-react';
+import { computed } from 'mobx';
+import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import { Link } from 'react-router-dom';
-import styles from './index.less';
 import CoursesList from './List';
 
 interface ICourseRouteProps extends RouteComponentProps<{}> {
-
+  $Courses?: CoursesModel;
 }
 
-const tabList: ItabItem[] = [
-  {
-    key: 'open',
-    tab: '进行中'
-  },
-  {
-    key: 'close',
-    tab: '已关闭'
-  }
-];
-
+@inject('$Courses')
 @observer
 export default class CourseRoute extends React.Component<ICourseRouteProps> {
+
+  @computed
+  get tabList(): ItabItem[] {
+    return [
+      {
+        key: 'open',
+        tab: '进行中'
+      },
+      {
+        key: 'close',
+        tab: '已关闭'
+      }
+    ];
+  }
 
   handleTabChange = (key: string) => {
     const { match, history } = this.props;
@@ -41,28 +44,20 @@ export default class CourseRoute extends React.Component<ICourseRouteProps> {
   }
 
   render() {
-    const { location, match } = this.props;
-    const breadcrumb = {
-      breadcrumbNameMap,
-      location
-    };
+    const { $Courses, location, match } = this.props;
     return (
-      <div style={ { margin: '-1.5rem' } }>
-        <PageHeader
-          tabList={ tabList }
-          linkElement={ Link }
-          tabActiveKey={ location.pathname.replace(`${match.url}/`, '') }
-          onTabChange={ this.handleTabChange }
-          title={ '所有课程' }
-          { ...breadcrumb }
-        />
-        <div style={ { padding: '1.5rem' } }>
-          <Switch>
-            <Route path={ `${match.url}/:status` } component={ CoursesList }/>
-            <Redirect to={ `${match.url}/open` }/>
-          </Switch>
-        </div>
-      </div>
+      <PageWithHeader
+        title={ '所有课程' }
+        loading={ !$Courses!.isCoursesLoaded }
+        tabActiveKey={ location.pathname.replace(`${match.url}/`, '') }
+        tabList={ this.tabList }
+        onTabChange={ this.handleTabChange }
+      >
+        <Switch>
+          <Route path={ `${match.url}/:status` } component={ CoursesList }/>
+          <Redirect to={ `${match.url}/open` }/>
+        </Switch>
+      </PageWithHeader>
     );
   }
 }
