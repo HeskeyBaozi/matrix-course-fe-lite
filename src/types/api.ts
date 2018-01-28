@@ -133,10 +133,10 @@ export interface IAssignment<C = object> {
   description: string;
   enddate: string;
   files?: any[];
-  grade_at_end: 0 | 1;
-  plcheck: 0 | 1;
+  grade_at_end: 0 | 1; // 1 = 定时编程题
+  plcheck: 0 | 1; // 抄袭检查
   ptype_id: PType;
-  pub_answer: 0 | 1;
+  pub_answer: 0 | 1; // 1 = 结束公开答案
   standard_score: number;
   startdate: string;
   submit_limitation: number;

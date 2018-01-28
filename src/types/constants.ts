@@ -23,6 +23,13 @@ export enum PType {
   ShortAnswer = 6
 }
 
-export type GeneralKey = ProgrammingKey;
+export type GeneralKey = ProgrammingKeys;
 
-export type ProgrammingKey = 'description' | 'submit' | 'grade-feedback' | 'recording' | 'rank' | 'discussion';
+export enum ProgrammingKeys {
+  Description = 'description',
+  Submit = 'submit',
+  GradeFeedback = 'grade-feedback',
+  Recordings = 'recordings',
+  Rank = 'rank',
+  Discussions = 'discussions'
+}

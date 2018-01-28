@@ -1,11 +1,13 @@
 import PageWithHeader from '@/components/common/PageWithHeader';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { AssignmentTimeStatusMap, AssignmentTimeStatusTextMap } from '@/types/api';
+import { PType } from '@/types/constants';
+import { OneAssignmentProgrammingRoute } from '@/utils/dynamic';
 import { format } from 'date-fns/esm';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
-import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 
 interface IOneAssignmentParams {
   ca_id: string;
@@ -16,7 +18,7 @@ interface IOneAssignment extends RouteComponentProps<IOneAssignmentParams> {
   $OneAssignment?: OneAssignmentModel;
 }
 
-const test = () => <div>Home</div>;
+const test = () => <div>HomeTest</div>;
 
 @inject('$OneAssignment')
 @observer
@@ -54,6 +56,17 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
     ];
   }
 
+  @computed
+  get AssignmentView() {
+    const { $OneAssignment } = this.props;
+    switch ($OneAssignment!.assignment.ptype_id) {
+      case PType.Programming:
+        return OneAssignmentProgrammingRoute;
+      default:
+        return test;
+    }
+  }
+
   componentDidMount() {
     const { $OneAssignment, match } = this.props;
     const { ca_id, course_id } = match.params;
@@ -77,10 +90,7 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
         avatarIcon={ 'edit' }
         col={ 2 }
       >
-        <Switch>
-          <Route path={ `${match.url}/home` } component={ test }/>
-          <Redirect to={ `${match.url}/home` }/>
-        </Switch>
+        <this.AssignmentView/>
       </PageWithHeader>
     );
   }
