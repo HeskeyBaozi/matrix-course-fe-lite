@@ -1,6 +1,7 @@
-import CodeBlock from '@/components/common/CodeBlock';
+import MutableCodeEditor from '@/components/common/MutableCodeEditor';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { Card, Col, Row } from 'antd';
+import { autorun, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 
@@ -12,36 +13,27 @@ interface IProgrammingSubmitProps {
 @observer
 export default class ProgrammingSubmit extends React.Component<IProgrammingSubmitProps> {
 
+  @observable
+  data = {
+    'Date.cpp': {
+      value: '',
+      readOnly: false
+    }
+  };
+
+  componentDidMount() {
+    autorun(() => {
+      console.log('autorun', this.data['Date.cpp'].value);
+    });
+  }
+
   render() {
-    const code = `
-#include "binary.h"
-
-namespace binary
-{
-
-int convert(std::string const& text)
-{
-    int result = 0;
-    if (text.length() > sizeof(int)*8-1) {
-        return 0;
-    }
-    for (const char x : text) {
-        result <<=  1;
-        if (x == '1') {
-            result |= 1;
-        } else if (x != '0') {
-            return 0;
-        }
-    }
-    return result;
-}
-
-}`;
+    console.log(this.data);
     return (
       <Row type={ 'flex' } gutter={ 16 }>
         <Col lg={ 12 } md={ 24 } sm={ 24 } xs={ 24 } style={ { marginBottom: '1rem' } }>
           <Card>
-            <CodeBlock value={ code } readOnly={ false }/>
+            <MutableCodeEditor mutableDataSource={ this.data }/>
           </Card>
         </Col>
         <Col lg={ 12 } md={ 24 } sm={ 24 } xs={ 24 }>

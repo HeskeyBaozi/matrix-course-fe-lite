@@ -55,9 +55,14 @@ function renderPicture({ src }: { src: string }) {
 }
 
 function renderCode(props: { value: string, language: string }) {
-  console.log(props.language);
   return (
-    <CodeBlock value={ props.value } markdown={ true } readOnly={ true } language={ props.language }/>
+    <CodeBlock
+      className={ styles.code }
+      value={ props.value }
+      markdown={ true }
+      readOnly={ true }
+      language={ props.language }
+    />
   );
 }
 
