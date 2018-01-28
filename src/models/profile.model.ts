@@ -1,5 +1,5 @@
-import { IProfile } from '@/api/interface';
 import { fetchAvatar, fetchProfile } from '@/api/user';
+import { IProfile } from '@/types/api';
 import { computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
 

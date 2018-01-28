@@ -1,6 +1,6 @@
 import PageWithHeader from '@/components/common/PageWithHeader';
 import { CoursesModel } from '@/models/courses.model';
-import { ItabItem } from '@/types';
+import { ItabItem } from '@/types/common';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';

@@ -1,8 +1,8 @@
-import { IAssignmentItem } from '@/api/interface';
 import DescriptionList from '@/components/common/DescriptionList';
 import { OneCourseModel } from '@/models/one-course.model';
+import { IAssignmentItem } from '@/types/api';
 import { descriptionRender, formatter, getBadgeStatus, IDescriptionItem } from '@/utils/helpers';
-import { Badge, Card, Icon, Input, List, Progress, Radio } from 'antd';
+import { Badge, Card, Input, List, Progress, Radio } from 'antd';
 import { format } from 'date-fns/esm';
 import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -10,8 +10,6 @@ import React, { SyntheticEvent } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
 import styles from './index.less';
-
-const { Description } = DescriptionList;
 
 interface IOnceCourseAssignments extends RouteComponentProps<{}> {
   $OneCourse?: OneCourseModel;

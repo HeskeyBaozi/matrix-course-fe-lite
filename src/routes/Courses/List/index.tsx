@@ -1,6 +1,6 @@
-import { ICoursesItem } from '@/api/interface';
 import OneCourseCard from '@/components/OneCourseCard';
 import { CoursesModel } from '@/models/courses.model';
+import { ICoursesItem } from '@/types/api';
 import { Card, Icon, Input, List } from 'antd';
 import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';

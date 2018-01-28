@@ -1,5 +1,5 @@
 import { xios } from '@/api/instance';
-import { ILoginBody, ILoginQueryResult, ILoginResult, IProfile, IUpdateProfileBody } from '@/api/interface';
+import { ILoginBody, ILoginQueryResult, ILoginResult, IProfile, IUpdateProfileBody } from '@/types/api';
 import { stringify } from 'qs';
 
 /******************************

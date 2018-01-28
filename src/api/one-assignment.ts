@@ -1,5 +1,5 @@
 import { xios, xiosSilence } from '@/api/instance';
-import { IAssignment, IMatrixResponse } from '@/api/interface';
+import { IAssignment, IMatrixResponse } from '@/types/api';
 
 export interface IOneAssignmentArgs {
   course_id: number;

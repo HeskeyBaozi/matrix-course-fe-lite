@@ -1,6 +1,6 @@
-import { IDiscussionItem } from '@/api/interface';
 import DescriptionList from '@/components/common/DescriptionList';
 import { OneCourseModel } from '@/models/one-course.model';
+import { IDiscussionItem } from '@/types/api';
 import { descriptionRender, IDescriptionItem } from '@/utils/helpers';
 import { Avatar, Card, Icon, Input, List, Radio } from 'antd';
 import { compareAsc, format } from 'date-fns/esm';

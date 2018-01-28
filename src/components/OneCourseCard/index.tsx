@@ -1,7 +1,7 @@
-import { CourseStatusMap, ICoursesItem, RoleMap } from '@/api/interface';
 import { fetchAvatar } from '@/api/user';
 import DescriptionList from '@/components/common/DescriptionList';
 import Info from '@/components/common/Info';
+import { CourseStatusMap, ICoursesItem, RoleMap } from '@/types/api';
 import { Avatar, Badge, Card, Col, Icon, Row } from 'antd';
 import { computed, observable } from 'mobx';
 import { observer } from 'mobx-react';

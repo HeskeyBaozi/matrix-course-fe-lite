@@ -1,11 +1,11 @@
-import { ILoginBody, ILoginErrorData, ILoginResult, ILoginSuccessData } from '@/api/interface';
 import defaultAvatarUrl from '@/assets/images/avatar.jpg';
 import Loading from '@/components/common/Loading';
 import { LoginModel } from '@/models/login.model';
-import { Avatar, Button, Form, Icon, Input, notification, Tooltip } from 'antd';
+import { ILoginBody, ILoginErrorData, ILoginResult, ILoginSuccessData } from '@/types/api';
+import { Button, Form, Icon, Input, notification, Tooltip } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 import classNames from 'classnames';
-import { action, autorunAsync, computed, IReactionDisposer, observable, runInAction } from 'mobx';
+import { action, autorunAsync, computed, IReactionDisposer, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { asyncAction } from 'mobx-utils';
 import React, { SyntheticEvent } from 'react';
@@ -123,23 +123,23 @@ class LoginRoute extends React.Component<ILoginRouteProps> {
     const { form: { getFieldDecorator: $ }, $Login } = this.props;
 
     const UserName = $('username', {
-      rules: [ { required: true, message: '请输入用户名' }]
-    })(<Input onChange={ this.observeUsername } placeholder={ 'Username' } prefix={ <Icon type={ 'user' } /> } />);
+      rules: [ { required: true, message: '请输入用户名' } ]
+    })(<Input onChange={ this.observeUsername } placeholder={ 'Username' } prefix={ <Icon type={ 'user' }/> }/>);
 
     const Password = $('password', {
-      rules: [ { required: true, message: '请输入密码' }]
-    })(<Input type={ 'password' } placeholder={ 'Password' } prefix={ <Icon type={ 'lock' } /> } />);
+      rules: [ { required: true, message: '请输入密码' } ]
+    })(<Input type={ 'password' } placeholder={ 'Password' } prefix={ <Icon type={ 'lock' }/> }/>);
 
     const Captcha = $('captcha', {
-      rules: [ { required: !!$Login!.captchaUrl, message: '请输入验证码' }]
-    })(<Input placeholder={ '验证码' } prefix={ <Icon type='edit' /> } />);
+      rules: [ { required: !!$Login!.captchaUrl, message: '请输入验证码' } ]
+    })(<Input placeholder={ '验证码' } prefix={ <Icon type='edit'/> }/>);
 
     return (
       <Form onSubmit={ this.handleSubmit }>
         <Item>
           <div className={ styles.avatarWrapper }>
-            <Loading isLoading={ this.isAvatarLoading } isFullScreen={ false } showTips={ false } />
-            <img src={ this.avatarUrl } alt={ 'avatar' } />
+            <Loading isLoading={ this.isAvatarLoading } isFullScreen={ false } showTips={ false }/>
+            <img src={ this.avatarUrl } alt={ 'avatar' }/>
           </div>
         </Item>
         <Item>{ UserName }</Item>
@@ -150,7 +150,7 @@ class LoginRoute extends React.Component<ILoginRouteProps> {
             { Captcha }
             <Tooltip title={ '点击以更换验证码' } trigger={ 'hover' }>
               <div className={ styles.captchaImageWrapper }>
-                <Loading isLoading={ this.isCaptchaLoading } isFullScreen={ false } showTips={ false } />
+                <Loading isLoading={ this.isCaptchaLoading } isFullScreen={ false } showTips={ false }/>
                 <img
                   onClick={ this.handleChangeCaptcha }
                   className={ styles.captcha }

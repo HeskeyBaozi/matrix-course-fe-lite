@@ -1,6 +1,6 @@
-import { IAssignment, ISubmission } from '@/api/interface';
 import { FetchAssignmentDetail, FetchLastSubmission, IOneAssignmentArgs } from '@/api/one-assignment';
-import { AssignmentTimeStatus } from '@/constants';
+import { IAssignment, ISubmission } from '@/types/api';
+import { AssignmentTimeStatus } from '@/types/constants';
 import { isAfter, isBefore, isWithinInterval } from 'date-fns/esm';
 import { computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';

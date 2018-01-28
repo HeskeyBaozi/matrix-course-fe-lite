@@ -1,5 +1,5 @@
 import { xios } from '@/api/instance';
-import { IAssignmentItem, IDiscussionItem, IMatrixResponse, IOneCourse } from '@/api/interface';
+import { IAssignmentItem, IDiscussionItem, IMatrixResponse, IOneCourse } from '@/types/api';
 
 /******************************
  *           Detail

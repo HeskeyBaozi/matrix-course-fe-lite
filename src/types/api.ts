@@ -1,4 +1,4 @@
-import { AssignmentTimeStatus } from '@/constants';
+import { AssignmentTimeStatus } from '@/types/constants';
 
 export interface IMatrixResponse<T, P = {}> {
   data: T;

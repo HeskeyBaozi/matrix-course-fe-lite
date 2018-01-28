@@ -1,6 +1,6 @@
-import { IAssignmentItem, IDiscussionItem, IOneCourse } from '@/api/interface';
 import { fetchAssignments, fetchCourseDetail, fetchDiscussions } from '@/api/one-course';
 import { fetchAvatar } from '@/api/user';
+import { IAssignmentItem, IDiscussionItem, IOneCourse } from '@/types/api';
 import { isAfter, isBefore, isWithinInterval } from 'date-fns/esm';
 import { computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';

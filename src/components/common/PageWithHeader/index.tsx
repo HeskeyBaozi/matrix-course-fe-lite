@@ -1,8 +1,8 @@
 import DescriptionList from '@/components/common/DescriptionList';
 import Loading from '@/components/common/Loading';
 import PageHeader from '@/components/common/PageHeader';
-import { breadcrumbNameMap } from '@/constants';
-import { ItabItem } from '@/types';
+import { ItabItem } from '@/types/common';
+import { breadcrumbNameMap } from '@/types/constants';
 import { descriptionRender, IDescriptionItem } from '@/utils/helpers';
 import { Avatar, Badge } from 'antd';
 import React, { ReactNode } from 'react';

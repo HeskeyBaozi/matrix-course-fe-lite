@@ -1,5 +1,5 @@
 import { xios } from '@/api/instance';
-import { ICaptchaResult } from '@/api/interface';
+import { ICaptchaResult } from '@/types/api';
 
 /******************************
  *           Captcha

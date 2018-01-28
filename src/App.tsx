@@ -1,11 +1,11 @@
-import { ILoginQueryResult, ILoginSuccessData } from '@/api/interface';
 import RenderAuthorizeRoute from '@/components/common/Authorized';
 import Loading from '@/components/common/Loading/index';
 import { LoginModel } from '@/models/login.model';
+import { ILoginQueryResult, ILoginSuccessData } from '@/types/api';
 import { BasicLayout, LoginLayout } from '@/utils/dynamic';
 import { history } from '@/utils/history';
 import { notification } from 'antd';
-import { computed, observable } from 'mobx';
+import { observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import DevTools from 'mobx-react-devtools';
 import { asyncAction } from 'mobx-utils';

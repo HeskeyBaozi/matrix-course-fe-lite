@@ -1,4 +1,4 @@
-import { IBreadCrumbNameMap } from '@/types';
+import { IBreadCrumbNameMap } from '@/types/common';
 
 // tslint:disable:object-literal-sort-keys
 export const breadcrumbNameMap: IBreadCrumbNameMap = {

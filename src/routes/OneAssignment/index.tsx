@@ -1,6 +1,6 @@
-import { AssignmentTimeStatusMap, AssignmentTimeStatusTextMap } from '@/api/interface';
 import PageWithHeader from '@/components/common/PageWithHeader';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
+import { AssignmentTimeStatusMap, AssignmentTimeStatusTextMap } from '@/types/api';
 import { format } from 'date-fns/esm';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';

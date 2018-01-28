@@ -1,6 +1,6 @@
-import { CourseStatusMap, RoleMap } from '@/api/interface';
 import PageWithHeader from '@/components/common/PageWithHeader';
 import { OneCourseModel } from '@/models/one-course.model';
+import { CourseStatusMap, RoleMap } from '@/types/api';
 import {
   OneCourseAssignmentsRoute, OneCourseDiscussionsRoute, OneCourseHomeRoute
 } from '@/utils/dynamic';

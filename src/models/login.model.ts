@@ -1,17 +1,15 @@
 import { fetchCaptcha } from '@/api/captcha';
 import {
-  ICaptchaResult,
-  ILoginBody,
-  ILoginQueryResult,
-  ILoginResult
-} from '@/api/interface';
-import {
   fetchAvatar,
   fetchUserLoginState,
   loginPost
 } from '@/api/user';
-import { history } from '@/utils/history';
-import { notification } from 'antd';
+import {
+  ICaptchaResult,
+  ILoginBody,
+  ILoginQueryResult,
+  ILoginResult
+} from '@/types/api';
 import { observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
 
