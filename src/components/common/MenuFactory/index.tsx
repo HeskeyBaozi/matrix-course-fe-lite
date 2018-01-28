@@ -1,5 +1,7 @@
+import { GlobalModel } from '@/models/global.model';
 import { Icon, Menu } from 'antd';
 import { ClickParam } from 'antd/lib/menu';
+import { observer } from 'mobx-react';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import styles from './index.less';
@@ -16,7 +18,7 @@ interface IMenuFactoryProps {
 }
 
 interface IGeneralMenuProps<P> extends RouteComponentProps<P> {
-  collapsed: boolean;
+  $Global?: GlobalModel;
 }
 
 const generalPathRegexp = /\/$/;
@@ -32,7 +34,7 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
 
   const keys = menuList.map(({ key }) => key);
 
-  return class GeneralMenu extends React.PureComponent<IGeneralMenuProps<P>> {
+  return observer([ '$Global' ], class GeneralMenu extends React.Component<IGeneralMenuProps<P>> {
     navigate = ({ key }: ClickParam) => {
       const { history, match, location } = this.props;
       if (key === 'RETURN') {
@@ -53,7 +55,7 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
     }
 
     render() {
-      const { collapsed, location, match } = this.props;
+      const { $Global, location, match } = this.props;
       const pathSnippets = location.pathname.split('/').filter((i) => i);
       const urls = [ '/', ...pathSnippets.map((_, index) => `/${pathSnippets.slice(0, index + 1).join('/')}`) ];
       const selectedKeys = keys.filter((key, index) => {
@@ -76,7 +78,7 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
         <Menu
           className={ styles.menu }
           theme={ 'dark' }
-          inlineCollapsed={ collapsed }
+          inlineCollapsed={ $Global!.collapsed }
           onClick={ this.navigate }
           mode={ 'inline' }
           selectedKeys={ selectedKeys }
@@ -85,5 +87,5 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
         </Menu>
       );
     }
-  };
+  });
 }
