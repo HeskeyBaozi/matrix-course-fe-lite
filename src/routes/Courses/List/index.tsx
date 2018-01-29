@@ -22,6 +22,11 @@ export default class CoursesList extends React.Component<ICoursesListProps> {
   @observable
   titleFilter = '';
 
+  @action
+  observeFilterChange = (e: SyntheticEvent<HTMLInputElement>) => {
+    this.titleFilter = e.currentTarget.value;
+  }
+
   @computed
   get dataSource() {
     const { match, $Courses } = this.props;
@@ -33,15 +38,9 @@ export default class CoursesList extends React.Component<ICoursesListProps> {
     return this.dataSource.filter((item) => item.course_name.indexOf(this.titleFilter) !== -1);
   }
 
-  @action
-  observeFilterChange = (e: SyntheticEvent<HTMLInputElement>) => {
-    this.titleFilter = e.currentTarget.value;
-  }
-
-  render() {
-    const { $Courses } = this.props;
-    const pagination = false; // todo: pagination
-    return [ (
+  @computed
+  get Filter() {
+    return (
       <Card className={ styles.searchArea } key={ 'filter' }>
         <Input
           className={ styles.searchBar }
@@ -50,16 +49,27 @@ export default class CoursesList extends React.Component<ICoursesListProps> {
           prefix={ <Icon type={ 'search' }/> }
           onChange={ this.observeFilterChange }
         />
-      </Card>), (
+      </Card>
+    );
+  }
+
+  @computed
+  get List() {
+    const { $Courses } = this.props;
+    return (
       <List
         key={ 'list' }
         loading={ !$Courses!.isCoursesLoaded }
-        pagination={ pagination }
+        pagination={ false }
         grid={ { gutter: 16, xl: 3, lg: 2, md: 1, sm: 1, xs: 1 } }
         dataSource={ this.filteredDataSource }
         renderItem={ renderItem }
       />
-    ) ];
+    );
+  }
+
+  render() {
+    return [ this.Filter, this.List ];
   }
 }
 

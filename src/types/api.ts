@@ -132,7 +132,7 @@ export interface IAssignment<C = object> {
   course_id: number;
   description: string;
   enddate: string;
-  files?: any[];
+  files?: Array<{ name: string, code: string }>;
   grade_at_end: 0 | 1; // 1 = 定时编程题
   plcheck: 0 | 1; // 抄袭检查
   ptype_id: PType;

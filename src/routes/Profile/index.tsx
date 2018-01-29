@@ -18,17 +18,16 @@ const topRightResponsive: ColProps = { xs: 24, sm: 24, md: 12, lg: 12, xl: 6, st
 @observer
 export default class ProfileRoute extends React.Component<IProfileRouteProps> {
   render() {
-    const { $Profile } = this.props;
     return (
       <Row gutter={ 16 }>
-        <Col {...topRightResponsive} xl={ 12 }>
-          <UserProfileCard />
+        <Col { ...topRightResponsive } xl={ 12 }>
+          <UserProfileCard/>
         </Col>
-        <Col {...topRightResponsive}>
-          <CurrentCoursesCard />
+        <Col { ...topRightResponsive }>
+          <CurrentCoursesCard/>
         </Col>
-        <Col {...topRightResponsive}>
-          <DeadlinesCard />
+        <Col { ...topRightResponsive }>
+          <DeadlinesCard/>
         </Col>
       </Row>
     );

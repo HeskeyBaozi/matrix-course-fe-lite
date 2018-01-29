@@ -26,6 +26,14 @@ const { Header, Sider, Content } = Layout;
 @observer
 export default class BasicLayout extends React.Component<ILoginLayoutProps> {
 
+  componentDidMount() {
+    const { $Profile, $Courses } = this.props;
+    Promise.all([
+      $Profile!.LoadProfile(),
+      $Courses!.LoadCoursesList()
+    ]);
+  }
+
   handleToggle = () => {
     const { $Global } = this.props;
     $Global!.toggle();
@@ -37,63 +45,86 @@ export default class BasicLayout extends React.Component<ILoginLayoutProps> {
     return $Profile!.avatarUrl.length ? $Profile!.avatarUrl : void 0;
   }
 
-  componentDidMount() {
-    const { $Profile, $Courses } = this.props;
-    Promise.all([
-      $Profile!.LoadProfile(),
-      $Courses!.LoadCoursesList()
-    ]);
+  @computed
+  get Sider() {
+    const { $Global } = this.props;
+    return (
+      <Sider
+        breakpoint={ 'md' }
+        className={ styles.sider }
+        trigger={ null }
+        collapsible={ true }
+        collapsed={ $Global!.collapsed }
+      >
+        <div className={ styles.logoWrapper }>
+          <img src={ logoTransUrl } alt={ 'logo' }/>
+        </div>
+        <Switch>
+          <Route path={ '/course/:course_id/assignment/:ca_id' } component={ GeneralAssignmentMenu }/>
+          <Route path={ '/course/:course_id' } component={ OneCourseMenu }/>
+          <Route path={ '/' } component={ FirstMenu }/>
+        </Switch>
+      </Sider>
+    );
+  }
+
+  @computed
+  get collapsibleIconType() {
+    const { $Global } = this.props;
+    return $Global!.collapsed ? 'menu-unfold' : 'menu-fold';
+  }
+
+  @computed
+  get collapsibleLayoutStyles() {
+    const { $Global } = this.props;
+    return classNames(styles.contentLayout, { [ styles.contentLayoutCollapsed ]: $Global!.collapsed });
+  }
+
+  @computed
+  get collapsibleHeaderStyles() {
+    const { $Global } = this.props;
+    return classNames(styles.contentHeader, { [ styles.contentHeaderCollapsed ]: $Global!.collapsed });
+  }
+
+  @computed
+  get Header() {
+    return (
+      <Header className={ this.collapsibleHeaderStyles }>
+        <Icon className={ styles.trigger } type={ this.collapsibleIconType } onClick={ this.handleToggle }/>
+        <div className={ styles.right }>
+          <span className={ styles.action }>
+            <Icon type={ 'bell' }/>
+          </span>
+          <span className={ styles.action }>
+            <Avatar size={ 'large' } icon={ 'user' } src={ this.headerAvatarUrl }/>
+          </span>
+        </div>
+      </Header>
+    );
+  }
+
+  @computed
+  get Content() {
+    return (
+      <Content className={ styles.content }>
+        <Switch>
+          <Route exact={ true } path={ `/` } component={ ProfileRoute }/>
+          <Route path={ `/courses` } component={ CoursesRoute }/>
+          <Route path={ '/course/:course_id/assignment/:ca_id' } component={ OneAssignmentRoute }/>
+          <Route path={ '/course/:course_id' } component={ OneCourseRoute }/>
+          <Redirect to={ '/' }/>
+        </Switch>
+      </Content>
+    );
   }
 
   render() {
-    const { $Global } = this.props;
     return (
       <Layout>
-        <Sider
-          breakpoint={ 'md' }
-          className={ styles.sider }
-          trigger={ null }
-          collapsible={ true }
-          collapsed={ $Global!.collapsed }
-        >
-          <div className={ styles.logoWrapper }>
-            <img src={ logoTransUrl } alt={ 'logo' }/>
-          </div>
-          <Switch>
-            <Route path={ '/course/:course_id/assignment/:ca_id' } component={ GeneralAssignmentMenu }/>
-            <Route path={ '/course/:course_id' } component={ OneCourseMenu }/>
-            <Route path={ '/' } component={ FirstMenu }/>
-          </Switch>
-        </Sider>
-        <Layout
-          className={ classNames(styles.contentLayout, { [ styles.contentLayoutCollapsed ]: $Global!.collapsed }) }
-        >
-          <Header
-            className={ classNames(styles.contentHeader, { [ styles.contentHeaderCollapsed ]: $Global!.collapsed }) }
-          >
-            <Icon
-              className={ styles.trigger }
-              type={ $Global!.collapsed ? 'menu-unfold' : 'menu-fold' }
-              onClick={ this.handleToggle }
-            />
-            <div className={ styles.right }>
-              <span className={ styles.action }>
-                <Icon type={ 'bell' }/>
-              </span>
-              <span className={ styles.action }>
-                <Avatar size={ 'large' } icon={ 'user' } src={ this.headerAvatarUrl }/>
-              </span>
-            </div>
-          </Header>
-          <Content className={ styles.content }>
-            <Switch>
-              <Route exact={ true } path={ `/` } component={ ProfileRoute }/>
-              <Route path={ `/courses` } component={ CoursesRoute }/>
-              <Route path={ '/course/:course_id/assignment/:ca_id' } component={ OneAssignmentRoute }/>
-              <Route path={ '/course/:course_id' } component={ OneCourseRoute }/>
-              <Redirect to={ '/' }/>
-            </Switch>
-          </Content>
+        { this.Sider }
+        <Layout className={ this.collapsibleLayoutStyles }>
+          { this.Header }
+          { this.Content }
         </Layout>
       </Layout>
     );

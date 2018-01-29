@@ -5,6 +5,8 @@ import { ItabItem } from '@/types/common';
 import { breadcrumbNameMap } from '@/types/constants';
 import { descriptionRender, IDescriptionItem } from '@/utils/helpers';
 import { Avatar, Badge } from 'antd';
+import { computed } from 'mobx';
+import { observer } from 'mobx-react';
 import React, { ReactNode } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -25,54 +27,65 @@ interface IPageWithHeaderProps extends RouteComponentProps<{}> {
   onTabChange?: (key: string) => void;
 }
 
-export default withRouter(function PageWithHeader({
-                                                    loading,
-                                                    avatarUrl,
-                                                    avatarIcon,
-                                                    badgeStatus,
-                                                    badgeText,
-                                                    descriptionsList,
-                                                    location,
-                                                    children,
-                                                    col,
-                                                    title,
-                                                    tabList,
-                                                    tabActiveKey,
-                                                    onTabChange
-                                                  }: IPageWithHeaderProps) {
+@observer
+class PageWithHeader extends React.Component<IPageWithHeaderProps> {
+  @computed
+  get breadcrumb() {
+    const { location } = this.props;
+    return { breadcrumbNameMap, location };
+  }
 
-  const breadcrumb = { breadcrumbNameMap, location };
-
-  const pageTitle = (
-    <div className={ styles.titleWrapper }>
-      <Loading isLoading={ loading } isFullScreen={ false }/>
-      <span>{ title }</span>
-      { badgeStatus ? <Badge className={ styles.badgeStatus } status={ badgeStatus } text={ badgeText }/> : null }
-    </div>
-  );
-
-  const content = descriptionsList ? (
-    <DescriptionList style={ { marginBottom: '1.5rem' } } title={ null } col={ col || 3 }>
-      { descriptionsList.map(descriptionRender) }
-    </DescriptionList>
-  ) : null;
-
-  return (
-    <div style={ { margin: '-1.5rem' } }>
-      <PageHeader
-        linkElement={ Link }
-        style={ { position: 'relative' } }
-        logo={ avatarIcon ? <Avatar icon={ avatarIcon } src={ avatarUrl }/> : void 0 }
-        title={ pageTitle }
-        tabList={ tabList }
-        tabActiveKey={ tabActiveKey }
-        onTabChange={ onTabChange }
-        content={ content }
-        { ...breadcrumb }
-      />
-      <div style={ { padding: '1.5rem' } }>
-        { children }
+  @computed
+  get pageTitle() {
+    const { title, loading, badgeStatus, badgeText } = this.props;
+    return (
+      <div className={ styles.titleWrapper }>
+        <Loading isLoading={ loading } isFullScreen={ false }/>
+        <span>{ title }</span>
+        { badgeStatus ? <Badge className={ styles.badgeStatus } status={ badgeStatus } text={ badgeText }/> : null }
       </div>
-    </div>
-  );
-});
+    );
+  }
+
+  @computed
+  get content() {
+    const { descriptionsList, col } = this.props;
+    return descriptionsList ? (
+      <DescriptionList style={ { marginBottom: '1.5rem' } } title={ null } col={ col || 3 }>
+        { descriptionsList.map(descriptionRender) }
+      </DescriptionList>
+    ) : null;
+  }
+
+  @computed
+  get logo() {
+    const { avatarIcon, avatarUrl } = this.props;
+    return (
+      avatarIcon ? <Avatar icon={ avatarIcon } src={ avatarUrl }/> : void 0
+    );
+  }
+
+  render() {
+    const { tabList, tabActiveKey, onTabChange, children } = this.props;
+    return (
+      <div style={ { margin: '-1.5rem' } }>
+        <PageHeader
+          linkElement={ Link }
+          style={ { position: 'relative' } }
+          logo={ this.logo }
+          title={ this.pageTitle }
+          tabList={ tabList }
+          tabActiveKey={ tabActiveKey }
+          onTabChange={ onTabChange }
+          content={ this.content }
+          { ...this.breadcrumb }
+        />
+        <div style={ { padding: '1.5rem' } }>
+          { children }
+        </div>
+      </div>
+    );
+  }
+}
+
+export default withRouter(PageWithHeader);

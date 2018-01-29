@@ -53,7 +53,7 @@ export default class CodeBlock extends React.Component<ICodeBlockProps> {
       theme: 'github',
       tabSize: 2,
       lineNumbers: !markdown,
-      readOnly: (markdown || readOnly) ? 'nocursor' : false
+      readOnly: readOnly ? (markdown ? 'nocursor' : true) : false
     };
   }
 
