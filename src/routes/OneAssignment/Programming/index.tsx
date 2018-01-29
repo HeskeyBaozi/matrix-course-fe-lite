@@ -16,6 +16,7 @@ export interface IProgrammingConfig {
     memory: number;
     time: number;
   };
+  submission: string[];
 }
 
 interface IProgrammingProps {

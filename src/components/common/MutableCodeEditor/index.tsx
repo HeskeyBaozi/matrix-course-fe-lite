@@ -1,12 +1,12 @@
 import CodeBlock from '@/components/common/CodeBlock';
 import { Tabs } from 'antd';
-import { action, computed } from 'mobx';
+import { computed } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
 
 const { TabPane } = Tabs;
 
-interface IDataSource {
+export interface ICodeEditorDataSource {
   [key: string]: {
     readOnly: boolean;
     value: string;
@@ -14,7 +14,8 @@ interface IDataSource {
 }
 
 interface ICodeEditor {
-  mutableDataSource: IDataSource;
+  mutableDataSource: ICodeEditorDataSource;
+  extra?: React.ReactNode;
 }
 
 @observer
@@ -33,7 +34,11 @@ export default class MutableCodeEditor extends React.Component<ICodeEditor> {
 
   render() {
     return (
-      <Tabs defaultActiveKey={ this.first && this.first.key || 'NONE' }>
+      <Tabs
+        defaultActiveKey={ this.first && this.first.key || 'NONE' }
+        type={ 'card' }
+        tabBarExtraContent={ this.props.extra }
+      >
         { this.sourceToList.map(renderTabPane) }
       </Tabs>
     );
