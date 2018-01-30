@@ -71,6 +71,9 @@ class Programming extends React.Component<IProgrammingProps> {
   oneSubmission: IProgrammingSubmission;
 
   @observable
+  submitAt: string = '';
+
+  @observable
   isOneSubmissionLoaded = false;
 
   @asyncAction
@@ -78,12 +81,15 @@ class Programming extends React.Component<IProgrammingProps> {
     const { course_id, ca_id } = this.props.match.params;
     this.isOneSubmissionLoaded = false;
     try {
-      const { data: { data: one } } = yield FetchOneSubmission<IProgrammingSubmission>({
+      const {
+        data: { data: one, paramData: { submission: { submit_at } } }
+      } = yield FetchOneSubmission<IProgrammingSubmission>({
         course_id: Number.parseInt(course_id),
         ca_id: Number.parseInt(ca_id),
         sub_ca_id
       });
       this.oneSubmission = one;
+      this.submitAt = submit_at;
     } catch (error) {
       throw error;
     }
@@ -122,7 +128,7 @@ class Programming extends React.Component<IProgrammingProps> {
           <ProgrammingSubmit/>
         </TabPane>
         <TabPane key={ ProgrammingKeys.GradeFeedback } tab={ ProgrammingKeys.GradeFeedback }>
-          <ProgrammingReport oneSubmission={ this.oneSubmission }/>
+          <ProgrammingReport oneSubmission={ this.oneSubmission } submitAt={ this.submitAt }/>
         </TabPane>
         <TabPane key={ ProgrammingKeys.Recordings } tab={ ProgrammingKeys.Recordings }>
           <ProgrammingSubmissions onDetail={ this.onDetail }/>
