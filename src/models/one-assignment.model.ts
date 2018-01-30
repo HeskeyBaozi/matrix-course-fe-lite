@@ -1,5 +1,8 @@
-import { FetchAssignmentDetail, FetchLastSubmission, IOneAssignmentArgs } from '@/api/one-assignment';
-import { IAssignment, ISubmission } from '@/types/api';
+import {
+  FetchAssignmentDetail, FetchLastSubmission, FetchSubmissionsList,
+  IOneAssignmentArgs
+} from '@/api/one-assignment';
+import { IAssignment, ISubmission, ISubmissionItem } from '@/types/api';
 import { ItabItem } from '@/types/common';
 import { AssignmentTimeStatus, GeneralKey, ProgrammingKeys, PType } from '@/types/constants';
 import { isAfter, isBefore, isWithinInterval } from 'date-fns/esm';
@@ -39,6 +42,12 @@ const voidLast: ISubmission = {
 export class OneAssignmentModel {
   @observable
   assignment = voidAssignment;
+
+  @observable
+  submissions: ISubmissionItem[] = [];
+
+  @observable
+  isSubmissionsLoaded = false;
 
   @observable
   isDetailLoaded = false;
@@ -117,7 +126,7 @@ export class OneAssignmentModel {
   async LoadOneAssignment(args: IOneAssignmentArgs) {
     return Promise.all([
       this.LoadDetail(args),
-      this.LoadLast(args)
+      this.LoadSubmissions(args)
     ]);
   }
 
@@ -131,6 +140,18 @@ export class OneAssignmentModel {
       this.assignment = voidAssignment;
     }
     this.isDetailLoaded = true;
+  }
+
+  @asyncAction
+  * LoadSubmissions(args: IOneAssignmentArgs) {
+    this.isSubmissionsLoaded = false;
+    try {
+      const { data: { data: submissions } } = yield FetchSubmissionsList(args);
+      this.submissions = submissions;
+    } catch (error) {
+      this.submissions = [];
+    }
+    this.isSubmissionsLoaded = true;
   }
 
   @asyncAction

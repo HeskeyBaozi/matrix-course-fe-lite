@@ -1,5 +1,6 @@
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import ProgrammingDescription from '@/routes/OneAssignment/Programming/Description';
+import ProgrammingSubmissions from '@/routes/OneAssignment/Programming/Submissions';
 import ProgrammingSubmit from '@/routes/OneAssignment/Programming/Submit';
 import { ProgrammingKeys } from '@/types/constants';
 import { IDescriptionItem } from '@/utils/helpers';
@@ -17,6 +18,7 @@ export interface IProgrammingConfig {
     time: number;
   };
   submission: string[];
+  standard_score: number;
 }
 
 interface IProgrammingProps {
@@ -55,7 +57,7 @@ export default class Programming extends React.Component<IProgrammingProps> {
           <ProgrammingSubmit/>
         </TabPane>
         <TabPane key={ ProgrammingKeys.Recordings } tab={ ProgrammingKeys.Recordings }>
-          Recording
+          <ProgrammingSubmissions/>
         </TabPane>
       </Tabs>
     );

@@ -152,6 +152,13 @@ export interface ISubmission<C = object, R = object> {
   sub_ca_id: number;
 }
 
+export interface ISubmissionItem {
+  grade: number | null;
+  sub_ca_id: number;
+  submit_at: string;
+  user_id: number;
+}
+
 // General
 export const RoleMap: IMapper = {
   TA: '助教',

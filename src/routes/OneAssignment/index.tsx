@@ -75,18 +75,15 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
       ca_id: Number.parseInt(ca_id),
       course_id: Number.parseInt(course_id)
     });
-    autorun(() => {
-      console.log(this.props.$OneAssignment!.assignment.config);
-    });
   }
 
   render() {
-    const { $OneAssignment, match } = this.props;
+    const { $OneAssignment } = this.props;
     const { assignment } = $OneAssignment!;
 
     return (
       <PageWithHeader
-        loading={ !$OneAssignment!.isBaseInformationLoaded }
+        loading={ !$OneAssignment!.isDetailLoaded }
         title={ assignment.title }
         badgeStatus={ AssignmentTimeStatusMap[ $OneAssignment!.timeStatus ] }
         badgeText={ AssignmentTimeStatusTextMap[ $OneAssignment!.timeStatus ] }

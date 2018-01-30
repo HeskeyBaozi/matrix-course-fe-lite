@@ -2,10 +2,11 @@ import MutableCodeEditor, { ICodeEditorDataSource } from '@/components/common/Mu
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { IProgrammingConfig } from '@/routes/OneAssignment/Programming';
 import { IAssignment } from '@/types/api';
-import { Card, Col, Icon, Row, Switch } from 'antd';
-import { action, autorun, computed, observable } from 'mobx';
+import { Button, Card, Col, Icon, Row, Switch } from 'antd';
+import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
+import styles from './index.less';
 
 interface IProgrammingSubmitProps {
   $OneAssignment?: OneAssignmentModel;
@@ -131,7 +132,7 @@ export default class ProgrammingSubmit extends React.Component<IProgrammingSubmi
 
   render() {
     return (
-      <Row type={ 'flex' } gutter={ 16 }>
+      <Row className={ styles.codemirror } type={ 'flex' } gutter={ 16 }>
         <Col { ...this.AnswersAreaResponsiveColProps }>
           <Card loading={ this.loading }>
             <MutableCodeEditor
@@ -139,6 +140,9 @@ export default class ProgrammingSubmit extends React.Component<IProgrammingSubmi
               extraDataSource={ this.extraDataSource }
               extra={ this.Extra }
             />
+            <div style={ { marginTop: '1rem', display: 'flex', flexFlow: 'row-reverse nowrap' } }>
+              <Button type={ 'primary' } htmlType={ 'submit' } icon={ 'upload' }>Submit</Button>
+            </div>
           </Card>
         </Col>
         { this.SupportFilesEditor }
