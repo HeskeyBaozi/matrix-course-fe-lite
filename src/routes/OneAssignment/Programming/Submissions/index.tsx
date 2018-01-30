@@ -4,15 +4,17 @@ import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { IProgrammingConfig } from '@/routes/OneAssignment/Programming';
 import SubmissionsTable from '@/routes/OneAssignment/Programming/Submissions/SubmissionsTable.class';
 import { ISubmissionItem } from '@/types/api';
-import { Badge, Card, Col, Row } from 'antd';
+import { ProgrammingKeys } from '@/types/constants';
+import { Badge, Button, Card, Col, Row } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import { compareAsc, format, formatDistance } from 'date-fns/esm';
-import { computed } from 'mobx';
+import { computed, observable, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 
 interface IProgrammingSubmissionsProps {
   $OneAssignment?: OneAssignmentModel;
+  onDetail: (args: { sub_ca_id: number }) => Promise<any>;
 }
 
 @inject('$OneAssignment')
@@ -43,9 +45,25 @@ export default class ProgrammingSubmissions extends React.Component<IProgramming
     return Math.max(0, ...this.submissions.map(({ grade }) => grade || 0));
   }
 
+  getClickHandler = (subCaId: number) => () => {
+    this.props.$OneAssignment!.changeTab(ProgrammingKeys.GradeFeedback);
+    this.props.onDetail({ sub_ca_id: subCaId });
+  }
+
   @computed
   get columns(): Array<ColumnProps<ISubmissionItem>> {
     return [
+      {
+        dataIndex: 'sub_ca_id', key: 'action', title: '操作', render: (subCaId) => (
+          <Button
+            icon={ 'eye' }
+            type={ 'ghost' }
+            onClick={ this.getClickHandler(subCaId) }
+          >详情
+          </Button>
+        ),
+        width: 'min-content'
+      },
       { dataIndex: 'sub_ca_id', key: 'sub_ca_id', title: '作业提交ID' },
       {
         dataIndex: 'grade', title: '成绩',

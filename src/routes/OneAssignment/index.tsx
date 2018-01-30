@@ -1,11 +1,11 @@
 import PageWithHeader from '@/components/common/PageWithHeader';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { AssignmentTimeStatusMap, AssignmentTimeStatusTextMap } from '@/types/api';
-import { PType } from '@/types/constants';
+import { ProgrammingKeys, PType } from '@/types/constants';
 import { OneAssignmentProgrammingRoute } from '@/utils/dynamic';
 import 'codemirror/lib/codemirror.css';
 import { format } from 'date-fns/esm';
-import { autorun, computed } from 'mobx';
+import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
@@ -39,7 +39,7 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
       {
         term: '截止日期',
         key: 'ddl',
-        icon: 'calender',
+        icon: 'calendar',
         value: format(assignment.enddate, 'HH:mm A, Do MMM. YYYY')
       },
       {
@@ -75,6 +75,11 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
       ca_id: Number.parseInt(ca_id),
       course_id: Number.parseInt(course_id)
     });
+  }
+
+  componentWillUnmount() {
+    const { $OneAssignment } = this.props;
+    $OneAssignment!.changeTab(ProgrammingKeys.Description);
   }
 
   render() {

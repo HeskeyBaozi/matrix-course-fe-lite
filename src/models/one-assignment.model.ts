@@ -1,8 +1,8 @@
 import {
-  FetchAssignmentDetail, FetchLastSubmission, FetchSubmissionsList,
+  FetchAssignmentDetail, FetchSubmissionsList,
   IOneAssignmentArgs
 } from '@/api/one-assignment';
-import { IAssignment, ISubmission, ISubmissionItem } from '@/types/api';
+import { IAssignment, ISubmissionItem } from '@/types/api';
 import { ItabItem } from '@/types/common';
 import { AssignmentTimeStatus, GeneralKey, ProgrammingKeys, PType } from '@/types/constants';
 import { isAfter, isBefore, isWithinInterval } from 'date-fns/esm';
@@ -32,13 +32,6 @@ const voidAssignment: IAssignment<any> = {
   updated_at: new Date().toString()
 };
 
-const voidLast: ISubmission = {
-  config: {},
-  grade: null,
-  report: {},
-  sub_ca_id: 0
-};
-
 export class OneAssignmentModel {
   @observable
   assignment = voidAssignment;
@@ -51,9 +44,6 @@ export class OneAssignmentModel {
 
   @observable
   isDetailLoaded = false;
-
-  @observable
-  last = voidLast;
 
   @observable
   hasLastSubmission = false;
@@ -152,20 +142,5 @@ export class OneAssignmentModel {
       this.submissions = [];
     }
     this.isSubmissionsLoaded = true;
-  }
-
-  @asyncAction
-  * LoadLast(args: IOneAssignmentArgs) {
-    this.isLastSubmitLoaded = false;
-    this.hasLastSubmission = false;
-    try {
-      const { data: { data: last } } = yield FetchLastSubmission(args);
-      this.last = last;
-      this.hasLastSubmission = true;
-    } catch (error) {
-      this.last = voidLast;
-      this.hasLastSubmission = false;
-    }
-    this.isLastSubmitLoaded = true;
   }
 }

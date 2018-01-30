@@ -145,13 +145,6 @@ export interface IAssignment<C = object> {
   updated_at: string;
 }
 
-export interface ISubmission<C = object, R = object> {
-  config: C;
-  grade: number | null;
-  report: R | null;
-  sub_ca_id: number;
-}
-
 export interface ISubmissionItem {
   grade: number | null;
   sub_ca_id: number;

@@ -1,8 +1,9 @@
 import DescriptionList from '@/components/common/DescriptionList';
+import ScoreBar from '@/components/common/ScoreBar';
 import { OneCourseModel } from '@/models/one-course.model';
 import { IAssignmentItem } from '@/types/api';
-import { descriptionRender, formatter, getBadgeStatus, IDescriptionItem } from '@/utils/helpers';
-import { Badge, Card, Input, List, Progress, Radio } from 'antd';
+import { descriptionRender, getBadgeStatus, IDescriptionItem } from '@/utils/helpers';
+import { Badge, Card, Input, List, Radio } from 'antd';
 import { format } from 'date-fns/esm';
 import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -233,13 +234,7 @@ function renderItem({
           >
             { content }
           </DescriptionList>
-          <Progress
-            strokeWidth={ 5 }
-            format={ formatter(grade || 0, standard_score) }
-            width={ 64 }
-            status={ progressStatus }
-            percent={ percent }
-          />
+          <ScoreBar grade={ grade } strokeWidth={ 5 } full={ standard_score } isSubmitted={ !!submit_times }/>
         </Card>
       </Link>
     </List.Item>
