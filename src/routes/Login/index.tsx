@@ -112,20 +112,15 @@ class LoginRoute extends React.Component<ILoginRouteProps> {
   }
 
   @computed
-  get $() {
-    return this.form.getFieldDecorator;
-  }
-
-  @computed
   get UserName() {
-    return this.$('username', {
+    return this.form.getFieldDecorator('username', {
       rules: [ { required: true, message: '请输入用户名' } ]
     })(<Input onChange={ this.observeUsername } placeholder={ 'Username' } prefix={ <Icon type={ 'user' }/> }/>);
   }
 
   @computed
   get Password() {
-    return this.$('password', {
+    return this.form.getFieldDecorator('password', {
       rules: [ { required: true, message: '请输入密码' } ]
     })(<Input type={ 'password' } placeholder={ 'Password' } prefix={ <Icon type={ 'lock' }/> }/>);
   }
@@ -133,7 +128,7 @@ class LoginRoute extends React.Component<ILoginRouteProps> {
   @computed
   get Captcha() {
     const { $Login } = this.props;
-    return this.$('captcha', {
+    return this.form.getFieldDecorator('captcha', {
       rules: [ { required: !!$Login!.captchaUrl, message: '请输入验证码' } ]
     })(<Input placeholder={ '验证码' } prefix={ <Icon type='edit'/> }/>);
   }

@@ -1,11 +1,11 @@
 import { GlobalModel } from '@/models/global.model';
 import { Icon, Menu } from 'antd';
 import { ClickParam } from 'antd/es/menu';
+import { extendObservable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 import styles from './index.less';
-import { extendObservable } from 'mobx';
 
 export interface IMenuItem {
   key: string;
@@ -30,7 +30,6 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
     class GeneralMenu extends React.Component<IGeneralMenuProps<P>> {
       collapsed: boolean;
       children: any[];
-      selectedKeys: string[];
       keys: string[];
       returnTo: (params: P) => string;
       mappedList: any[];
@@ -55,17 +54,6 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
           },
           get keys() {
             return this.menuList.map(({ key }) => key);
-          },
-          get selectedKeys(): string[] {
-            const { location, match } = props;
-            const pathSnippets = location.pathname.split('/').filter((i) => i);
-            const urls = [ '/', ...pathSnippets.map((_, index) => `/${pathSnippets.slice(0, index + 1).join('/')}`) ];
-            return this.keys.filter((key, index) => {
-              const generalKey = `${match.url.replace(generalPathRegexp, '')}${key}`;
-              return (urls.some((url) => url === generalKey && url !== '/')
-                || generalKey === match.url && urls.indexOf(match.url) === -1
-                || generalKey === match.url && generalKey === '/' && urls.length === 1);
-            });
           },
           get children() {
             return this.returnTo ?
@@ -96,6 +84,15 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
       }
 
       render() {
+        const { location, match } = this.props;
+        const pathSnippets = location.pathname.split('/').filter((i) => i);
+        const urls = [ '/', ...pathSnippets.map((_, index) => `/${pathSnippets.slice(0, index + 1).join('/')}`) ];
+        const selectedKeys = this.keys.filter((key, index) => {
+          const generalKey = `${match.url.replace(generalPathRegexp, '')}${key}`;
+          return (urls.some((url) => url === generalKey && url !== '/')
+            || generalKey === match.url && urls.indexOf(match.url) === -1
+            || generalKey === match.url && generalKey === '/' && urls.length === 1);
+        });
         return (
           <Menu
             className={ styles.menu }
@@ -103,7 +100,7 @@ export default function MenuFactory<P = {}>({ menuList, returnTo }: IMenuFactory
             inlineCollapsed={ this.collapsed }
             onClick={ this.navigate }
             mode={ 'inline' }
-            selectedKeys={ this.selectedKeys }
+            selectedKeys={ selectedKeys }
           >
             { this.children }
           </Menu>

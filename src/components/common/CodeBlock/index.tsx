@@ -16,7 +16,7 @@ interface ICodeBlockProps {
   value: string;
   readOnly: boolean;
   className?: string;
-  mutableSource?: { value: string };
+  onChange?: (key: string, value: string) => void;
 }
 
 @observer
@@ -31,17 +31,11 @@ export default class CodeBlock extends React.Component<ICodeBlockProps> {
   }
 
   @action
-  onChange = (_1: any, _2: any, value: string) => {
+  onChangeLocal = (_1: any, _2: any, value: string) => {
 
-    /**
-     * Todo:
-     * Fixme:
-     * This is mutable Hack!!
-     * What the Fck??
-     * Is there anyone who can tell me what happen to these codes ?
-     */
-    if (this.props.mutableSource) {
-      this.props.mutableSource.value = value;
+    const { filename, onChange } = this.props;
+    if (onChange && filename) {
+      onChange(filename, value);
     }
   }
 
@@ -64,7 +58,7 @@ export default class CodeBlock extends React.Component<ICodeBlockProps> {
         value={ this.code }
         options={ this.CodeOptions }
         onBeforeChange={ this.onBeforeChange }
-        onChange={ this.onChange }
+        onChange={ this.onChangeLocal }
       />
     );
   }

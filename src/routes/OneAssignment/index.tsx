@@ -5,12 +5,10 @@ import { PType } from '@/types/constants';
 import { OneAssignmentProgrammingRoute } from '@/utils/dynamic';
 import 'codemirror/lib/codemirror.css';
 import { format } from 'date-fns/esm';
-import { computed } from 'mobx';
+import { autorun, computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
-import './code.less';
-import './github.theme.less';
 
 interface IOneAssignmentParams {
   ca_id: string;
@@ -76,6 +74,9 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
     $OneAssignment!.LoadOneAssignment({
       ca_id: Number.parseInt(ca_id),
       course_id: Number.parseInt(course_id)
+    });
+    autorun(() => {
+      console.log(this.props.$OneAssignment!.assignment.config);
     });
   }
 
