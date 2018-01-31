@@ -37,12 +37,14 @@ export default class ProgrammingSubmissions extends React.Component<IProgramming
 
   @computed
   get miniBarData() {
-    return this.submissions.slice(0, Math.min(36, this.submissions.length)).map(({ submit_at, grade }) => {
-      return {
-        x: format(submit_at, 'YYYY-MM-DD HH:mma'),
-        y: statusFromGrade(grade, [ 0, 0, grade ])
-      };
-    });
+    return this.submissions
+      .slice(0, Math.min(36, this.submissions.length))
+      .map(({ submit_at, grade }) => {
+        return {
+          x: format(submit_at, 'YYYY-MM-DD HH:mma'),
+          y: statusFromGrade(grade, [ 0, 0, grade ])
+        };
+      });
   }
 
   @computed

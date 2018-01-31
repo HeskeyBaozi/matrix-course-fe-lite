@@ -25,6 +25,14 @@ export default class ProgrammingReport extends React.Component<IProgrammingRepor
   }
 
   @computed
+  get isLastSubmission() {
+    const { $OneAssignment, $$Programming } = this.props;
+    const { submissions } = $OneAssignment!;
+    const { oneSubmission: { sub_ca_id } } = $$Programming!;
+    return submissions.length ? submissions[ 0 ].sub_ca_id === sub_ca_id : false;
+  }
+
+  @computed
   get full() {
     return this.config.standard_score;
   }
@@ -64,6 +72,18 @@ export default class ProgrammingReport extends React.Component<IProgrammingRepor
   }
 
   @computed
+  get submitIdText() {
+    return this.isLastSubmission ? `${this.one.sub_ca_id} / 最近提交` : this.one.sub_ca_id;
+  }
+
+  @computed
+  get currentScoreValue() {
+    return statusFromGrade(this.one.grade, [
+      'Waiting for judging', 'Under judging', `${this.one.grade}pts`
+    ]);
+  }
+
+  @computed
   get Extra() {
     return (
       <div>
@@ -88,16 +108,13 @@ export default class ProgrammingReport extends React.Component<IProgrammingRepor
       <Card key={ 'meta' } style={ { marginBottom: '1rem' } } loading={ this.loading }>
         <Row>
           <Col sm={ 8 } xs={ 24 }>
-            <Info title={ '提交ID' } value={ this.one.sub_ca_id } bordered={ true }/>
+            <Info title={ '提交ID' } value={ this.submitIdText } bordered={ true }/>
           </Col>
           <Col sm={ 8 } xs={ 24 }>
             <Info title={ '提交时间' } value={ this.formatTime } bordered={ true }/>
           </Col>
           <Col sm={ 8 } xs={ 24 }>
-            <Info
-              title={ '当前成绩' }
-              value={ statusFromGrade(this.one.grade, [ 'Waiting for judging', 'Under judging', this.one.grade ]) }
-            />
+            <Info title={ '当前成绩' } value={ this.currentScoreValue }/>
           </Col>
         </Row>
         <ScoreBar
