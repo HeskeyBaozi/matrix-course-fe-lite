@@ -1,7 +1,7 @@
 import DescriptionList from '@/components/common/DescriptionList';
 import Markdown from '@/components/common/Markdown';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
-import { IProgrammingConfig } from '@/routes/OneAssignment/Programming';
+import { IProgrammingConfig } from '@/types/api';
 import { descriptionRender, IDescriptionItem } from '@/utils/helpers';
 import { Card, Col, Row } from 'antd';
 import { computed } from 'mobx';

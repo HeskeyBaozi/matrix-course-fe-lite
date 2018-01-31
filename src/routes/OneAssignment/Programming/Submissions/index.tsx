@@ -1,25 +1,30 @@
 import ChartCard from '@/components/common/Charts/ChartCard';
 import MiniBar from '@/components/common/Charts/MiniBar';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
-import { IProgrammingConfig } from '@/routes/OneAssignment/Programming';
+import { ProgrammingModel } from '@/routes/OneAssignment/Programming/model';
 import SubmissionsTable from '@/routes/OneAssignment/Programming/Submissions/SubmissionsTable.class';
-import { ISubmissionItem } from '@/types/api';
+import { IProgrammingConfig, ISubmissionItem } from '@/types/api';
 import { ProgrammingKeys } from '@/types/constants';
+import { statusFromGrade } from '@/utils/helpers';
 import { Badge, Button, Card, Col, Row } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import { compareAsc, format, formatDistance } from 'date-fns/esm';
-import { computed, observable, runInAction } from 'mobx';
+import { computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
+import { asyncAction } from 'mobx-utils';
 import React from 'react';
 
 interface IProgrammingSubmissionsProps {
   $OneAssignment?: OneAssignmentModel;
-  onDetail: (args: { sub_ca_id: number }) => Promise<any>;
+  $$Programming?: ProgrammingModel;
 }
 
-@inject('$OneAssignment')
+@inject('$OneAssignment', '$$Programming')
 @observer
 export default class ProgrammingSubmissions extends React.Component<IProgrammingSubmissionsProps> {
+  @observable
+  isButtonLoading = false;
+
   @computed
   get submissions() {
     return this.props.$OneAssignment!.submissions;
@@ -45,9 +50,21 @@ export default class ProgrammingSubmissions extends React.Component<IProgramming
     return Math.max(0, ...this.submissions.map(({ grade }) => grade || 0));
   }
 
+  @asyncAction
+  * LoadOneSubmissionFromHistory(subCaId: number) {
+    const { $OneAssignment, $$Programming } = this.props;
+    this.isButtonLoading = true;
+    $OneAssignment!.changeTab(ProgrammingKeys.GradeFeedback);
+    yield $$Programming!.LoadOneSubmission({
+      course_id: $OneAssignment!.assignment.course_id,
+      ca_id: $OneAssignment!.assignment.ca_id,
+      sub_ca_id: subCaId
+    });
+    this.isButtonLoading = false;
+  }
+
   getClickHandler = (subCaId: number) => () => {
-    this.props.$OneAssignment!.changeTab(ProgrammingKeys.GradeFeedback);
-    this.props.onDetail({ sub_ca_id: subCaId });
+    this.LoadOneSubmissionFromHistory(subCaId);
   }
 
   @computed
@@ -56,6 +73,7 @@ export default class ProgrammingSubmissions extends React.Component<IProgramming
       {
         dataIndex: 'sub_ca_id', key: 'action', title: '操作', render: (subCaId) => (
           <Button
+            loading={ this.isButtonLoading }
             icon={ 'eye' }
             type={ 'ghost' }
             onClick={ this.getClickHandler(subCaId) }
@@ -130,10 +148,4 @@ export default class ProgrammingSubmissions extends React.Component<IProgramming
       </Card>
     ) ];
   }
-}
-
-function statusFromGrade(grade: number | null, [ none, ing, ok ]: [ any, any, any | [ any, any ] ], full?: number) {
-  return grade === null ? none : (grade === -1 ? ing : (
-    Array.isArray(ok) && full ? ((grade * 100 / full) >= 60 ? ok[ 0 ] : ok[ 1 ]) : ok
-  ));
 }

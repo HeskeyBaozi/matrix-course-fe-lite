@@ -152,6 +152,52 @@ export interface ISubmissionItem {
   user_id: number;
 }
 
+export interface IProgrammingConfig {
+  compilers: string[];
+  grading: {
+    'compile check': number;
+    'google tests': number;
+    'google tests detail': {};
+    'memory check': number;
+    'random tests': number;
+    'standard tests': number;
+    'static check': number;
+  };
+  limits: {
+    memory: number;
+    time: number;
+  };
+  submission: string[];
+  standard_score: number;
+}
+
+export interface IProgrammingReport {
+  'compile check': {
+    'compile check': string;
+    continue: boolean;
+    grade: number;
+  };
+  'memory check': {
+    continue: boolean;
+    grade: number;
+  };
+  'standard tests': {
+    continue: boolean;
+    grade: number;
+  };
+  'static check': {
+    continue: boolean;
+    grade: number;
+  };
+}
+
+export interface IProgrammingSubmission {
+  answers: Array<{ code: string, name: string }>;
+  grade: number | null;
+  report: IProgrammingReport;
+  sub_ca_id: number;
+}
+
 // General
 export const RoleMap: IMapper = {
   TA: '助教',

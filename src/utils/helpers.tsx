@@ -27,8 +27,9 @@ export function getBadgeStatus(isSubmitted: boolean, grade: number | null, stand
   ) : [ 'default', '未提交' ];
 }
 
-export function formatter(grade: number, standardScore: number) {
-  return function progressFormat(percent: number) {
-    return `${grade}pts`;
-  };
+export function statusFromGrade(grade: number | null,
+                                [ none, ing, ok ]: [ any, any, any | [ any, any ] ], full?: number) {
+  return grade === null ? none : (grade === -1 ? ing : (
+    Array.isArray(ok) && full ? ((grade * 100 / full) >= 60 ? ok[ 0 ] : ok[ 1 ]) : ok
+  ));
 }

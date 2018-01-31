@@ -1,8 +1,10 @@
 import Info from '@/components/common/Info';
-import MutableCodeEditor, { ICodeEditorDataSource } from '@/components/common/MutableCodeEditor';
+import MutableCodeEditor from '@/components/common/MutableCodeEditor';
 import ScoreBar from '@/components/common/ScoreBar';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
-import { IProgrammingSubmission } from '@/routes/OneAssignment/Programming';
+import { ProgrammingModel } from '@/routes/OneAssignment/Programming/model';
+import { IProgrammingConfig } from '@/types/api';
+import { statusFromGrade } from '@/utils/helpers';
 import { Button, Card, Col, Row } from 'antd';
 import { format } from 'date-fns/esm';
 import { computed } from 'mobx';
@@ -11,39 +13,54 @@ import React from 'react';
 
 interface IProgrammingReportProps {
   $OneAssignment?: OneAssignmentModel;
-  oneSubmission?: IProgrammingSubmission;
-  submitAt?: string;
+  $$Programming?: ProgrammingModel;
 }
 
-@inject('$OneAssignment')
+@inject('$OneAssignment', '$$Programming')
 @observer
 export default class ProgrammingReport extends React.Component<IProgrammingReportProps> {
   @computed
+  get loading() {
+    return !this.props.$$Programming!.isOneSubmissionLoaded;
+  }
+
+  @computed
   get full() {
-    return this.props.$OneAssignment!.assignment.config.standard_score;
+    return this.config.standard_score;
+  }
+
+  @computed
+  get config() {
+    return this.props.$OneAssignment!.assignment.config as IProgrammingConfig;
+  }
+
+  @computed
+  get report() {
+    const { $$Programming } = this.props;
+    return $$Programming!.oneSubmission.report;
   }
 
   @computed
   get one() {
-    return this.props.oneSubmission;
+    const { $$Programming } = this.props;
+    return $$Programming!.oneSubmission;
   }
 
   @computed
-  get submitAt() {
-    return this.props.submitAt;
+  get answerFiles() {
+    const { $$Programming } = this.props;
+    return $$Programming!.answerFiles;
   }
 
   @computed
-  get answerFiles(): ICodeEditorDataSource {
-    const start: ICodeEditorDataSource = new Map();
-    return this.one!.answers
-      .reduce((acc, file) => {
-        acc.set(file.name, {
-          readOnly: true,
-          value: file.code
-        });
-        return acc;
-      }, start);
+  get formatTime() {
+    const { $$Programming } = this.props;
+    return format($$Programming!.submitAt, 'YYYY-MM-DD HH:mm:SS');
+  }
+
+  @computed
+  get checkResponsiveProps() {
+    return { xl: 12, lg: 24, md: 24, sm: 24, xs: 24, style: { marginBottom: '1rem' } };
   }
 
   @computed
@@ -56,27 +73,31 @@ export default class ProgrammingReport extends React.Component<IProgrammingRepor
   }
 
   @computed
-  get loading() {
-    return !this.one;
-  }
-
-  @computed
-  get formatTime() {
-    return format(this.submitAt!, 'YYYY-MM-DD HH:mm');
+  get CompileCheck() {
+    return this.report[ 'compile check' ] && this.config.grading[ 'compile check' ] ? (
+      <Col { ...this.checkResponsiveProps }>
+        <Card key={ 'compile-check' } title={ 'Compile Check' } loading={ this.loading }>
+          123
+        </Card>
+      </Col>
+    ) : null;
   }
 
   render() {
-    return !this.loading ? [ (
-      <Card key={ 'meta' } style={ { marginBottom: '1rem' } }>
+    return [ (
+      <Card key={ 'meta' } style={ { marginBottom: '1rem' } } loading={ this.loading }>
         <Row>
           <Col sm={ 8 } xs={ 24 }>
-            <Info title={ '提交ID' } value={ this.one!.sub_ca_id } bordered={ true }/>
+            <Info title={ '提交ID' } value={ this.one.sub_ca_id } bordered={ true }/>
           </Col>
           <Col sm={ 8 } xs={ 24 }>
             <Info title={ '提交时间' } value={ this.formatTime } bordered={ true }/>
           </Col>
           <Col sm={ 8 } xs={ 24 }>
-            <Info title={ '当前成绩' } value={ this.one!.grade || 0 }/>
+            <Info
+              title={ '当前成绩' }
+              value={ statusFromGrade(this.one.grade, [ 'Waiting for judging', 'Under judging', this.one.grade ]) }
+            />
           </Col>
         </Row>
         <ScoreBar
@@ -84,17 +105,21 @@ export default class ProgrammingReport extends React.Component<IProgrammingRepor
           isSubmitted={ true }
           full={ this.full }
           strokeWidth={ 8 }
-          grade={ this.one!.grade }
+          grade={ this.one.grade }
         />
       </Card>
     ), (
-      <Card key={ 'submitted-code' }>
+      <Row key={ 'check' }>
+        { this.CompileCheck }
+      </Row>
+    ), (
+      <Card key={ 'submitted-code' } loading={ this.loading }>
         <MutableCodeEditor
           mutableDataSource={ this.answerFiles }
           extraDataSource={ null }
           extra={ this.Extra }
         />
       </Card>
-    ) ] : null;
+    ) ];
   }
 }
