@@ -6,7 +6,7 @@ import ProgrammingSubmissions from '@/routes/OneAssignment/Programming/Submissio
 import ProgrammingSubmit from '@/routes/OneAssignment/Programming/Submit';
 import { ProgrammingKeys } from '@/types/constants';
 import { Tabs } from 'antd';
-import { computed } from 'mobx';
+import { computed, observable } from 'mobx';
 import { inject, observer, Provider } from 'mobx-react';
 import React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
@@ -21,6 +21,7 @@ interface IProgrammingProps extends RouteComponentProps<{ course_id: string, ca_
 @observer
 class Programming extends React.Component<IProgrammingProps> {
 
+  @observable
   $$Programming = new ProgrammingModel();
 
   @computed
@@ -29,14 +30,17 @@ class Programming extends React.Component<IProgrammingProps> {
     return $OneAssignment!.tabActiveKey;
   }
 
-  componentDidMount() {
-    const { assignment: { course_id, ca_id }, submissions } = this.props.$OneAssignment!;
-    if (submissions.length) {
-      const { sub_ca_id } = submissions[ 0 ];
-      this.$$Programming.LoadOneSubmission({
-        course_id, ca_id, sub_ca_id
-      });
-    }
+  constructor(props: any) {
+    super(props);
+    console.log('const', this.$$Programming);
+  }
+
+  async componentDidMount() {
+    console.log('DidMount', this.$$Programming);
+    const { assignment: { course_id, ca_id } } = this.props.$OneAssignment!;
+    await this.$$Programming.LoadLastSubmission({
+      course_id, ca_id
+    });
   }
 
   render() {

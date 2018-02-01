@@ -1,12 +1,11 @@
 import PageWithHeader from '@/components/common/PageWithHeader';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { AssignmentTimeStatusMap, AssignmentTimeStatusTextMap } from '@/types/api';
-import { ProgrammingKeys, PType } from '@/types/constants';
+import { PType } from '@/types/constants';
 import { OneAssignmentProgrammingRoute } from '@/utils/dynamic';
-import 'codemirror/lib/codemirror.css';
 import { format } from 'date-fns/esm';
 import { computed } from 'mobx';
-import { inject, observer } from 'mobx-react';
+import { inject, observer, Provider } from 'mobx-react';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -19,16 +18,20 @@ interface IOneAssignment extends RouteComponentProps<IOneAssignmentParams> {
   $OneAssignment?: OneAssignmentModel;
 }
 
-const test = () => <div>HomeTest</div>;
+const Test = () => <div>HomeTest</div>;
 
 @inject('$OneAssignment')
 @observer
 export default class OneAssignment extends React.Component<IOneAssignment> {
 
   @computed
+  get $OneAssignment() {
+    return this.props.$OneAssignment!;
+  }
+
+  @computed
   get descriptionsList() {
-    const { $OneAssignment } = this.props;
-    const { assignment } = $OneAssignment!;
+    const { assignment } = this.$OneAssignment;
     return [
       {
         term: '题型',
@@ -59,43 +62,39 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
 
   @computed
   get AssignmentView() {
-    const { $OneAssignment } = this.props;
-    switch ($OneAssignment!.assignment.ptype_id) {
+    switch (this.$OneAssignment.isDetailLoaded && this.$OneAssignment.assignment.ptype_id) {
       case PType.Programming:
-        return OneAssignmentProgrammingRoute;
+        return <OneAssignmentProgrammingRoute/>;
       default:
-        return test;
+        return <Test/>;
     }
   }
 
-  componentDidMount() {
-    const { $OneAssignment, match } = this.props;
+  async componentDidMount() {
+    const { match } = this.props;
     const { ca_id, course_id } = match.params;
-    $OneAssignment!.LoadOneAssignment({
+    await this.$OneAssignment.LoadOneAssignment({
       ca_id: Number.parseInt(ca_id),
       course_id: Number.parseInt(course_id)
     });
   }
 
   componentWillUnmount() {
-    const { $OneAssignment } = this.props;
-    $OneAssignment!.changeTab(ProgrammingKeys.Description);
+    this.$OneAssignment.resetTab();
   }
 
   render() {
-    const { $OneAssignment } = this.props;
-    const { assignment } = $OneAssignment!;
-
+    const { assignment } = this.$OneAssignment;
     return (
       <PageWithHeader
-        loading={ !$OneAssignment!.isDetailLoaded }
+        loading={ !this.$OneAssignment.isDetailLoaded }
         title={ assignment.title }
-        badgeStatus={ AssignmentTimeStatusMap[ $OneAssignment!.timeStatus ] }
-        badgeText={ AssignmentTimeStatusTextMap[ $OneAssignment!.timeStatus ] }
+        badgeStatus={ AssignmentTimeStatusMap[ this.$OneAssignment.timeStatus ] }
+        badgeText={ AssignmentTimeStatusTextMap[ this.$OneAssignment.timeStatus ] }
         descriptionsList={ this.descriptionsList }
         col={ 2 }
       >
-        <this.AssignmentView/>
+        { this.AssignmentView }
       </PageWithHeader>
     );
   }

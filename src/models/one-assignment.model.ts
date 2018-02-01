@@ -46,12 +46,6 @@ export class OneAssignmentModel {
   isDetailLoaded = false;
 
   @observable
-  hasLastSubmission = false;
-
-  @observable
-  isLastSubmitLoaded = false;
-
-  @observable
   tabActiveKey: GeneralKey = ProgrammingKeys.Description;
 
   @action
@@ -62,11 +56,6 @@ export class OneAssignmentModel {
   @action
   needReload() {
     this.isDetailLoaded = false;
-  }
-
-  @computed
-  get isBaseInformationLoaded() {
-    return this.isDetailLoaded && this.isLastSubmitLoaded;
   }
 
   @computed
@@ -142,5 +131,10 @@ export class OneAssignmentModel {
       this.submissions = [];
     }
     this.isSubmissionsLoaded = true;
+  }
+
+  @action
+  resetTab() {
+    this.changeTab(ProgrammingKeys.Description);
   }
 }

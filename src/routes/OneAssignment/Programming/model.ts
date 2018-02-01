@@ -1,4 +1,7 @@
-import { FetchOneSubmission, IOneAssignmentOneSubmissionArgs } from '@/api/one-assignment';
+import {
+  FetchLastSubmission, FetchOneSubmission, IOneAssignmentArgs,
+  IOneAssignmentOneSubmissionArgs
+} from '@/api/one-assignment';
 import { ICodeEditorDataSource } from '@/components/common/MutableCodeEditor';
 import { IProgrammingSubmission } from '@/types/api';
 import { computed, observable } from 'mobx';
@@ -9,25 +12,7 @@ export class ProgrammingModel {
   oneSubmission: IProgrammingSubmission = {
     answers: [],
     grade: null,
-    report: {
-      'compile check': {
-        'compile check': '',
-        'continue': false,
-        'grade': 0
-      },
-      'memory check': {
-        continue: false,
-        grade: 0
-      },
-      'standard tests': {
-        continue: false,
-        grade: 0
-      },
-      'static check': {
-        continue: false,
-        grade: 0
-      }
-    },
+    report: {},
     sub_ca_id: 0
   };
 
@@ -58,6 +43,23 @@ export class ProgrammingModel {
         data: { data: one, paramData: { submission: { submit_at } } }
       } = yield FetchOneSubmission<IProgrammingSubmission>({
         course_id, ca_id, sub_ca_id
+      });
+      this.oneSubmission = one;
+      this.submitAt = submit_at;
+    } catch (error) {
+      throw error;
+    }
+    this.isOneSubmissionLoaded = true;
+  }
+
+  @asyncAction
+  * LoadLastSubmission({ course_id, ca_id }: IOneAssignmentArgs) {
+    this.isOneSubmissionLoaded = false;
+    try {
+      const {
+        data: { data: one, paramData: { submission: { submit_at } } }
+      } = yield FetchLastSubmission<IProgrammingSubmission>({
+        course_id, ca_id
       });
       this.oneSubmission = one;
       this.submitAt = submit_at;

@@ -45,6 +45,10 @@ export default class BasicLayout extends React.Component<ILoginLayoutProps> {
     return $Profile!.avatarUrl.length ? $Profile!.avatarUrl : void 0;
   }
 
+  menuRef = (ref: any) => {
+    this.props.$Global!.setRef(ref);
+  }
+
   @computed
   get Sider() {
     const { $Global } = this.props;

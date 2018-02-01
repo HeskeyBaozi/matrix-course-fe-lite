@@ -1,7 +1,6 @@
 import MutableCodeEditor, { ICodeEditorDataSource } from '@/components/common/MutableCodeEditor';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
-import { IProgrammingConfig } from '@/routes/OneAssignment/Programming';
-import { IAssignment } from '@/types/api';
+import { IAssignment, IProgrammingConfig } from '@/types/api';
 import { Button, Card, Col, Icon, Row, Switch } from 'antd';
 import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';

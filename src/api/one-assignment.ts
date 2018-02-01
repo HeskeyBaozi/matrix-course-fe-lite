@@ -17,8 +17,8 @@ export function FetchAssignmentDetail({ course_id, ca_id }: IOneAssignmentArgs) 
 
 // https://api.vmatrix.org.cn/#/course_assignment_submission
 // /get_api_courses__course_id__assignments__ca_id__submissions_last
-export function FetchLastSubmission({ course_id, ca_id }: IOneAssignmentArgs) {
-  return xiosSilence.get<IMatrixResponse<any>>(`/api/courses/${course_id}/assignments/${ca_id}/submissions/last`);
+export function FetchLastSubmission<S>({ course_id, ca_id }: IOneAssignmentArgs) {
+  return xiosSilence.get<IMatrixResponse<S>>(`/api/courses/${course_id}/assignments/${ca_id}/submissions/last`);
 }
 
 // https://api.vmatrix.org.cn/#/course_assignment_submission/get_api_courses__course_id__assignments__ca_id__submissions

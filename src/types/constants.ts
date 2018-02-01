@@ -1,3 +1,4 @@
+import { IMapper } from '@/types/api';
 import { IBreadCrumbNameMap } from '@/types/common';
 
 // tslint:disable:object-literal-sort-keys
@@ -33,3 +34,13 @@ export enum ProgrammingKeys {
   Rank = 'rank',
   Discussions = 'discussions'
 }
+
+export const TestResultMapper: IMapper = {
+  WA: 'Wrong Answer',
+  TL: 'Time Limit',
+  CR: 'Correct',
+  ML: 'Memory Limit',
+  RE: 'Runtime Error',
+  IE: 'Internal Error',
+  OL: 'Output Limit'
+};

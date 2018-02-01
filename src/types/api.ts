@@ -162,6 +162,7 @@ export interface IProgrammingConfig {
     'random tests': number;
     'standard tests': number;
     'static check': number;
+    [key: string]: number | object;
   };
   limits: {
     memory: number;
@@ -172,23 +173,61 @@ export interface IProgrammingConfig {
 }
 
 export interface IProgrammingReport {
-  'compile check': {
+  'compile check'?: {
     'compile check': string;
     continue: boolean;
     grade: number;
   };
-  'memory check': {
+  'memory check'?: {
     continue: boolean;
     grade: number;
   };
-  'standard tests': {
+  'standard tests'?: {
     continue: boolean;
     grade: number;
+    'standard tests': Array<{
+      memoryused?: number;
+      message: string;
+      result: string;
+      stdin: string;
+      stdout: string;
+      timeused?: number;
+      memorylimit?: number;
+      timelimit?: number;
+      standard_stdout?: string;
+    }>;
   };
-  'static check': {
+  'static check'?: {
     continue: boolean;
     grade: number;
+    'static check': {
+      clangStaticAnalyzer: any[];
+      summary: {
+        numberOfFiles: number;
+        numberOfFilesWithViolations: number;
+        numberOfViolationsWithPriority: Array<{ number: number, priority: number }>
+      };
+      timestamp: number;
+      url: string;
+      version: string;
+      violation: Array<{
+        category: string;
+        endColumn: number;
+        endLine: number;
+        message?: string;
+        path: string;
+        priority: number;
+        rule: string;
+        startColumn: number;
+        startLine: number;
+      }>;
+    };
   };
+
+  [key: string]: {
+    continue: boolean;
+    grade: number;
+  } | undefined;
 }
 
 export interface IProgrammingSubmission {
@@ -226,6 +265,6 @@ interface IBadgeMapper {
   [key: string]: 'success' | 'error' | 'default' | 'processing' | 'warning';
 }
 
-interface IMapper {
+export interface IMapper {
   [ key: string ]: string;
 }
