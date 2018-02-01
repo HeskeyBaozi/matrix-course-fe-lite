@@ -172,6 +172,43 @@ export interface IProgrammingConfig {
   standard_score: number;
 }
 
+export interface IProgrammingValgrindoutput {
+  args: {
+    argv: { exe: string };
+    vargv: { arg: string[], exe: string };
+  };
+  error: Array<{
+    kind: string;
+    stack: {
+      frame: Array<{
+        dir?: string;
+        file?: string;
+        fn: string;
+        ip: string;
+        line?: string;
+        obj: string;
+      }>;
+    };
+    what?: string;
+    tid: string;
+    unique: string;
+  }>;
+  errorcounts: any | null;
+  pid: string;
+  ppid: string;
+  preamble: {
+    line: string[];
+  };
+  protocoltool: string;
+  protocolversion: string;
+  status: Array<{
+    time: string;
+    state: string;
+  }>;
+  suppcounts: any | null;
+  tool: string;
+}
+
 export interface IProgrammingReport {
   'compile check'?: {
     'compile check': string;
@@ -181,6 +218,11 @@ export interface IProgrammingReport {
   'memory check'?: {
     continue: boolean;
     grade: number;
+    'memory check': Array<{
+      stdin: string;
+      message?: string;
+      valgrindoutput: IProgrammingValgrindoutput;
+    }>;
   };
   'standard tests'?: {
     continue: boolean;
@@ -223,11 +265,22 @@ export interface IProgrammingReport {
       }>;
     };
   };
-
-  [key: string]: {
+  'random tests'?: {
     continue: boolean;
     grade: number;
-  } | undefined;
+    'random tests': Array<{
+      memoryused?: number;
+      message?: string;
+      re_signum: number;
+      result: string;
+      standard_stdout?: string;
+      stdin: string;
+      stdout: string;
+      timeused?: number;
+      memorylimit?: number;
+      timelimit?: number;
+    }>;
+  };
 }
 
 export interface IProgrammingSubmission {

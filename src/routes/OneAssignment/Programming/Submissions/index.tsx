@@ -22,9 +22,6 @@ interface IProgrammingSubmissionsProps {
 @inject('$OneAssignment', '$$Programming')
 @observer
 export default class ProgrammingSubmissions extends React.Component<IProgrammingSubmissionsProps> {
-  @observable
-  isButtonLoading = false;
-
   @computed
   get submissions() {
     return this.props.$OneAssignment!.submissions;
@@ -55,14 +52,12 @@ export default class ProgrammingSubmissions extends React.Component<IProgramming
   @asyncAction
   * LoadOneSubmissionFromHistory(subCaId: number) {
     const { $OneAssignment, $$Programming } = this.props;
-    this.isButtonLoading = true;
     $OneAssignment!.changeTab(ProgrammingKeys.GradeFeedback);
     yield $$Programming!.LoadOneSubmission({
       course_id: $OneAssignment!.assignment.course_id,
       ca_id: $OneAssignment!.assignment.ca_id,
       sub_ca_id: subCaId
     });
-    this.isButtonLoading = false;
   }
 
   getClickHandler = (subCaId: number) => () => {
@@ -75,7 +70,6 @@ export default class ProgrammingSubmissions extends React.Component<IProgramming
       {
         dataIndex: 'sub_ca_id', key: 'action', title: '操作', render: (subCaId) => (
           <Button
-            loading={ this.isButtonLoading }
             icon={ 'eye' }
             type={ 'ghost' }
             onClick={ this.getClickHandler(subCaId) }
