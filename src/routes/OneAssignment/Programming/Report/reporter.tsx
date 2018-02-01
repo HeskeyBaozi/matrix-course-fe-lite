@@ -29,16 +29,15 @@ export default class ProgrammingReporter extends React.Component<IProgrammingRep
   }
 
   @computed
-  get allChecks(): [ 'compile check', 'memory check', 'standard tests', 'static check', 'random tests' ] {
-    return [ 'compile check', 'memory check', 'standard tests', 'static check', 'random tests' ];
+  get allChecks(): [ 'compile check', 'memory check', 'standard tests',
+    'static check', 'random tests', 'google tests' ] {
+    return [ 'compile check', 'memory check', 'standard tests', 'static check', 'random tests', 'google tests' ];
   }
 
   @computed
   get defaultExpandKeys() {
-
     return this.allChecks.filter((key) => {
-      return this.config.grading[ key ] && !this.report[ key ]!.continue
-        || this.config.grading[ key ] && this.report[ key ]!.grade < this.config.grading[ key ];
+      return this.config.grading[ key ] && this.report[ key ] && this.report[ key ]!.grade < this.config.grading[ key ];
     });
   }
 
@@ -59,8 +58,10 @@ export default class ProgrammingReporter extends React.Component<IProgrammingRep
       const message = `You Get ${report.grade} Points of ${grading} Points.`;
       const description = isContinue ?
         'Pass compilation. You got full score!' : 'Compilation fail.';
-      const Code = isContinue ? null :
-        <CodeBlock value={ report[ 'compile check' ] || '' } markdown={ true } readOnly={ true }/>;
+      const Code = isContinue ? null : (
+        <div style={ { padding: '.5rem' } }>
+          <code>{ report[ 'compile check' ] || '' }</code>
+        </div>);
       return grading ? (
         <Panel key={ 'compile check' } header={ header } style={ { border: '0' } }>
           <Alert
@@ -464,6 +465,71 @@ export default class ProgrammingReporter extends React.Component<IProgrammingRep
     return null;
   }
 
+  @computed
+  get GoogleTest(): ReactNode {
+    const report = this.report[ 'google tests' ];
+    if (report) {
+      const grading = this.config.grading[ 'google tests' ];
+      const isContinue = report.grade === grading;
+      const message = `You Get ${report.grade} Points of ${grading} Points.`;
+      const header = (
+        <span>{ 'Google Tests' } <Badge
+          style={ { marginLeft: '.3rem' } }
+          status={ isContinue ? 'success' : 'error' }
+          text={ `${report.grade} / ${grading}` }
+        /></span>
+      );
+      const description = report.grade === grading
+        ? 'Pass Google test. You got full score!'
+        : 'Google test fail.';
+      const check = report[ 'google tests' ].find((one) => !!(one.gtest && one.gtest.failure));
+      let logs = null;
+      if (check) {
+
+        const msg = check.message ? (
+          <Alert
+            showIcon={ true }
+            type={ 'warning' }
+            message={ check.message }
+            style={ { marginBottom: '.5rem' } }
+          />) : null;
+
+        const failures = check.gtest.failure.map((dict) => {
+          const fnName = Object.keys(dict)[ 0 ];
+          const value = dict[ fnName ];
+          return [ fnName, value ];
+        }) as Array<[ string, number ]>;
+
+        const text = check.gtest.info
+          ? failures.map(([ fnName, value ]) => {
+            return `[ failure ] ${fnName}: ${check.gtest.info[ fnName ]} - ${value} points.`;
+          }).join('\n')
+          : `Error : ${check.gtest.failure[ 0 ].error}`;
+
+        logs = (
+          <div>
+            { msg }
+            <CodeBlock value={ text } markdown={ true } readOnly={ true }/>
+          </div>
+        );
+      }
+      return grading ? (
+          <Panel key={ 'google tests' } header={ header } style={ { border: '0' } }>
+            <Alert
+              showIcon={ true }
+              type={ isContinue ? 'success' : 'error' }
+              message={ message }
+              style={ { marginBottom: '.5rem' } }
+              description={ description }
+            />
+            { logs }
+          </Panel>
+        ) :
+        null;
+    }
+    return null;
+  }
+
   render() {
     return (
       <Collapse bordered={ false } defaultActiveKey={ this.defaultExpandKeys }>
@@ -472,6 +538,7 @@ export default class ProgrammingReporter extends React.Component<IProgrammingRep
         { this.StandardTests }
         { this.RandomTests }
         { this.MemoryCheck }
+        { this.GoogleTest }
       </Collapse>
     );
   }

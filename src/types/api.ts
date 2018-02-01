@@ -281,6 +281,20 @@ export interface IProgrammingReport {
       timelimit?: number;
     }>;
   };
+  'google tests'?: {
+    continue: boolean;
+    grade: number;
+    'google tests': Array<{
+      gtest: {
+        grade: number;
+        failure: Array<{ [key: string]: number }>;
+        info: {
+          [key: string]: string;
+        };
+      };
+      message?: string;
+    }>;
+  };
 }
 
 export interface IProgrammingSubmission {
