@@ -98,7 +98,7 @@ export default class ProgrammingSubmissions extends React.Component<IProgramming
       {
         dataIndex: 'submit_at',
         key: 'submit_at_time', title: '提交时间',
-        render: (text) => `${formatDistance(text, Date.now())} / ${format(text, 'HH:mm A, Do MMM. YYYY')}`,
+        render: (text) => `${formatDistance(text, Date.now())} ago / ${format(text, 'HH:mm A, Do MMM. YYYY')}`,
         sorter: (a, b) => compareAsc(a.submit_at, b.submit_at),
         defaultSortOrder: 'descend'
       }
@@ -132,16 +132,16 @@ export default class ProgrammingSubmissions extends React.Component<IProgramming
         </Col>
       </Row>
     ), (
-      <Card key={ 'submissions-table' }>
-        <SubmissionsTable
-          bordered={ true }
-          loading={ !this.isSubmissionsLoaded }
-          rowKey={ 'sub_ca_id' }
-          dataSource={ this.submissions.slice() }
-          columns={ this.columns }
-          pagination={ this.pagination }
-        />
-      </Card>
+      <SubmissionsTable
+        key={ 'submission-table' }
+        bodyStyle={ { backgroundColor: 'white' } }
+        bordered={ true }
+        loading={ !this.isSubmissionsLoaded }
+        rowKey={ 'sub_ca_id' }
+        dataSource={ this.submissions.slice() }
+        columns={ this.columns }
+        pagination={ this.pagination }
+      />
     ) ];
   }
 }

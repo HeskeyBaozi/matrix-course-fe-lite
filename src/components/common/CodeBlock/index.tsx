@@ -2,10 +2,10 @@ import { getMimeFromExt } from '@/components/common/CodeBlock/language';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/javascript/javascript';
-import { action, computed, observable } from 'mobx';
+import { action, computed } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
-import { Controlled as CodeMirror, IInstance } from 'react-codemirror2';
+import { IInstance, UnControlled as CodeMirror } from 'react-codemirror2';
 import './code.less';
 import './github.theme.less';
 
@@ -22,12 +22,14 @@ interface ICodeBlockProps {
 @observer
 export default class CodeBlock extends React.Component<ICodeBlockProps> {
 
-  @observable
-  code = this.props.value || '';
+  @computed
+  get code() {
+    return this.props.value || '';
+  }
 
   @action
   onBeforeChange = (editor: IInstance, data: any, value: string) => {
-    this.code = value;
+    // this.code = value;
   }
 
   @action
@@ -57,7 +59,6 @@ export default class CodeBlock extends React.Component<ICodeBlockProps> {
         className={ this.props.className }
         value={ this.code }
         options={ this.CodeOptions }
-        onBeforeChange={ this.onBeforeChange }
         onChange={ this.onChangeLocal }
       />
     );

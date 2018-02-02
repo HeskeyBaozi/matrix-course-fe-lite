@@ -5,8 +5,9 @@ import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { ProgrammingModel } from '@/routes/OneAssignment/Programming/model';
 import ProgrammingReporter from '@/routes/OneAssignment/Programming/Report/reporter';
 import { IProgrammingConfig } from '@/types/api';
+import { AssignmentTimeStatus, ProgrammingKeys } from '@/types/constants';
 import { statusFromGrade } from '@/utils/helpers';
-import { Button, Card, Col, Row } from 'antd';
+import { Button, Card, Col, Modal, Row } from 'antd';
 import { format } from 'date-fns/esm';
 import { computed } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -69,7 +70,7 @@ export default class ProgrammingReport extends React.Component<IProgrammingRepor
   @computed
   get formatTime() {
     const { $$Programming } = this.props;
-    return format($$Programming!.submitAt, 'YYYY-MM-DD HH:mm:SS');
+    return format($$Programming!.submitAt, 'YYYY-MM-DD HH:mmA');
   }
 
   @computed
@@ -89,18 +90,47 @@ export default class ProgrammingReport extends React.Component<IProgrammingRepor
     ]);
   }
 
+  handleClickEdit = () => {
+    const { $$Programming, $OneAssignment } = this.props;
+    const content = [
+      <div key={ 'pt1' }>你将会<strong style={ { fontSize: '1rem' } }>丢失</strong>当前提交编辑框中的代码,</div>,
+      <div key={ 'pt2' }>推荐先将其保存到本地作为备份.</div>
+    ];
+    const ref = Modal.confirm({
+      title: '确定编辑此提交的代码吗?',
+      content,
+      zIndex: 10000,
+      iconType: 'warning',
+      maskClosable: true,
+      onOk: () => {
+        ref.destroy();
+        $$Programming!.LoadCurrentSubmissionAnswers();
+        $OneAssignment!.changeTab(ProgrammingKeys.Submit);
+      },
+      onCancel: () => {
+        ref.destroy();
+      }
+    });
+  }
+
   @computed
   get Extra() {
+    const { $OneAssignment } = this.props;
     return (
       <div>
-        <Button icon={ 'edit' }>编辑代码</Button>
+        <Button
+          icon={ 'edit' }
+          disabled={ $OneAssignment!.timeStatus !== AssignmentTimeStatus.InProgressing }
+          onClick={ this.handleClickEdit }
+        >编辑代码
+        </Button>
       </div>
     );
   }
 
   render() {
     return this.isShown ? [ (
-      <Card key={ 'meta' } style={ { marginBottom: '1rem' } } loading={ this.loading }>
+      <Card key={ 'meta' } style={ { marginBottom: '1rem' } }>
         <Row>
           <Col sm={ 8 } xs={ 24 }>
             <Info title={ '提交ID' } value={ this.submitIdText } bordered={ true }/>
@@ -121,11 +151,11 @@ export default class ProgrammingReport extends React.Component<IProgrammingRepor
         />
       </Card>
     ), (
-      <Card key={ 'check' } loading={ this.loading } style={ { marginBottom: '1rem' } }>
-        <ProgrammingReporter config={ this.config } report={ this.report }/>
+      <Card key={ 'check' } loading={ this.loading || this.report === null } style={ { marginBottom: '1rem' } }>
+        <ProgrammingReporter config={ this.config } report={ this.report || {} }/>
       </Card>
     ), (
-      <Card key={ 'submitted-code' } loading={ this.loading }>
+      <Card key={ 'submitted-code' }>
         <MutableCodeEditor
           mutableDataSource={ this.answerFiles }
           extraDataSource={ null }

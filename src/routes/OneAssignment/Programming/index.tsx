@@ -1,6 +1,7 @@
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import ProgrammingDescription from '@/routes/OneAssignment/Programming/Description';
 import { ProgrammingModel } from '@/routes/OneAssignment/Programming/model';
+import { ProgrammingRank } from '@/routes/OneAssignment/Programming/Rank';
 import ProgrammingReport from '@/routes/OneAssignment/Programming/Report';
 import ProgrammingSubmissions from '@/routes/OneAssignment/Programming/Submissions';
 import ProgrammingSubmit from '@/routes/OneAssignment/Programming/Submit';
@@ -30,17 +31,12 @@ class Programming extends React.Component<IProgrammingProps> {
     return $OneAssignment!.tabActiveKey;
   }
 
-  constructor(props: any) {
-    super(props);
-    console.log('const', this.$$Programming);
-  }
-
   async componentDidMount() {
-    console.log('DidMount', this.$$Programming);
     const { assignment: { course_id, ca_id } } = this.props.$OneAssignment!;
-    await this.$$Programming.LoadLastSubmission({
-      course_id, ca_id
-    });
+    await Promise.all([
+      this.$$Programming.LoadLastSubmission({ course_id, ca_id }),
+      this.$$Programming.LoadRanks({ course_id, ca_id })
+    ]);
   }
 
   render() {
@@ -61,6 +57,9 @@ class Programming extends React.Component<IProgrammingProps> {
           </TabPane>
           <TabPane key={ ProgrammingKeys.Recordings } tab={ ProgrammingKeys.Recordings }>
             <ProgrammingSubmissions/>
+          </TabPane>
+          <TabPane key={ ProgrammingKeys.Rank } tab={ ProgrammingKeys.Rank }>
+            <ProgrammingRank/>
           </TabPane>
         </Tabs>
       </Provider>

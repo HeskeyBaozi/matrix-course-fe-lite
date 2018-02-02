@@ -300,8 +300,20 @@ export interface IProgrammingReport {
 export interface IProgrammingSubmission {
   answers: Array<{ code: string, name: string }>;
   grade: number | null;
-  report: IProgrammingReport;
+  report: IProgrammingReport | null;
   sub_ca_id: number;
+}
+
+export interface IRanksItem {
+  grade: number;
+  lastSubmissionTime: string;
+  nickname: string;
+  submissionTimes: number;
+  user_id: number;
+}
+
+export interface IProgrammingSubmitDetail {
+  answers: Array<{ name: string, code: string }>;
 }
 
 // General

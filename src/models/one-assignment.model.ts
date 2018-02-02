@@ -64,11 +64,10 @@ export class OneAssignmentModel {
       case PType.Programming:
         return [
           { tab: '题目描述', key: ProgrammingKeys.Description, icon: 'file-text' },
-          { tab: '提交', key: ProgrammingKeys.Submit, icon: 'upload' },
+          { tab: '当前提交', key: ProgrammingKeys.Submit, icon: 'upload' },
           { tab: '成绩反馈', key: ProgrammingKeys.GradeFeedback, icon: 'check' },
           { tab: '历史记录', key: ProgrammingKeys.Recordings, icon: 'calendar' },
-          { tab: '排名', key: ProgrammingKeys.Rank, icon: 'bar-chart' },
-          { tab: '讨论', key: ProgrammingKeys.Discussions, icon: 'message' }
+          { tab: '排名分布', key: ProgrammingKeys.Rank, icon: 'bar-chart' }
         ] as Array<ItabItem<ProgrammingKeys>>;
       case PType.Choice:
         return [];

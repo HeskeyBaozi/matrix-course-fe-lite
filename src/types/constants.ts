@@ -31,8 +31,7 @@ export enum ProgrammingKeys {
   Submit = 'submit',
   GradeFeedback = 'grade-feedback',
   Recordings = 'recordings',
-  Rank = 'rank',
-  Discussions = 'discussions'
+  Rank = 'rank'
 }
 
 export const TestResultMapper: IMapper = {

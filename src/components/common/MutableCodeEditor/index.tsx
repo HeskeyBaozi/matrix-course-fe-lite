@@ -18,18 +18,13 @@ interface ICodeEditor {
 export default class MutableCodeEditor extends React.Component<ICodeEditor> {
 
   @computed
-  get dataSource() {
-    return this.props.mutableDataSource;
-  }
-
-  @computed
   get extraDataSource() {
     return this.props.extraDataSource;
   }
 
   @action
   onChange = (filename: string, value: string) => {
-    const target = this.dataSource.get(filename);
+    const target = this.props.mutableDataSource.get(filename);
     if (target && !target.readOnly) {
       target.value = value;
     }
