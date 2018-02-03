@@ -11,19 +11,17 @@ import { Tabs } from 'antd';
 import { computed, observable } from 'mobx';
 import { inject, observer, Provider } from 'mobx-react';
 import React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router';
 
 const { TabPane } = Tabs;
 
-interface IProgrammingProps extends RouteComponentProps<{ course_id: string, ca_id: string }> {
+interface IProgrammingProps {
   $OneAssignment?: OneAssignmentModel;
 }
 
 @inject('$OneAssignment')
 @observer
-class Programming extends React.Component<IProgrammingProps> {
+export default class Programming extends React.Component<IProgrammingProps> {
 
-  @observable
   $$Programming = new ProgrammingModel();
 
   @computed
@@ -48,10 +46,7 @@ class Programming extends React.Component<IProgrammingProps> {
   render() {
     return (
       <Provider $$Programming={ this.$$Programming }>
-        <Tabs
-          activeKey={ this.activeKey }
-          tabBarStyle={ { display: 'none' } }
-        >
+        <Tabs activeKey={ this.activeKey } tabBarStyle={ { display: 'none' } }>
           <TabPane key={ ProgrammingKeys.Description } tab={ ProgrammingKeys.Description }>
             <ProgrammingDescription/>
           </TabPane>
@@ -75,5 +70,3 @@ class Programming extends React.Component<IProgrammingProps> {
     );
   }
 }
-
-export default withRouter(Programming);

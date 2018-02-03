@@ -297,7 +297,7 @@ export interface IProgrammingReport {
   };
 }
 
-export interface ISubmission<A, R> {
+export interface ISubmission<A extends {}, R extends {}> {
   answers: A[];
   grade: number | null;
   report: R | null;

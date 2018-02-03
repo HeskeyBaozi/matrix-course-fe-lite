@@ -3,7 +3,7 @@ import Loading from '@/components/common/Loading';
 import { LoginModel } from '@/models/login.model';
 import { ILoginBody, ILoginErrorData, ILoginResult, ILoginSuccessData } from '@/types/api';
 import { Button, Form, Icon, Input, notification, Tooltip } from 'antd';
-import { FormComponentProps } from 'antd/lib/form';
+import { FormComponentProps } from 'antd/es/form';
 import classNames from 'classnames';
 import { action, autorunAsync, computed, IReactionDisposer, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';

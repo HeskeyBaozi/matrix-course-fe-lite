@@ -24,7 +24,7 @@ export enum PType {
   ShortAnswer = 6
 }
 
-export type GeneralKey = ProgrammingKeys;
+export type GeneralKey = ProgrammingKeys | ChoiceKeys;
 
 export enum ProgrammingKeys {
   Description = 'description',
@@ -33,6 +33,12 @@ export enum ProgrammingKeys {
   Recordings = 'recordings',
   Rank = 'rank',
   StandardAnswer = 'standard-answer'
+}
+
+export enum ChoiceKeys {
+  Description = 'description',
+  GradeFeedback = 'grade-feedback',
+  Recordings = 'recordings'
 }
 
 export const TestResultMapper: IMapper = {

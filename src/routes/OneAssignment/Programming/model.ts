@@ -1,29 +1,14 @@
 import {
-  FetchAssignmentRank,
-  FetchLastSubmission, FetchOneSubmission, FetchStandardAnswer, IOneAssignmentArgs,
-  IOneAssignmentOneSubmissionArgs, PostOneSubmissions
+  FetchAssignmentRank, FetchStandardAnswer, IOneAssignmentArgs
 } from '@/api/one-assignment';
 import { ICodeEditorDataSource } from '@/components/common/MutableCodeEditor';
-import { IProgrammingReport, IProgrammingSubmitDetail, IRanksItem, ISubmission } from '@/types/api';
+import { OneSubmissionModel } from '@/models/one-submission.model';
+import { IProgrammingReport, IProgrammingSubmitDetail, IRanksItem } from '@/types/api';
 import { action, computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
 
-type IProgrammingSubmission = ISubmission<{ code: string, name: string }, IProgrammingReport>;
-
-export class ProgrammingModel {
-  @observable
-  oneSubmission: IProgrammingSubmission = {
-    answers: [],
-    grade: null,
-    report: {},
-    sub_ca_id: 0
-  };
-
-  @observable
-  submitAt: string = '';
-
-  @observable
-  isOneSubmissionLoaded = false;
+export class ProgrammingModel extends OneSubmissionModel <{ code: string, name: string }
+  , IProgrammingReport, IProgrammingSubmitDetail> {
 
   @observable
   ranks: IRanksItem[] = [];
@@ -59,40 +44,6 @@ export class ProgrammingModel {
   }
 
   @asyncAction
-  * LoadOneSubmission({ course_id, ca_id, sub_ca_id }: IOneAssignmentOneSubmissionArgs) {
-    this.isOneSubmissionLoaded = false;
-    try {
-      const {
-        data: { data: one, paramData: { submission: { submit_at } } }
-      } = yield FetchOneSubmission<IProgrammingSubmission>({
-        course_id, ca_id, sub_ca_id
-      });
-      this.oneSubmission = one;
-      this.submitAt = submit_at;
-    } catch (error) {
-      throw error;
-    }
-    this.isOneSubmissionLoaded = true;
-  }
-
-  @asyncAction
-  * LoadLastSubmission({ course_id, ca_id }: IOneAssignmentArgs) {
-    this.isOneSubmissionLoaded = false;
-    try {
-      const {
-        data: { data: one, paramData: { submission: { submit_at } } }
-      } = yield FetchLastSubmission<IProgrammingSubmission>({
-        course_id, ca_id
-      });
-      this.oneSubmission = one;
-      this.submitAt = submit_at;
-    } catch (error) {
-      throw error;
-    }
-    this.isOneSubmissionLoaded = true;
-  }
-
-  @asyncAction
   * LoadRanks({ course_id, ca_id }: IOneAssignmentArgs) {
     this.isRanksLoaded = false;
     const {
@@ -105,45 +56,10 @@ export class ProgrammingModel {
   }
 
   @asyncAction
-  * SubmitAnswers({ course_id, ca_id }: IOneAssignmentArgs, detail: IProgrammingSubmitDetail) {
-    const { data: { data: result } } = yield PostOneSubmissions<IProgrammingSubmitDetail>({ course_id, ca_id }, detail);
-    return result as { sub_asgn_id: number };
-  }
-
-  @asyncAction
   * LoadStandardAnswer(args: IOneAssignmentArgs) {
     this.isStandardAnswerLoaded = false;
     const { data: { data: standardAnswer } } = yield FetchStandardAnswer<Array<{ name: string, code: string }>>(args);
     this.standardAnswer = standardAnswer;
     this.isStandardAnswerLoaded = true;
-  }
-
-  async untilLastFinishJudging(args: IOneAssignmentOneSubmissionArgs,
-                               time: number, limit: number = 5): Promise<number> {
-    return new Promise<number>(async (resolve, reject) => {
-      let finished = false;
-      let count: number = 0;
-      while (!finished && count < limit) {
-        try {
-          const { data: { data: one } } = await FetchOneSubmission(args);
-          const submission = one as IProgrammingSubmission;
-          if (submission && submission.grade !== null && submission.grade !== -1) {
-            finished = true;
-            resolve(count);
-          }
-        } catch (error) {
-          count--;
-        }
-        if (!finished) {
-          await new Promise((resolve2) => {
-            setTimeout(() => {
-              resolve2();
-            }, time);
-          });
-          count++;
-        }
-      }
-      resolve(count);
-    });
   }
 }

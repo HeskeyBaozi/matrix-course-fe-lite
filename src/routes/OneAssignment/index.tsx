@@ -2,10 +2,10 @@ import PageWithHeader from '@/components/common/PageWithHeader';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { AssignmentTimeStatusMap, AssignmentTimeStatusTextMap } from '@/types/api';
 import { PType } from '@/types/constants';
-import { OneAssignmentProgrammingRoute } from '@/utils/dynamic';
+import { OneAssignmentChoiceRoute, OneAssignmentProgrammingRoute } from '@/utils/dynamic';
 import { format } from 'date-fns/esm';
 import { computed } from 'mobx';
-import { inject, observer, Provider } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import React from 'react';
 import { RouteComponentProps } from 'react-router';
 
@@ -65,6 +65,8 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
     switch (this.$OneAssignment.isDetailLoaded && this.$OneAssignment.assignment.ptype_id) {
       case PType.Programming:
         return <OneAssignmentProgrammingRoute/>;
+      case PType.Choice:
+        return <OneAssignmentChoiceRoute/>;
       default:
         return <Test/>;
     }

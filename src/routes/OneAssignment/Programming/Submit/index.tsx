@@ -174,17 +174,19 @@ export default class ProgrammingSubmit extends React.Component<IProgrammingSubmi
 
       $OneAssignment!.changeTab(ProgrammingKeys.GradeFeedback);
 
-      const count = yield $$Programming!.untilLastFinishJudging({
-        course_id,
-        ca_id,
-        sub_ca_id: sub_asgn_id
-      }, 2500, Infinity);
+      if (!$OneAssignment!.assignment.grade_at_end) {
+        const count = yield $$Programming!.untilLastFinishJudging({
+          course_id,
+          ca_id,
+          sub_ca_id: sub_asgn_id
+        }, 2500, Infinity);
 
-      yield Promise.all([
-        $OneAssignment!.LoadSubmissions({ course_id, ca_id }),
-        $$Programming!.LoadOneSubmission({ course_id, ca_id, sub_ca_id: sub_asgn_id }),
-        $$Programming!.LoadRanks({ course_id, ca_id })
-      ]);
+        yield Promise.all([
+          $OneAssignment!.LoadSubmissions({ course_id, ca_id }),
+          $$Programming!.LoadOneSubmission({ course_id, ca_id, sub_ca_id: sub_asgn_id }),
+          $$Programming!.LoadRanks({ course_id, ca_id })
+        ]);
+      }
     } catch (error) {
       // throw (error);
     }

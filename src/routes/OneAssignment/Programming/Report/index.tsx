@@ -78,13 +78,21 @@ export default class ProgrammingReport extends React.Component<IProgrammingRepor
     );
   }
 
+  @computed
+  get Reporter() {
+    const { $OneAssignment } = this.props;
+    return !$OneAssignment!.assignment.grade_at_end ? (
+      <Card key={ 'check' } loading={ this.loading || this.report === null } style={ { marginBottom: '1rem' } }>
+        <ProgrammingReporter config={ this.config } report={ this.report || {} }/>
+      </Card>
+    ) : null;
+  }
+
   render() {
     const { $$Programming } = this.props;
     return (
       <Feedback submission={ $$Programming!.oneSubmission } submitAt={ $$Programming!.submitAt }>
-        <Card key={ 'check' } loading={ this.loading || this.report === null } style={ { marginBottom: '1rem' } }>
-          <ProgrammingReporter config={ this.config } report={ this.report || {} }/>
-        </Card>
+        { this.Reporter }
         <Card key={ 'submitted-code' }>
           <MutableCodeEditor
             mutableDataSource={ this.answerFiles }

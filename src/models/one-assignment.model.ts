@@ -4,7 +4,7 @@ import {
 } from '@/api/one-assignment';
 import { IAssignment, ISubmissionItem } from '@/types/api';
 import { ItabItem } from '@/types/common';
-import { AssignmentTimeStatus, GeneralKey, ProgrammingKeys, PType } from '@/types/constants';
+import { AssignmentTimeStatus, ChoiceKeys, GeneralKey, ProgrammingKeys, PType } from '@/types/constants';
 import { isAfter, isBefore, isWithinInterval } from 'date-fns/esm';
 import { action, computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
@@ -74,7 +74,11 @@ export class OneAssignmentModel {
         }
         return list;
       case PType.Choice:
-        return [];
+        return [
+          { tab: '题目描述', key: ChoiceKeys.Description, icon: 'file-text' },
+          { tab: '成绩反馈', key: ChoiceKeys.GradeFeedback, icon: 'check' },
+          { tab: '历史记录', key: ChoiceKeys.Recordings, icon: 'calendar' }
+        ];
       case PType.FileUpload:
         return [];
       case PType.ProgramBlankFilling:
