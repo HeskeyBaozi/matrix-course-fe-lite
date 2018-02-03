@@ -62,13 +62,17 @@ export class OneAssignmentModel {
   get tabList(): Array<ItabItem<GeneralKey>> {
     switch (this.assignment.ptype_id) {
       case PType.Programming:
-        return [
+        const list = [
           { tab: '题目描述', key: ProgrammingKeys.Description, icon: 'file-text' },
           { tab: '当前提交', key: ProgrammingKeys.Submit, icon: 'upload' },
           { tab: '成绩反馈', key: ProgrammingKeys.GradeFeedback, icon: 'check' },
           { tab: '历史记录', key: ProgrammingKeys.Recordings, icon: 'calendar' },
           { tab: '排名分布', key: ProgrammingKeys.Rank, icon: 'bar-chart' }
         ] as Array<ItabItem<ProgrammingKeys>>;
+        if (this.assignment.pub_answer) {
+          list.push({ tab: '标准答案', key: ProgrammingKeys.StandardAnswer, icon: 'eye-o' });
+        }
+        return list;
       case PType.Choice:
         return [];
       case PType.FileUpload:

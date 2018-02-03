@@ -14,7 +14,7 @@ interface IProgrammingRank {
 
 @inject('$$Programming')
 @observer
-export class ProgrammingRank extends React.Component<IProgrammingRank> {
+export default class ProgrammingRank extends React.Component<IProgrammingRank> {
 
   @computed
   get loading() {

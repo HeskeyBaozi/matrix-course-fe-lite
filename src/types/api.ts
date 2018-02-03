@@ -121,7 +121,7 @@ export interface IDiscussionItem {
 
 // One Assignment
 
-export interface IAssignment<C = object> {
+export interface IAssignment<C extends { standard_score: number } = { standard_score: number }> {
   asgn_id: number;
   author: {
     realname: string,
@@ -297,10 +297,10 @@ export interface IProgrammingReport {
   };
 }
 
-export interface IProgrammingSubmission {
-  answers: Array<{ code: string, name: string }>;
+export interface ISubmission<A, R> {
+  answers: A[];
   grade: number | null;
-  report: IProgrammingReport | null;
+  report: R | null;
   sub_ca_id: number;
 }
 

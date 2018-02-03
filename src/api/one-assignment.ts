@@ -44,3 +44,8 @@ export function PostOneSubmissions<D>({ course_id, ca_id }: IOneAssignmentArgs, 
     `/api/courses/${course_id}/assignments/${ca_id}/submissions`, { detail }
   );
 }
+
+// https://api.vmatrix.org.cn/#/course_assignment/get_api_courses__course_id__assignments__ca_id__answer
+export function FetchStandardAnswer<A>({ course_id, ca_id }: IOneAssignmentArgs) {
+  return xiosSilence.get<IMatrixResponse<A>>(`/api/courses/${course_id}/assignments/${ca_id}/answer`);
+}

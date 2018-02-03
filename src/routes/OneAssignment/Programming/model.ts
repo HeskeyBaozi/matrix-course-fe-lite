@@ -1,12 +1,14 @@
 import {
   FetchAssignmentRank,
-  FetchLastSubmission, FetchOneSubmission, IOneAssignmentArgs,
+  FetchLastSubmission, FetchOneSubmission, FetchStandardAnswer, IOneAssignmentArgs,
   IOneAssignmentOneSubmissionArgs, PostOneSubmissions
 } from '@/api/one-assignment';
 import { ICodeEditorDataSource } from '@/components/common/MutableCodeEditor';
-import { IProgrammingSubmission, IProgrammingSubmitDetail, IRanksItem } from '@/types/api';
+import { IProgrammingReport, IProgrammingSubmitDetail, IRanksItem, ISubmission } from '@/types/api';
 import { action, computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
+
+type IProgrammingSubmission = ISubmission<{ code: string, name: string }, IProgrammingReport>;
 
 export class ProgrammingModel {
   @observable
@@ -31,6 +33,12 @@ export class ProgrammingModel {
 
   @observable
   currentAnswers: Array<{ code: string, name: string }> = [];
+
+  @observable
+  standardAnswer: Array<{ name: string, code: string }> = [];
+
+  @observable
+  isStandardAnswerLoaded = false;
 
   @computed
   get answerFiles(): ICodeEditorDataSource {
@@ -100,6 +108,14 @@ export class ProgrammingModel {
   * SubmitAnswers({ course_id, ca_id }: IOneAssignmentArgs, detail: IProgrammingSubmitDetail) {
     const { data: { data: result } } = yield PostOneSubmissions<IProgrammingSubmitDetail>({ course_id, ca_id }, detail);
     return result as { sub_asgn_id: number };
+  }
+
+  @asyncAction
+  * LoadStandardAnswer(args: IOneAssignmentArgs) {
+    this.isStandardAnswerLoaded = false;
+    const { data: { data: standardAnswer } } = yield FetchStandardAnswer<Array<{ name: string, code: string }>>(args);
+    this.standardAnswer = standardAnswer;
+    this.isStandardAnswerLoaded = true;
   }
 
   async untilLastFinishJudging(args: IOneAssignmentOneSubmissionArgs,

@@ -1,11 +1,12 @@
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import ProgrammingDescription from '@/routes/OneAssignment/Programming/Description';
 import { ProgrammingModel } from '@/routes/OneAssignment/Programming/model';
-import { ProgrammingRank } from '@/routes/OneAssignment/Programming/Rank';
+import ProgrammingRank from '@/routes/OneAssignment/Programming/Rank';
 import ProgrammingReport from '@/routes/OneAssignment/Programming/Report';
+import ProgrammingStandardAnswer from '@/routes/OneAssignment/Programming/StandardAnswer';
 import ProgrammingSubmissions from '@/routes/OneAssignment/Programming/Submissions';
 import ProgrammingSubmit from '@/routes/OneAssignment/Programming/Submit';
-import { ProgrammingKeys } from '@/types/constants';
+import { AssignmentTimeStatus, ProgrammingKeys } from '@/types/constants';
 import { Tabs } from 'antd';
 import { computed, observable } from 'mobx';
 import { inject, observer, Provider } from 'mobx-react';
@@ -32,11 +33,16 @@ class Programming extends React.Component<IProgrammingProps> {
   }
 
   async componentDidMount() {
-    const { assignment: { course_id, ca_id } } = this.props.$OneAssignment!;
-    await Promise.all([
-      this.$$Programming.LoadLastSubmission({ course_id, ca_id }),
-      this.$$Programming.LoadRanks({ course_id, ca_id })
-    ]);
+    const { assignment: { course_id, ca_id, pub_answer }, timeStatus } = this.props.$OneAssignment!;
+    const args = { course_id, ca_id };
+    const loadList: any[] = [
+      this.$$Programming.LoadLastSubmission(args),
+      this.$$Programming.LoadRanks(args)
+    ];
+    if (pub_answer && timeStatus === AssignmentTimeStatus.OutOfDate) {
+      loadList.push(this.$$Programming.LoadStandardAnswer(args));
+    }
+    await Promise.all(loadList);
   }
 
   render() {
@@ -60,6 +66,9 @@ class Programming extends React.Component<IProgrammingProps> {
           </TabPane>
           <TabPane key={ ProgrammingKeys.Rank } tab={ ProgrammingKeys.Rank }>
             <ProgrammingRank/>
+          </TabPane>
+          <TabPane key={ ProgrammingKeys.StandardAnswer } tab={ ProgrammingKeys.StandardAnswer }>
+            <ProgrammingStandardAnswer/>
           </TabPane>
         </Tabs>
       </Provider>
