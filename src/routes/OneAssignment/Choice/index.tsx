@@ -3,14 +3,14 @@ import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { OneSubmissionModel } from '@/models/one-submission.model';
 import Feedback from '@/routes/OneAssignment/Common/FeedBack';
 import Submissions from '@/routes/OneAssignment/Common/Submissions';
-import { IAssignment } from '@/types/api';
-import { AssignmentTimeStatus, ChoiceKeys } from '@/types/constants';
+import { IAnswersSubmission, IAssignment } from '@/types/api';
+import { ChoiceKeys } from '@/types/constants';
 import {
   IChoiceAnswerItem, IChoiceConfig, IChoiceFormResultItem, IChoiceReport,
   IChoiceSubmitDetail
 } from '@/types/OneAssignment/choice';
 import { Card, Tabs } from 'antd';
-import { computed } from 'mobx';
+import { action, computed, observable, runInAction } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 import ChoiceForm from './Form';
@@ -25,7 +25,8 @@ interface IChoiceProps {
 @observer
 export default class Choice extends React.Component<IChoiceProps> {
 
-  $$ChoiceSubmission = new OneSubmissionModel<IChoiceAnswerItem, IChoiceReport, IChoiceSubmitDetail>();
+  $$ChoiceSubmission = new OneSubmissionModel<IChoiceReport,
+    IAnswersSubmission<IChoiceAnswerItem, IChoiceReport>, IChoiceSubmitDetail>();
 
   @computed
   get assignment() {
@@ -61,33 +62,37 @@ export default class Choice extends React.Component<IChoiceProps> {
     ]);
   }
 
-  handleSubmit = async (result: IChoiceFormResultItem[]) => {
+  async submitFlow(result: IChoiceFormResultItem[]) {
     const { $OneAssignment } = this.props;
     const { course_id, ca_id } = this.assignment;
-    try {
-      const { sub_asgn_id } = await this.$$ChoiceSubmission.SubmitAnswers({ course_id, ca_id }, { answers: result });
+    const { sub_asgn_id } = await this.$$ChoiceSubmission.SubmitAnswers({ course_id, ca_id }, { answers: result });
+
+    await Promise.all([
+      $OneAssignment!.LoadSubmissions({ course_id, ca_id }),
+      this.$$ChoiceSubmission.LoadOneSubmission({ course_id, ca_id, sub_ca_id: sub_asgn_id })
+    ]);
+
+    $OneAssignment!.changeTab(ChoiceKeys.GradeFeedback);
+
+    if (!this.assignment.grade_at_end) {
+      const count = await this.$$ChoiceSubmission.untilLastFinishJudging({
+        course_id,
+        ca_id,
+        sub_ca_id: sub_asgn_id
+      }, 2500, Infinity);
 
       await Promise.all([
         $OneAssignment!.LoadSubmissions({ course_id, ca_id }),
         this.$$ChoiceSubmission.LoadOneSubmission({ course_id, ca_id, sub_ca_id: sub_asgn_id })
       ]);
+    }
+  }
 
-      $OneAssignment!.changeTab(ChoiceKeys.GradeFeedback);
-
-      if (!this.assignment.grade_at_end) {
-        const count = await this.$$ChoiceSubmission.untilLastFinishJudging({
-          course_id,
-          ca_id,
-          sub_ca_id: sub_asgn_id
-        }, 2500, Infinity);
-
-        await Promise.all([
-          $OneAssignment!.LoadSubmissions({ course_id, ca_id }),
-          this.$$ChoiceSubmission.LoadOneSubmission({ course_id, ca_id, sub_ca_id: sub_asgn_id })
-        ]);
-      }
+  handleSubmit = async (result: IChoiceFormResultItem[]) => {
+    try {
+      await this.submitFlow(result);
     } catch (error) {
-      // throw error;
+      // none
     }
   }
 

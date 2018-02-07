@@ -3,12 +3,12 @@ import {
 } from '@/api/one-assignment';
 import { ICodeEditorDataSource } from '@/components/common/MutableCodeEditor';
 import { OneSubmissionModel } from '@/models/one-submission.model';
-import { IProgrammingReport, IProgrammingSubmitDetail, IRanksItem } from '@/types/api';
+import { IAnswersSubmission, IProgrammingReport, IProgrammingSubmitDetail, IRanksItem } from '@/types/api';
 import { action, computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
 
-export class ProgrammingModel extends OneSubmissionModel <{ code: string, name: string }
-  , IProgrammingReport, IProgrammingSubmitDetail> {
+export class ProgrammingModel extends OneSubmissionModel  <IProgrammingReport,
+  IAnswersSubmission<{ code: string, name: string }, IProgrammingReport>, IProgrammingSubmitDetail> {
 
   @observable
   ranks: IRanksItem[] = [];
@@ -28,7 +28,7 @@ export class ProgrammingModel extends OneSubmissionModel <{ code: string, name: 
   @computed
   get answerFiles(): ICodeEditorDataSource {
     const start: ICodeEditorDataSource = new Map();
-    return this.oneSubmission.answers
+    return (this.oneSubmission.answers || [])
       .reduce((acc, file) => {
         acc.set(file.name, {
           readOnly: true,

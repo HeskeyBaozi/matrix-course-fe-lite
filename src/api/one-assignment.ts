@@ -39,7 +39,19 @@ export function FetchAssignmentRank({ course_id, ca_id }: IOneAssignmentArgs) {
 
 // https://api.vmatrix.org.cn/#/course_assignment_submission
 // /post_api_courses__course_id__assignments__ca_id__submissions
-export function PostOneSubmissions<D>({ course_id, ca_id }: IOneAssignmentArgs, detail: D) {
+export function PostOneSubmissions<D = {}>({ course_id, ca_id }: IOneAssignmentArgs,
+                                           detail: D | File, isFileUpload = false) {
+  if (isFileUpload) {
+    const formData = new FormData();
+    formData.append('detail', detail as File, (detail as File).name);
+    return xios.post<IMatrixResponse<{ sub_asgn_id: number }>>(
+      `/api/courses/${course_id}/assignments/${ca_id}/submissions`,
+      formData,
+      {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }
+    );
+  }
   return xios.post<IMatrixResponse<{ sub_asgn_id: number }>>(
     `/api/courses/${course_id}/assignments/${ca_id}/submissions`, { detail }
   );

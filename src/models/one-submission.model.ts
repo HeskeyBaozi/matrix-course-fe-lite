@@ -2,18 +2,17 @@ import {
   FetchLastSubmission, FetchOneSubmission, IOneAssignmentArgs,
   IOneAssignmentOneSubmissionArgs, PostOneSubmissions
 } from '@/api/one-assignment';
-import { ISubmission } from '@/types/api';
+import { IBaseSubmission } from '@/types/api';
 import { observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
 
-export class OneSubmissionModel<A, R, D> {
+export class OneSubmissionModel<R, S extends IBaseSubmission<R>, D> {
   @observable
-  oneSubmission: ISubmission<A, R> = {
-    answers: [],
+  oneSubmission: S = {
     grade: null,
     report: null,
     sub_ca_id: 0
-  };
+  } as any;
 
   @observable
   submitAt: string = '';
@@ -26,7 +25,7 @@ export class OneSubmissionModel<A, R, D> {
     this.isOneSubmissionLoaded = false;
     const {
       data: { data: one, paramData: { submission: { submit_at } } }
-    } = yield FetchOneSubmission<ISubmission<A, R>>({
+    } = yield FetchOneSubmission<S>({
       course_id, ca_id, sub_ca_id
     });
     this.oneSubmission = one;
@@ -39,7 +38,7 @@ export class OneSubmissionModel<A, R, D> {
     this.isOneSubmissionLoaded = false;
     const {
       data: { data: one, paramData: { submission: { submit_at } } }
-    } = yield FetchLastSubmission<ISubmission<A, R>>({
+    } = yield FetchLastSubmission<S>({
       course_id, ca_id
     });
     this.oneSubmission = one;
@@ -47,8 +46,13 @@ export class OneSubmissionModel<A, R, D> {
     this.isOneSubmissionLoaded = true;
   }
 
-  async SubmitAnswers({ course_id, ca_id }: IOneAssignmentArgs, detail: D) {
-    const { data: { data: result } } = await PostOneSubmissions<D>({ course_id, ca_id }, detail);
+  async SubmitAnswers(args: IOneAssignmentArgs, detail: D) {
+    const { data: { data: result } } = await PostOneSubmissions<D>(args, detail);
+    return result as { sub_asgn_id: number };
+  }
+
+  async FileUpload(args: IOneAssignmentArgs, detail: File) {
+    const { data: { data: result } } = await PostOneSubmissions(args, detail, true);
     return result as { sub_asgn_id: number };
   }
 
@@ -60,7 +64,7 @@ export class OneSubmissionModel<A, R, D> {
       while (!finished && count < limit) {
         try {
           const { data: { data: one } } = await FetchOneSubmission(args);
-          const submission = one as ISubmission<A, R>;
+          const submission = one as S;
           if (submission && submission.grade !== null && submission.grade !== -1) {
             finished = true;
             resolve(count);

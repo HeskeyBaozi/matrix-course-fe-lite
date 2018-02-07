@@ -4,7 +4,10 @@ import {
 } from '@/api/one-assignment';
 import { IAssignment, ISubmissionItem } from '@/types/api';
 import { ItabItem } from '@/types/common';
-import { AssignmentTimeStatus, ChoiceKeys, GeneralKey, ProgrammingKeys, PType } from '@/types/constants';
+import {
+  AssignmentTimeStatus, ChoiceKeys, FileUploadKeys, GeneralKey, ProgrammingKeys,
+  PType
+} from '@/types/constants';
 import { isAfter, isBefore, isWithinInterval } from 'date-fns/esm';
 import { action, computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';
@@ -68,7 +71,7 @@ export class OneAssignmentModel {
           { tab: '成绩反馈', key: ProgrammingKeys.GradeFeedback, icon: 'check' },
           { tab: '历史记录', key: ProgrammingKeys.Recordings, icon: 'calendar' },
           { tab: '排名分布', key: ProgrammingKeys.Rank, icon: 'bar-chart' }
-        ] as Array<ItabItem<ProgrammingKeys>>;
+        ];
         if (this.assignment.pub_answer) {
           list.push({ tab: '标准答案', key: ProgrammingKeys.StandardAnswer, icon: 'eye-o' });
         }
@@ -80,7 +83,11 @@ export class OneAssignmentModel {
           { tab: '历史记录', key: ChoiceKeys.Recordings, icon: 'calendar' }
         ];
       case PType.FileUpload:
-        return [];
+        return [
+          { tab: '题目描述', key: FileUploadKeys.Description, icon: 'file-text' },
+          { tab: '成绩反馈', key: FileUploadKeys.GradeFeedback, icon: 'check' },
+          { tab: '历史记录', key: FileUploadKeys.Recordings, icon: 'calendar' }
+        ];
       case PType.ProgramBlankFilling:
         return [];
       case PType.ProgramOutput:

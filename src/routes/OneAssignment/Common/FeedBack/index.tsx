@@ -1,7 +1,7 @@
 import Info from '@/components/common/Info';
 import ScoreBar from '@/components/common/ScoreBar';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
-import { ISubmission } from '@/types/api';
+import { IBaseSubmission } from '@/types/api';
 import { statusFromGrade } from '@/utils/helpers';
 import { Card, Col, Row } from 'antd';
 import { format } from 'date-fns/esm';
@@ -11,7 +11,7 @@ import React from 'react';
 
 interface IFeedbackProps {
   $OneAssignment?: OneAssignmentModel;
-  submission: ISubmission<any, any>;
+  submission: IBaseSubmission<any>;
   submitAt: string;
 }
 
@@ -64,8 +64,10 @@ export default class Feedback extends React.Component<IFeedbackProps> {
 
   @computed
   get currentScoreValue() {
+    const { $OneAssignment } = this.props;
     return statusFromGrade(this.one.grade, [
-      'Waiting for judging', 'Under judging', `${this.one.grade}pts`
+      'Waiting for judging', 'Under judging',
+      `${this.one.grade} / ${$OneAssignment!.assignment.config.standard_score}`
     ]);
   }
 

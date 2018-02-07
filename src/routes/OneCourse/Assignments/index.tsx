@@ -95,16 +95,19 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
   @action
   handleStatusFilterChange = ({ target }: SyntheticEvent<HTMLInputElement>) => {
     this.statusFilter = (target as HTMLInputElement).value as 'in-progress' | 'out-of-date' | 'not-started';
+    this.currentPage = 1;
   }
 
   @action
   handleSearchChange = ({ currentTarget }: SyntheticEvent<HTMLInputElement>) => {
     this.search = currentTarget.value;
+    this.currentPage = 1;
   }
 
   @action
   handleSubmitFilterChange = ({ target }: SyntheticEvent<HTMLInputElement>) => {
     this.submitFilter = (target as HTMLInputElement).value as 'all' | 'submitted' | 'not-submitted';
+    this.currentPage = 1;
   }
 
   render() {

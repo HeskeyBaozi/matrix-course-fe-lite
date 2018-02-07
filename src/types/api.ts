@@ -297,11 +297,18 @@ export interface IProgrammingReport {
   };
 }
 
-export interface ISubmission<A extends {}, R extends {}> {
-  answers: A[];
+export interface IBaseSubmission<R> {
   grade: number | null;
   report: R | null;
   sub_ca_id: number;
+}
+
+export interface IAnswersSubmission<A, R> extends IBaseSubmission<R> {
+  answers: A[];
+}
+
+export interface IConfigSubmission<C, R> extends IBaseSubmission<R> {
+  config: C;
 }
 
 export interface IRanksItem {
