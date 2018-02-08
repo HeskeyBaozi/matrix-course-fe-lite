@@ -121,7 +121,6 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
   @action
   handleTypeFilterChange = (value: any) => {
     this.typeFilter = value;
-    console.log('value = ', value);
     this.currentPage = 1;
   }
 

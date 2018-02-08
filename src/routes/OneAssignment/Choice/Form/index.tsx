@@ -147,7 +147,7 @@ class ChoiceForm extends React.Component<IChoiceFormProps> {
         </Form.Item>),
         <Divider key={ `${id}-divider` }/>
       ];
-    }) : null;
+    }) : <div>暂无反馈</div>;
   }
 
   @computed
