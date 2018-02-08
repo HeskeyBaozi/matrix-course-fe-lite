@@ -6,7 +6,7 @@ import { IAssignment, ISubmissionItem } from '@/types/api';
 import { ItabItem } from '@/types/common';
 import {
   AssignmentTimeStatus, ChoiceKeys, FileUploadKeys, GeneralKey, ProgrammingKeys, ProgramOutputKeys,
-  PType, ReportKeys
+  PType, ReportKeys, ShortAnswerKeys
 } from '@/types/constants';
 import { isAfter, isBefore, isWithinInterval } from 'date-fns/esm';
 import { action, computed, observable } from 'mobx';
@@ -104,7 +104,11 @@ export class OneAssignmentModel {
           { tab: '历史记录', key: ReportKeys.Recordings, icon: 'calendar' }
         ];
       case PType.ShortAnswer:
-        return [];
+        return [
+          { tab: '题目描述', key: ShortAnswerKeys.Description, icon: 'file-text' },
+          { tab: '成绩反馈', key: ShortAnswerKeys.GradeFeedback, icon: 'check' },
+          { tab: '历史记录', key: ShortAnswerKeys.Recordings, icon: 'calendar' }
+        ];
       default:
         return [];
     }

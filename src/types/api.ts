@@ -303,6 +303,10 @@ export interface IBaseSubmission<R> {
   sub_ca_id: number;
 }
 
+export interface IShortAnswerSubmission<A, C, R> extends IAnswersSubmission<A, R>, IConfigSubmission<C, R> {
+  // extends
+}
+
 export interface IAnswersSubmission<A, R> extends IBaseSubmission<R> {
   answers: A[];
 }

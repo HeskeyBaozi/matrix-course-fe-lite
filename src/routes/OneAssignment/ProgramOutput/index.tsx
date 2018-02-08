@@ -142,7 +142,7 @@ export default class ProgramOutput extends React.Component<IProgramOutputProps> 
             <Markdown source={ this.assignment.description || '这个出题人很懒...' }/>
           </Card>
           <Card>
-            <MarkdownEditor value={ this.answer } onChange={ this.handleChange }/>
+            <MarkdownEditor value={ this.answer } onValueChange={ this.handleChange }/>
             <Button
               style={ { marginTop: '1rem' } }
               type={ 'primary' }

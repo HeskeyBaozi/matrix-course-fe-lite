@@ -196,7 +196,7 @@ export default class Report extends React.Component<IReportProps> {
         </TabPane>
         <TabPane key={ ReportKeys.Submit } tab={ ReportKeys.Submit }>
           <Card>
-            <MarkdownEditor value={ this.answer } onChange={ this.handleChange } minRows={ 12 }/>
+            <MarkdownEditor value={ this.answer } onValueChange={ this.handleChange } minRows={ 12 }/>
             <Button
               style={ { marginTop: '1rem' } }
               type={ 'primary' }

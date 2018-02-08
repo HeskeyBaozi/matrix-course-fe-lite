@@ -4,7 +4,7 @@ import { AssignmentTimeStatusMap, AssignmentTimeStatusTextMap } from '@/types/ap
 import { PType } from '@/types/constants';
 import {
   OneAssignmentChoiceRoute, OneAssignmentFileUploadRoute, OneAssignmentProgrammingRoute,
-  OneAssignmentProgramOutputRoute, OneAssignmentReportRoute
+  OneAssignmentProgramOutputRoute, OneAssignmentReportRoute, OneAssignmentShortAnswerRoute
 } from '@/utils/dynamic';
 import { format } from 'date-fns/esm';
 import { computed } from 'mobx';
@@ -76,6 +76,8 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
         return <OneAssignmentProgramOutputRoute/>;
       case PType.Report:
         return <OneAssignmentReportRoute/>;
+      case PType.ShortAnswer:
+        return <OneAssignmentShortAnswerRoute/>;
       default:
         return <Test/>;
     }

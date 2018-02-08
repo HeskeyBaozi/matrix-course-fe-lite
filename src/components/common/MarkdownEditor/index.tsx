@@ -7,28 +7,34 @@ const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
 
 interface IMarkdownEditorProps {
-  value: string;
-  onChange: (next: string) => any;
+  value?: string;
+  onValueChange?: (next: string) => any;
+  onChange?: (e: SyntheticEvent<HTMLTextAreaElement>) => any;
   minRows?: number;
 }
 
 export default class MarkdownEditor extends React.PureComponent<IMarkdownEditorProps> {
 
   handleChange = (e: SyntheticEvent<HTMLTextAreaElement>) => {
-    this.props.onChange(e.currentTarget.value);
+    if (this.props.onChange) {
+      this.props.onChange(e);
+    }
+    if (this.props.onValueChange) {
+      this.props.onValueChange(e.currentTarget.value);
+    }
   }
 
   @computed
   get Preview() {
     return (
-      <span><Icon type={ 'eye-o' }/> 预览</span>
+      <span><Icon type={ 'eye-o' }/> Preview</span>
     );
   }
 
   @computed
   get Edit() {
     return (
-      <span><Icon type={ 'edit' }/> 编辑</span>
+      <span><Icon type={ 'edit' }/> Edit</span>
     );
   }
 
@@ -41,17 +47,16 @@ export default class MarkdownEditor extends React.PureComponent<IMarkdownEditorP
 
   render() {
     return (
-      <Tabs defaultActiveKey={ '1' }>
+      <Tabs defaultActiveKey={ '1' } size={ 'small' }>
         <TabPane tab={ this.Edit } key={ '1' }>
           <TextArea
             value={ this.props.value }
             onChange={ this.handleChange }
             autosize={ this.autoSize }
-            placeholder={ '欢迎使用 Markdown 语法...' }
           />
         </TabPane>
         <TabPane tab={ this.Preview } key={ '2' }>
-          <Markdown source={ this.props.value }/>
+          <Markdown source={ this.props.value || '' }/>
         </TabPane>
       </Tabs>
     );

@@ -28,6 +28,7 @@ export const OneAssignmentChoiceRoute = dynamic(() => import('@/routes/OneAssign
 export const OneAssignmentFileUploadRoute = dynamic(() => import('@/routes/OneAssignment/FileUpload'));
 export const OneAssignmentProgramOutputRoute = dynamic(() => import('@/routes/OneAssignment/ProgramOutput'));
 export const OneAssignmentReportRoute = dynamic(() => import('@/routes/OneAssignment/Report'));
+export const OneAssignmentShortAnswerRoute = dynamic(() => import('@/routes/OneAssignment/ShortAnswer'));
 
 // Dynamic Components
 export const ParticlesComponent = dynamic(() => import('@/components/Particles'));
