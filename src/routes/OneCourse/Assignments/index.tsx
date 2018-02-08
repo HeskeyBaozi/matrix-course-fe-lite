@@ -2,8 +2,9 @@ import DescriptionList from '@/components/common/DescriptionList';
 import ScoreBar from '@/components/common/ScoreBar';
 import { OneCourseModel } from '@/models/one-course.model';
 import { IAssignmentItem } from '@/types/api';
+import { PType } from '@/types/constants';
 import { descriptionRender, getBadgeStatus, IDescriptionItem } from '@/utils/helpers';
-import { Badge, Card, Input, List, Radio } from 'antd';
+import { Badge, Card, Input, List, Radio, Select } from 'antd';
 import { format } from 'date-fns/esm';
 import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
@@ -27,6 +28,9 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
   submitFilter: 'all' | 'submitted' | 'not-submitted' = 'all';
 
   @observable
+  typeFilter: 'all' | any = 'all';
+
+  @observable
   search = '';
 
   @observable
@@ -41,10 +45,14 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
       )
     );
 
-    const submitData = statusData.filter((assignment) => this.submitFilter === 'submitted'
+    const typeData = this.typeFilter === 'all' ? statusData : statusData.filter((assignment) => (
+      assignment.ptype_id === this.typeFilter
+    ));
+
+    const submitData = typeData.filter((assignment) => this.submitFilter === 'submitted'
       ? assignment.submit_times : !assignment.submit_times);
 
-    const resultData = this.submitFilter === 'all' ? statusData : submitData;
+    const resultData = this.submitFilter === 'all' ? typeData : submitData;
 
     return resultData.filter((assignment) => assignment.title.toLowerCase().indexOf(this.search.toLowerCase()) !== -1);
   }
@@ -110,6 +118,13 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
     this.currentPage = 1;
   }
 
+  @action
+  handleTypeFilterChange = (value: any) => {
+    this.typeFilter = value;
+    console.log('value = ', value);
+    this.currentPage = 1;
+  }
+
   render() {
     const { $OneCourse } = this.props;
     const extraContent = (
@@ -142,6 +157,15 @@ export default class OneCourseAssignments extends React.Component<IOnceCourseAss
           <Radio.Button value={ 'not-submitted' }>未提交</Radio.Button>
           <Radio.Button value={ 'submitted' }>已提交</Radio.Button>
         </Radio.Group>
+        <Select value={ this.typeFilter } style={ { width: 120 } } onChange={ this.handleTypeFilterChange }>
+          <Select.Option value={ 'all' }>全部题型</Select.Option>
+          <Select.Option value={ PType.Programming }>编程题</Select.Option>
+          <Select.Option value={ PType.Choice }>选择题</Select.Option>
+          <Select.Option value={ PType.ShortAnswer }>简答题</Select.Option>
+          <Select.Option value={ PType.Report }>报告题</Select.Option>
+          <Select.Option value={ PType.FileUpload }>文件上传题</Select.Option>
+          <Select.Option value={ PType.ProgramOutput }>程序输出题</Select.Option>
+        </Select>
         <Input.Search
           className={ styles.extraContentSearch }
           value={ this.search }

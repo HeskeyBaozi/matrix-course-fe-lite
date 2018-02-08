@@ -1,3 +1,4 @@
+import Loading from '@/components/common/Loading';
 import PageWithHeader from '@/components/common/PageWithHeader';
 import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { AssignmentTimeStatusMap, AssignmentTimeStatusTextMap } from '@/types/api';
@@ -20,8 +21,6 @@ interface IOneAssignmentParams {
 interface IOneAssignment extends RouteComponentProps<IOneAssignmentParams> {
   $OneAssignment?: OneAssignmentModel;
 }
-
-const Test = () => <div>HomeTest</div>;
 
 @inject('$OneAssignment')
 @observer
@@ -79,7 +78,7 @@ export default class OneAssignment extends React.Component<IOneAssignment> {
       case PType.ShortAnswer:
         return <OneAssignmentShortAnswerRoute/>;
       default:
-        return <Test/>;
+        return null;
     }
   }
 
