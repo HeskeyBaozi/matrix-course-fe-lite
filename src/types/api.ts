@@ -311,6 +311,10 @@ export interface IConfigSubmission<C, R> extends IBaseSubmission<R> {
   config: C;
 }
 
+export interface IReportSubmission<R> extends IBaseSubmission<R> {
+  answers: string;
+}
+
 export interface IRanksItem {
   grade: number;
   lastSubmissionTime: string;

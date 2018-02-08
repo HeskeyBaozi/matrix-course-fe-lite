@@ -160,9 +160,20 @@ export default class FileUpload extends React.Component<IFileUploadProps> {
 
   @computed
   get FeedBackDetail() {
+    const { course_id, ca_id } = this.assignment;
+    const { sub_ca_id } = this.$$FileUpload.oneSubmission;
+    const actions = [ (
+      <a
+        key={ 'download' }
+        target={ '_blank' }
+        href={ `/api/courses/${course_id}/assignments/${ca_id}/submissions/${sub_ca_id}/download` }
+      >
+        <Button type={ 'primary' } icon={ 'download' }>下载我的提交</Button>
+      </a>
+    ) ];
     return (
-      <Card title={ '反馈评语' } loading={ !this.$$FileUpload.isOneSubmissionLoaded }>
-        { this.$$FileUpload.oneSubmission.report || '暂无评语' }
+      <Card loading={ !this.$$FileUpload.isOneSubmissionLoaded } actions={ actions }>
+        <Markdown source={ this.$$FileUpload.oneSubmission.report || '暂无评语' }/>
       </Card>
     );
   }
@@ -192,7 +203,7 @@ export default class FileUpload extends React.Component<IFileUploadProps> {
               type={ 'primary' }
               icon={ 'check' }
               loading={ this.isSubmitting }
-              disabled={ !this.fileList.length && $OneAssignment!.timeStatus === AssignmentTimeStatus.InProgressing }
+              disabled={ !this.fileList.length || $OneAssignment!.timeStatus !== AssignmentTimeStatus.InProgressing }
               onClick={ this.handleSubmit }
             >上传
             </Button>

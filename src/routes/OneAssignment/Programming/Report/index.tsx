@@ -67,14 +67,12 @@ export default class ProgrammingReport extends React.Component<IProgrammingRepor
   get Extra() {
     const { $OneAssignment } = this.props;
     return (
-      <div>
-        <Button
-          icon={ 'edit' }
-          disabled={ $OneAssignment!.timeStatus !== AssignmentTimeStatus.InProgressing }
-          onClick={ this.handleClickEdit }
-        >编辑代码
-        </Button>
-      </div>
+      <Button
+        icon={ 'edit' }
+        disabled={ $OneAssignment!.timeStatus !== AssignmentTimeStatus.InProgressing }
+        onClick={ this.handleClickEdit }
+      >编辑代码
+      </Button>
     );
   }
 

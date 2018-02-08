@@ -24,7 +24,7 @@ export enum PType {
   ShortAnswer = 6
 }
 
-export type GeneralKey = ProgrammingKeys | ChoiceKeys | FileUploadKeys ;
+export type GeneralKey = ProgrammingKeys | ChoiceKeys | FileUploadKeys | ProgramOutputKeys | ReportKeys;
 
 export enum ProgrammingKeys {
   Description = 'description',
@@ -43,6 +43,19 @@ export enum ChoiceKeys {
 
 export enum FileUploadKeys {
   Description = 'description',
+  GradeFeedback = 'grade-feedback',
+  Recordings = 'recordings'
+}
+
+export enum ProgramOutputKeys {
+  Description = 'description',
+  GradeFeedback = 'grade-feedback',
+  Recordings = 'recordings'
+}
+
+export enum ReportKeys {
+  Description = 'description',
+  Submit = 'submit',
   GradeFeedback = 'grade-feedback',
   Recordings = 'recordings'
 }

@@ -3,7 +3,7 @@ import { OneAssignmentModel } from '@/models/one-assignment.model';
 import { ProgrammingModel } from '@/routes/OneAssignment/Programming/model';
 import { IAssignment, IProgrammingConfig } from '@/types/api';
 import { AssignmentTimeStatus, ProgrammingKeys } from '@/types/constants';
-import { Button, Card, Col, Icon, Row, Switch } from 'antd';
+import { Button, Card, Col, Icon, notification, Row, Switch } from 'antd';
 import { action, computed, observable } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { asyncAction } from 'mobx-utils';
@@ -171,6 +171,11 @@ export default class ProgrammingSubmit extends React.Component<IProgrammingSubmi
         $$Programming!.LoadOneSubmission({ course_id, ca_id, sub_ca_id: sub_asgn_id }),
         $$Programming!.LoadRanks({ course_id, ca_id })
       ]);
+
+      notification.success({
+        message: '作业提交成功',
+        description: `成功提交作业 ${this.assignment.title}`
+      });
 
       $OneAssignment!.changeTab(ProgrammingKeys.GradeFeedback);
 
