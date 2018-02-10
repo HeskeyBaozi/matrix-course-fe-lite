@@ -1,5 +1,5 @@
-import { fetchAssignments, fetchCourseDetail, fetchDiscussions } from '@/api/one-course';
-import { fetchAvatar } from '@/api/user';
+import { fetchAssignments, fetchCourseDetail, fetchDiscussions } from '@/services/one-course';
+import { fetchAvatar } from '@/services/user';
 import { IAssignmentItem, IDiscussionItem, IOneCourse } from '@/types/api';
 import { isAfter, isBefore, isWithinInterval } from 'date-fns/esm';
 import { computed, observable } from 'mobx';

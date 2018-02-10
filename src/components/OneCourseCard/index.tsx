@@ -1,6 +1,6 @@
-import { fetchAvatar } from '@/api/user';
 import DescriptionList from '@/components/common/DescriptionList';
 import Info from '@/components/common/Info';
+import { fetchAvatar } from '@/services/user';
 import { CourseStatusMap, ICoursesItem, RoleMap } from '@/types/api';
 import { Avatar, Badge, Card, Col, Icon, Row } from 'antd';
 import { computed, observable } from 'mobx';

@@ -1,4 +1,4 @@
-import { fetchAvatar, fetchProfile } from '@/api/user';
+import { fetchAvatar, fetchProfile } from '@/services/user';
 import { IProfile } from '@/types/api';
 import { computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';

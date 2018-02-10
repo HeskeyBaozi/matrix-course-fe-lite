@@ -1,7 +1,7 @@
 import {
   FetchLastSubmission, FetchOneSubmission, IOneAssignmentArgs,
   IOneAssignmentOneSubmissionArgs, PostOneSubmissions
-} from '@/api/one-assignment';
+} from '@/services/one-assignment';
 import { IBaseSubmission } from '@/types/api';
 import { observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';

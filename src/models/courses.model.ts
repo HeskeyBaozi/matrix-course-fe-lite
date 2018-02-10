@@ -1,4 +1,4 @@
-import { fetchCoursesList } from '@/api/courses';
+import { fetchCoursesList } from '@/services/courses';
 import { ICoursesItem } from '@/types/api';
 import { computed, observable } from 'mobx';
 import { asyncAction } from 'mobx-utils';

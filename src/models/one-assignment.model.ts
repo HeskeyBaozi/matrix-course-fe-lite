@@ -1,7 +1,7 @@
 import {
   FetchAssignmentDetail, FetchSubmissionsList,
   IOneAssignmentArgs
-} from '@/api/one-assignment';
+} from '@/services/one-assignment';
 import { IAssignment, ISubmissionItem } from '@/types/api';
 import { ItabItem } from '@/types/common';
 import {

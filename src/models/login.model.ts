@@ -1,9 +1,9 @@
-import { fetchCaptcha } from '@/api/captcha';
+import { fetchCaptcha } from '@/services/captcha';
 import {
   fetchAvatar,
   fetchUserLoginState,
   loginPost
-} from '@/api/user';
+} from '@/services/user';
 import {
   ICaptchaResult,
   ILoginBody,
