@@ -1,72 +1,22 @@
-import RenderAuthorizeRoute from '@/components/common/Authorized';
-import Loading from '@/components/common/Loading/index';
-import { LoginModel } from '@/models/login.model';
-import { ILoginQueryResult, ILoginSuccessData } from '@/types/api';
-import { BasicLayout, LoginLayout } from '@/utils/dynamic';
-import { history } from '@/utils/history';
-import { notification } from 'antd';
-import { observable } from 'mobx';
-import { inject, observer } from 'mobx-react';
-import DevTools from 'mobx-react-devtools';
-import { asyncAction } from 'mobx-utils';
-import React from 'react';
-import { Router, Switch } from 'react-router';
+import * as React from 'react';
+import './App.css';
 
-interface IAppProps {
-  $Login?: LoginModel;
-}
+const logo = require('./logo.svg');
 
-@inject('$Login')
-@observer
-export class App extends React.Component<IAppProps, {}> {
-
-  @observable
-  isLoading = true;
-
-  componentDidMount() {
-    this.initializeFlow();
-  }
-
-  @asyncAction
-  * initializeFlow() {
-    this.isLoading = true;
-    const result: ILoginQueryResult = yield this.props.$Login!.QueryLoginStatus();
-    if (result.status === 'OK') {
-      const realname = result.data && (result.data as ILoginSuccessData).realname;
-      notification.success({
-        description: realname && `欢迎你, ${realname}` || `欢迎你`,
-        duration: 1,
-        message: '欢迎回来'
-      });
-    }
-    this.isLoading = false;
-  }
-
+class App extends React.Component {
   render() {
-    const { $Login } = this.props;
-    const { AuthorizedRoute } = RenderAuthorizeRoute($Login!.isLogin ? 'USER' : 'GUEST');
-
     return (
-      <div>
-        <DevTools/>
-        <Loading isLoading={ this.isLoading } isFullScreen={ true }/>
-        <Router history={ history }>
-          <Switch>
-            <AuthorizedRoute
-              path={ '/login' }
-              component={ LoginLayout }
-              authority={ 'GUEST' }
-              redirectPath={ '/' }
-            />
-            <AuthorizedRoute
-              path={ '/' }
-              component={ BasicLayout }
-              authority={ 'USER' }
-              redirectPath={ '/login' }
-            />
-          </Switch>
-        </Router>
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1 className="App-title">Welcome to React</h1>
+        </header>
+        <p className="App-intro">
+          To get started, edit <code>src/App.tsx</code> and save to reload.
+        </p>
       </div>
     );
   }
 }
+
+export default App;
